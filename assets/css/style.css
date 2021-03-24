@@ -1402,3 +1402,31 @@ img.organizationlogo {
   background-size: 50px 50px;
   background-repeat: no-repeat;
 }
+
+/*AMS Login form*/
+.amsloginform { 
+  width: 100%;
+}
+
+.amsloginform .post-group { 
+  width: 100%; 
+  margin-bottom: 10px; 
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+.amsloginform input { 
+  width: 100%; 
+}  
+
+
+.amsuserlayout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}

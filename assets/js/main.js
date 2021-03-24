@@ -117,3 +117,26 @@ function fetchproject()
         }
     });
 }
+
+
+function btnAMSLogout()
+{
+	var amsemailoruser = jQuery('#amsemailoruser').val();
+    var amspassword = jQuery('#amspassword').val();   
+    var getaccesstoken = jQuery('#getaccesstoken').val();
+
+    
+      jQuery.ajax({
+         url: amsjs_ajax_url.ajaxurl,
+         type:'POST',
+         data: { action: 'get_amsmemberlogout', getaccesstoken:getaccesstoken},
+         beforeSend: function(){
+          // Show image container
+              //$("#inifiniteLoader").show();
+         },
+         success: function (data) {
+            console.log(data);
+            location.reload();
+         }
+      });
+}
