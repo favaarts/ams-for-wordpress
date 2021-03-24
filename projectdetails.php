@@ -42,6 +42,21 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
         <div class="entry-content">
             <div class="wp-block-columns main-content main-content-three-col">
                 <div class="categorysearchdata right-col">
+
+                    <?php
+                    if(isset($_SESSION["username"]))  
+                      {
+                        echo "<div class='amsuserlayout'>";
+                            echo "<div class='userlogin'><p>Hii, ".$_SESSION["username"]."</p></div>";
+            
+                            echo "<div class='amslogoutbutton'>
+                                    <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
+                                  </div>";
+
+                        echo "</div>";                              
+                        
+                      }
+                    ?>
                     <div class="projectdetail">
                         
                         <div class="project-img-sec">
@@ -157,6 +172,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                         {
                                             if($x_value['project_attribute_type_name'] == "Video")
                                             {
+                                                $amssinglevideo = $x_value['value_4'];
 
                                             echo "<div class='video-col'>
                                                  <div class='amsvideo-thumb'>
@@ -268,28 +284,48 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
 <script type="text/javascript">
 jQuery( document ).ready(function() {
 
-    var video = document.getElementById('videobanner');
-    if(Hls.isSupported()) {
-        var hls = new Hls();
-        hls.loadSource('<?php echo $attributePhoto['project_attributes'][0]['value_4']; ?>');
-        hls.attachMedia(video);
-    }    
-    /**/
+    var logintoken = "<?php echo $_SESSION["accesstoken"]; ?>";    
     
+    /**/
+    jQuery("#videobanner").click(function() {
+        if(logintoken)
+        {
+            if(Hls.isSupported()) {
+                var hls = new Hls();
+                hls.loadSource("<?php echo $amssinglevideo; ?>");
+                hls.attachMedia(this);
+                jQuery(this).get(0).play()
+            }  
+        }
+        else
+        {
+            alert("Please login to watch the video");
+        }
+    });
+
+    
+    // Open Popup
     jQuery('[popup-open]').on('click', function() {
-        var videourl = jQuery(this).data("img");
-        var videourlid = jQuery(this).data("id");
+        
+        if(logintoken)
+        {
+            var videourl = jQuery(this).data("img");
+            var videourlid = jQuery(this).data("id");
 
-        var videonew = document.getElementById('amspopupvideo'+videourlid);
-        if(Hls.isSupported()) {
-            var hls = new Hls();
-            hls.loadSource(videourl);
-            hls.attachMedia(videonew);
-        } 
+            var videonew = document.getElementById('amspopupvideo'+videourlid);
+            if(Hls.isSupported()) {
+                var hls = new Hls();
+                hls.loadSource(videourl);
+                hls.attachMedia(videonew);
+            } 
 
-        console.log(videourl);
-        var popup_name = jQuery(this).attr('popup-open');
-        jQuery('[popup-name="' + popup_name + '"]').fadeIn(300);
+            var popup_name = jQuery(this).attr('popup-open');
+            jQuery('[popup-name="' + popup_name + '"]').fadeIn(300);
+        }    
+        else
+        {
+            alert("Please login to watch the video");
+        }   
     });
 
 
@@ -301,7 +337,8 @@ jQuery( document ).ready(function() {
         jQuery("[popup-name="+popup_name+"]").find('#amspopupvideo'+videourlid).get(0).pause();
 
         jQuery('[popup-name="' + popup_name + '"]').fadeOut(300);
-    });    
+    });
+
 
 });        
 </script>

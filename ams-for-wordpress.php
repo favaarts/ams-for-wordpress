@@ -497,6 +497,97 @@ add_action('wp_ajax_get_eventorganizationtags','get_eventorganizationtags');
 add_action('wp_ajax_nopriv_get_eventorganizationtags','get_eventorganizationtags');
 // End Event organization tags
 
+// AMS Member login
+function get_amsmemberlogindetails()
+{
+
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+
+    $url = "https://".$apiurl.".amsnetwork.ca/api/v3/oauth/token";
+    
+    $amsemailoruser = $_POST['amsemailoruser'];
+    $amspassword = $_POST['amspassword'];
+
+    //Initiate cURL.
+    $ch = curl_init($url);
+     
+    //The JSON data.
+    $jsonData = array(
+        'username' =>  $amsemailoruser,
+        'password' => $amspassword,
+        'subdomain' => $apiurl,
+    );
+
+    session_start();
+    //Encode the array into JSON.
+    $jsonDataEncoded = json_encode($jsonData);
+     
+    //Tell cURL that we want to send a POST request.
+    curl_setopt($ch, CURLOPT_POST, 1);
+     
+    //Attach our encoded JSON string to the POST fields.
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+     
+    //Set the content type to application/json
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'Accept: application/json',
+        )); 
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+    $result = curl_exec($ch);
+
+    $arrayEventResultData = json_decode($result);
+    
+    if ($arrayEventResultData->status == 'valid')
+    {
+        $_SESSION['username']=$arrayEventResultData->social_data->name;
+        $_SESSION['accesstoken']=$arrayEventResultData->access_token;
+        echo "valid";
+    }
+    else
+    {
+        echo "error";
+    }
+    
+}
+add_action('wp_ajax_get_amsmemberlogindetails','get_amsmemberlogindetails');
+add_action('wp_ajax_nopriv_get_amsmemberlogindetails','get_amsmemberlogindetails');
+// End AMS Member login
+
+
+// AMS Member login
+function get_amsmemberlogout()
+{
+    session_start();
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+
+    $getaccesstoken = $_POST['getaccesstoken'];
+    
+    $url = "https://".$apiurl.".amsnetwork.ca/api/v3/oauth/token?token=".$getaccesstoken;
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    $result = curl_exec($ch);
+   
+    $amsLogOut = json_decode($result);
+
+    unset($_SESSION['username']);
+    unset($_SESSION['accesstoken']);
+    
+    echo "valid";
+
+    session_destroy();
+    
+}
+add_action('wp_ajax_get_amsmemberlogout','get_amsmemberlogout');
+add_action('wp_ajax_nopriv_get_amsmemberlogout','get_amsmemberlogout');
+// End AMS Member login
+
 // Event organization
 function get_organizationevents()
 {
@@ -769,7 +860,13 @@ if(!empty($apiurlcheck) && !empty($apikeycheck))
         'amsmember-js',
         plugins_url( 'assets/js/amsmember.js', __FILE__ ),
         array( 'wp-blocks', 'wp-element', 'wp-plugins', 'wp-editor', 'wp-edit-post', 'wp-i18n', 'wp-components', 'wp-data' )
-     );
+        );
+
+       wp_enqueue_script(
+        'amslogin-js',
+        plugins_url( 'assets/js/amslogin.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-element', 'wp-plugins', 'wp-editor', 'wp-edit-post', 'wp-i18n', 'wp-components', 'wp-data' )
+       );
     }
     add_action( 'enqueue_block_editor_assets', 'ams_gutenberg_api_block_admin' );
 }
@@ -804,6 +901,10 @@ require plugin_dir_path( __FILE__ ). 'inc/eventlisting.php';
 
 // CTA for Short code project listing
 require plugin_dir_path( __FILE__ ). 'inc/projects.php';
+
+// CTA for Short code login page
+require plugin_dir_path( __FILE__ ). 'inc/amslogin.php';
+
 
 // Get equipment product
 function get_apirequest($categoryid,$productname,$prodictid)
