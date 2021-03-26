@@ -37,6 +37,9 @@ main-content main-content-four-col - this class is for four columns.
                 
                 echo "<input type='hidden' id='getaccesstoken' value='".$_SESSION["accesstoken"]."' />";
                 echo "<input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out' />";
+                echo "<div class='post-group customloader' id='inifiniteLoader' style='text-align: center;'>
+                    <img src=".esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) )." >
+                  </div>"; 
               }  
               else
               {  
@@ -44,6 +47,7 @@ main-content main-content-four-col - this class is for four columns.
               
                    
                     <div class="post-group">
+                        <span id="amscredentials_error"></span>
                         <input type="text" id="amsemailoruser" placeholder="Username" required>
                     </div>
                     <div class="post-group">
@@ -51,9 +55,10 @@ main-content main-content-four-col - this class is for four columns.
                     </div>
                 
                     <input type="submit" id="btnSubmit" name="btnSubmit" value="Save Changes" />
-               <!--  <div class="post-group">
-                    <button type="submit" id="protectedamsvideo" class="btn btn-primary btn-block btn-large">Let me in 26.</button>
-                </div> -->
+                    
+                    <div class="post-group customloader" id="inifiniteLoader" style="text-align: center;">
+                      <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>" >
+                    </div>
              
               <?php } ?>      
             </div>
@@ -74,7 +79,9 @@ main-content main-content-four-col - this class is for four columns.
 
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-   
+    
+    jQuery("#inifiniteLoader").hide(); 
+    
     $('#btnSubmit').click(function(){
 
         var amsemailoruser = jQuery('#amsemailoruser').val();
@@ -86,10 +93,12 @@ jQuery(document).ready(function($) {
              data: { action: 'get_amsmemberlogindetails', amsemailoruser:amsemailoruser, amspassword:amspassword},
              beforeSend: function(){
               // Show image container
-                  $("#inifiniteLoader").show();
+                  jQuery("#inifiniteLoader").show();
+                  jQuery("#btnSubmit").attr("disabled", true);
              },
              success: function (data) {
-
+                jQuery('#inifiniteLoader').hide();
+                jQuery("#btnSubmit").attr("disabled", false);
                 var mydata = data.substring(0,data.length - 1);
 
                  if(mydata == 'valid')
@@ -98,7 +107,13 @@ jQuery(document).ready(function($) {
                  }
                  else
                  {
-                    console.log('Error data');
+                    jQuery("#amscredentials_error").html('<p>AMS Credentials not match.</p>');
+                    jQuery("#amscredentials_error").css("color", "red");
+                    jQuery("#amscredentials_error").css("display", "block");
+
+                    setTimeout(function() {
+                        $('#amscredentials_error').fadeOut('fast');
+                    }, 5000);
                  }
              }
           });

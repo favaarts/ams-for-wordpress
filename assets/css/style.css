@@ -1430,3 +1430,5 @@ img.organizationlogo {
     align-items: center;
     margin-bottom: 10px;
 }
+
+.customloader img{width: 35px;}

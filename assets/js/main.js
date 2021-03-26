@@ -131,10 +131,12 @@ function btnAMSLogout()
          type:'POST',
          data: { action: 'get_amsmemberlogout', getaccesstoken:getaccesstoken},
          beforeSend: function(){
-          // Show image container
-              //$("#inifiniteLoader").show();
+          	jQuery("#inifiniteLoader").show();
+            jQuery("#btnAMSLogout").attr("disabled", true);
          },
          success: function (data) {
+         	jQuery('#inifiniteLoader').hide();
+            jQuery("#btnAMSLogout").attr("disabled", false);
             console.log(data);
             location.reload();
          }

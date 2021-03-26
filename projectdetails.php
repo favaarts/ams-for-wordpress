@@ -52,7 +52,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                             echo "<div class='amslogoutbutton'>
                                     <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
                                   </div>";
-
+                                  
                         echo "</div>";                              
                         
                       }
@@ -285,10 +285,10 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
 jQuery( document ).ready(function() {
 
     var logintoken = "<?php echo $_SESSION["accesstoken"]; ?>";    
-    
+    var amscredentials = "<?php echo $blocks[0]['attrs']['amscredentials']; ?>";
     /**/
     jQuery("#videobanner").click(function() {
-        if(logintoken)
+        if(logintoken || amscredentials)
         {
             if(Hls.isSupported()) {
                 var hls = new Hls();
@@ -307,7 +307,7 @@ jQuery( document ).ready(function() {
     // Open Popup
     jQuery('[popup-open]').on('click', function() {
         
-        if(logintoken)
+        if(logintoken || amscredentials)
         {
             var videourl = jQuery(this).data("img");
             var videourlid = jQuery(this).data("id");
