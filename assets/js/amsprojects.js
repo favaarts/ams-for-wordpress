@@ -34,6 +34,10 @@
       type: 'boolean',
       default: false
      },
+    amscredentials: {
+      type: 'boolean',
+      default: false
+    },
     radio_attr_project: {
       type: 'string',
       default: 'three_col',
@@ -90,6 +94,13 @@
                  props.setAttributes( { projecttomember: value } );
               },
               checked: props.attributes.projecttomember,
+            }),
+            el(ToggleControl, {
+              label: 'Restrict Videos with AMS Credentials',
+              onChange: ( value ) => {
+                 props.setAttributes( { amscredentials: value } );
+              },
+              checked: props.attributes.amscredentials,
             }),
             el( RadioControl,
               {
@@ -171,6 +182,7 @@
            ),
            el( 'input', { 'type': 'hidden', 'name' : 'projectsidebar', 'value' : ( props.attributes.projectsidebar == true ? 'yes' : 'no') } ),
            el( 'input', { 'type': 'hidden', 'name' : 'projecttomember', 'value' : ( props.attributes.projecttomember == true ? 'yes' : 'no') } ),
+           el( 'input', { 'type': 'hidden', 'name' : 'amscredentials', 'value' : ( props.attributes.amscredentials == true ? 'yes' : 'no') } ), 
            el( 'input', { 'type': 'hidden', 'name' : 'radio_attr_project', 'value' : ( props.attributes.radio_attr_project) } ),
            el( 'input', { 'type': 'hidden', 'name' : 'project_pagination', 'value' : ( props.attributes.project_pagination) } ),
          )
