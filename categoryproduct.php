@@ -52,6 +52,12 @@ get_header();  ?>
                 {
                    $blockclass = 'main-content-three-col';
                 }
+
+                $detailspage = $blocks[0]['attrs']['assets_detailspage_url'];
+                if(empty($detailspage))
+                {
+                    $detailspage = "_self";
+                }
           ?>
           
               <div class="wp-block-columns main-content <?= $blockclass; ?>" >
@@ -235,7 +241,7 @@ get_header();  ?>
                                   }
                                   echo"<div class='assetsproduct-content'>"; 
                                     $assetstitle = (strlen($x_value['name']) > 43) ? substr($x_value['name'],0,40).'...' : $x_value['name'];
-                                    echo "<a href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'> <p class='product-title'>". $assetstitle ."</p> </a>";
+                                    echo "<a target='".$detailspage."' href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'> <p class='product-title'>". $assetstitle ."</p> </a>";
                                     
                                     echo"<div class='assetsprice'>" ;
                                     if (!isset($blocks[0]['attrs']['member']))
@@ -250,11 +256,11 @@ get_header();  ?>
                                     
                                     if($x_value['status_text'] == "Active")
                                     {  
-                                     echo "<span class='assetsproductlabel label-success btn-common' style='background-color: $bgcolor;'><a href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'>Available</a></span>";
+                                     echo "<span class='assetsproductlabel label-success btn-common' style='background-color: $bgcolor;'><a target='".$detailspage."' href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'>Available</a></span>";
                                     } 
                                     else
                                     {
-                                      echo "<span class='label label-danger btn-common'><a href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'>Unavailable</a></span>";
+                                      echo "<span class='label label-danger btn-common'><a target='".$detailspage."' href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'>Unavailable</a></span>";
                                     }
                                     
                                   echo "</div>";
@@ -281,7 +287,7 @@ get_header();  ?>
                                 {
                                   $assetstitle = (strlen($x_value['name']) > 34) ? substr($x_value['name'],0,34).'..' : $x_value['name'];
                                   
-                                    echo "<a href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'> <p class='product-title'>". $assetstitle ."</p> </a>";
+                                    echo "<a target='".$detailspage."' href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'> <p class='product-title'>". $assetstitle ."</p> </a>";
                                     
                                     if($x_value['photo'] == NULL || $x_value['photo'] == "")
                                     {                                    
@@ -298,10 +304,10 @@ get_header();  ?>
                 
                                     echo "<div class='bottom-fix'>"; 
                                     if($x_value['status_text'] == "Active")
-                                        echo "<span class='label label-success btn-common' style='background-color: $bgcolor;'><a href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'>Available</a></span>";
+                                        echo "<span class='label label-success btn-common' style='background-color: $bgcolor;'><a target='".$detailspage."' href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'>Available</a></span>";
                                         else
                                         {
-                                            echo "<span class='label label-danger btn-common'><a href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'>Unavailable</a></span>";
+                                            echo "<span class='label label-danger btn-common'><a target='".$detailspage."' href='".site_url('/'.$pageslug.'/'.$x_value['category_name'].'/'.$pageid.'-'.$x_value['id'])."'>Unavailable</a></span>";
                                         }
                                         
                                     echo "</div>";    
