@@ -49,6 +49,10 @@
       type: 'string',
       default: '_self',
     },
+    assets_detailspage_url: {
+      type: 'string',
+      default: '_self',
+    },
     showhidebookurl: {
       type: 'boolean',
       default: true
@@ -165,6 +169,20 @@
                 value: props.attributes.register_assets_urltab
               }
             ),
+            el( SelectControl,
+              {
+                label: 'Where to open the Details page URL',
+                //help: 'Some kind of description',
+                options : [
+                  { label: 'Same window', value: '_self' },
+                  { label: 'New window', value: '_blank' },
+                ],
+                onChange: ( value ) => {
+                  props.setAttributes( { assets_detailspage_url: value } );
+                },
+                value: props.attributes.assets_detailspage_url
+              }
+            ),
             el('p', {}, i18n.__('( On / Off ) Show Hide booking button.', 'amsnetwork-gutenbergevent-block')),
             el(ToggleControl, {
               label: 'Display Booking Button',
@@ -257,6 +275,7 @@
            el( 'input', { 'type': 'hidden', 'name' : 'radio_attr', 'value' : ( props.attributes.radio_attr) } ),
            el( 'input', { 'type': 'hidden', 'name' : 'register_assets_url', 'value' : ( props.attributes.register_assets_url) } ),
            el( 'input', { 'type': 'hidden', 'name' : 'register_assets_urltab', 'value' : ( props.attributes.register_assets_urltab) } ),
+           el( 'input', { 'type': 'hidden', 'name' : 'assets_detailspage_url', 'value' : ( props.attributes.assets_detailspage_url) } ),
            el( 'input', { 'type': 'hidden', 'name' : 'showhidebookurl', 'value' : ( props.attributes.showhidebookurl) } ),
            el( 'input', { 'type': 'hidden', 'name' : 'all_items_url', 'value' : ( props.attributes.all_items_url) } ),
            el( 'input', { 'type': 'hidden', 'name' : 'member', 'value' : ( props.attributes.member == true ? 'yes' : 'no') } ),
