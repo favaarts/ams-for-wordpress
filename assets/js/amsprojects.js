@@ -30,6 +30,9 @@
       type: 'boolean',
       default: true
      },
+     project_protected: {
+        type: 'string',
+     },
      projecttomember: {
       type: 'boolean',
       default: false
@@ -118,6 +121,15 @@
                 selected: props.attributes.radio_attr_project
               }
             ),
+            el( TextControl,
+              {
+                label: 'Password for Protecting Content (Leave Blank if Public)',
+                onChange: ( value ) => {
+                  props.setAttributes( { project_protected: value } );
+                },
+                value: props.attributes.project_protected
+              }
+            ),
             el( SelectControl,
               {
                 label: 'Number of project display in this page.',
@@ -183,6 +195,7 @@
            el( 'input', { 'type': 'hidden', 'name' : 'projectsidebar', 'value' : ( props.attributes.projectsidebar == true ? 'yes' : 'no') } ),
            el( 'input', { 'type': 'hidden', 'name' : 'projecttomember', 'value' : ( props.attributes.projecttomember == true ? 'yes' : 'no') } ),
            el( 'input', { 'type': 'hidden', 'name' : 'amscredentials', 'value' : ( props.attributes.amscredentials == true ? 'yes' : 'no') } ), 
+           el( 'input', { 'type': 'hidden', 'name' : 'project_protected', 'value' : ( props.attributes.project_protected) } ),
            el( 'input', { 'type': 'hidden', 'name' : 'radio_attr_project', 'value' : ( props.attributes.radio_attr_project) } ),
            el( 'input', { 'type': 'hidden', 'name' : 'project_pagination', 'value' : ( props.attributes.project_pagination) } ),
          )
