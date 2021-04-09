@@ -61,20 +61,22 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                         
                         <div class="project-img-sec">
 
-                            <div class="thumbnail">
+                            <div class="img-sec video-main">
                                 <?php
-                                if($arrayResult['project']['thumbnail'] == NULL || $arrayResult['project']['thumbnail'] == "")
-                                {  
-                                     echo "<img src=".plugins_url( 'assets/img/bg-page-image.jpg', __FILE__ )." alt=".$json_value['name'].">";
+                                if($attributePhoto['project_attributes'][0]['file_attachment_thumbnail'])
+                                {
+                                    $videoBanner = $attributePhoto['project_attributes'][0]['file_attachment_thumbnail'];
+                                    echo "<a class='video-icon'></a>";
                                 }
                                 else
                                 {
-                                    echo "<img src=".$arrayResult['project']['thumbnail'].">";
-                                } 
+                                    $videoBanner = plugins_url( 'assets/img/video_poster.jpg', __FILE__ );
+                                }
                                 ?>
-                            </div>
-                            <div class="img-sec">
-                                <video id="videobanner" poster="<?php echo $attributePhoto['project_attributes'][0]['file_attachment_thumbnail']; ?>" controls="controls" controlsList="nodownload" width="517">
+
+                                
+
+                                <video id="videobanner" poster="<?php echo $videoBanner; ?>" controlsList="nodownload" width="517">
                                 </video>
                             </div>
 
@@ -163,17 +165,30 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 ?>
                                  
 
+                                <?php
+                               
+
+                                if($attributePhoto['project_attributes'][0]['project_attribute_type_name'] == "Video" && !empty($attributePhoto['project_attributes'][0]['project_attribute_type_name']))
+                                {  
+
+                                   $amssinglevideo = $attributePhoto['project_attributes'][0]['value_4'];
+                                   
+                                   if(count($attributePhoto['project_attributes']) > 1)
+                                   {
+                                ?> 
                                 <div class="videos prospace amsvideos">
                                     <h3>Videos:</h3>
                                     <div class="video-row">
                                         <?php
-                                        $i = 1;                                        
+                                        $i = 1;
+                                        
+                                        array_shift($attributePhoto['project_attributes']);
+
                                         foreach($attributePhoto['project_attributes'] as $x_value) 
                                         {
                                             if($x_value['project_attribute_type_name'] == "Video")
                                             {
-                                                $amssinglevideo = $x_value['value_4'];
-
+                                                
                                             echo "<div class='video-col'>
                                                  <div class='amsvideo-thumb'>
                                                   <img src='".$x_value['file_attachment_thumbnail'] ."'>
@@ -194,7 +209,12 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
 
                                     </div>
                                 </div>
+                                <?php } } ?>
 
+                                <?php
+                                if($attributePhoto['project_attributes'][0]['project_attribute_type_name'] == "Photo" && !empty($attributePhoto['project_attributes'][0]['project_attribute_type_name']))
+                                {   
+                                ?>
                                 <div class="photos prospace">
                                     <h3>Photos:</h3>
                                     <div class="text-sec">
@@ -211,8 +231,11 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                         ?>
                                     </div>
                                 </div>
+                                <?php } ?>
 
                                 <?php
+                                if($attributePhoto['project_attributes'][0]['project_attribute_type_name'] == "Awards/Screenings/Festivals" && !empty($attributePhoto['project_attributes'][0]['project_attribute_type_name']))
+                                {
                                 echo "<div class='longattributes prospace'>";
                                 echo "<h3>Long Attributes:</h3>";
                                     echo "<div class='text-sec longattrval'>";
@@ -227,9 +250,14 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                         echo "</p>";
                                     echo "</div>";
                                 echo "</div>";
+                                }
                                 ?>
                                 
 
+                                <?php
+                                if($attributeCrewResult['project_attributes'])
+                                { 
+                                ?>
                                 <div class="crewroles prospace">
                                     <h3>Crew Roles:</h3>
                                         <?php
@@ -242,18 +270,26 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                         }    
                                         ?>
                                 </div>
+                            <?php } ?>
 
                             </div>
                             
 
+                            <?php
+                            $shortattribute = "Short%20Attributes";
+                            $shortAttributeResult = get_projectattributes($arrayevid[0],$shortattribute);
+
+
+                             if($shortAttributeResult['project_attributes'])   
+                             { 
+                            ?>
                             <div class="right-sec">
                                
                                 <div class="location-sec">
                                     <h3>Short Attributes</h3>
                                 </div>
                                 <?php
-                                $shortattribute = "Short%20Attributes";
-                                $shortAttributeResult = get_projectattributes($arrayevid[0],$shortattribute);
+                                
 
                                 foreach($shortAttributeResult['project_attributes'] as $x_value) 
                                 {
@@ -265,6 +301,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 ?>
                                 
                             </div>
+                            <?php } ?>
                             
                         </div>
                     </div>  
@@ -286,16 +323,29 @@ jQuery( document ).ready(function() {
 
     var logintoken = "<?php echo $_SESSION["accesstoken"]; ?>";    
     var amscredentials = "<?php echo $blocks[0]['attrs']['amscredentials']; ?>";
+    var amssinglevideo = "<?php echo $amssinglevideo; ?>";
     /**/
     jQuery("#videobanner").click(function() {
         if(logintoken || amscredentials == '')
         {
-            if(Hls.isSupported()) {
+            if(amssinglevideo != '')
+            {
+                if(Hls.isSupported()) {
                 var hls = new Hls();
-                hls.loadSource("<?php echo $amssinglevideo; ?>");
+                hls.loadSource(amssinglevideo);
                 hls.attachMedia(this);
-                jQuery(this).get(0).play()
-            }  
+                document.getElementById("videobanner").controls = true;
+                jQuery(".video-icon").hide();
+                jQuery(this).get(0).play();
+                }
+            }
+            else
+            {
+                alert("No video found");
+                jQuery(this).show();
+            }
+
+              
         }
         else
         {

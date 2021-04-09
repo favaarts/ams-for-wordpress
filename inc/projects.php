@@ -226,16 +226,40 @@ else
 
 <!-- Popup -->
 <div class="custom-model-main">
-    <div class="custom-model-inner">        
+    <div class="custom-model-inner amsloginpopup">        
     <div class="close-btn">×</div>
         <div class="custom-model-wrap">
             <span id="amscredentials_error"></span>
             <div class="pop-up-content-wrap">
+              <p>The project content is restricted by a password. Please enter the password to continue.</p>
                <input type="text" name="projectpassword" id="projectpassword">
                <input type="submit" id="projectsubmit">
                 <span class="customprojectloader" id="projectinifiniteLoader">
                   <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>">
                 </span>
+                <?php
+                  if($blockdata['project_paymenturl'])
+                  {
+                    if($blockdata['project_paymentmessage'])
+                    {
+                      echo "<p>".$blockdata['project_paymentmessage']."</p>"; 
+                    }
+                    else
+                    {
+                      echo "<p>If you don’t have a password, you can make a payment at this link to receive it.</p>"; 
+                    }
+
+                    if($blockdata['paymentbuttonname'])
+                    {
+                      $buttonname = $blockdata['paymentbuttonname'];
+                    }
+                    else
+                    {
+                      $buttonname = "Pay Here";
+                    }
+                    echo "<div class='paymentdiv'><a target='_blank' class='paymentclass' href=".$blockdata['project_paymenturl'].">".$buttonname."</a></div>";
+                  }
+                ?>
             </div>
         </div>  
     </div>  
