@@ -33,6 +33,15 @@
      project_protected: {
         type: 'string',
      },
+     project_paymenturl: {
+        type: 'string',
+     },
+    project_paymentmessage: {
+        type: 'string',
+     },
+     paymentbuttonname: {
+        type: 'string',
+     },
      projecttomember: {
       type: 'boolean',
       default: false
@@ -128,6 +137,33 @@
                   props.setAttributes( { project_protected: value } );
                 },
                 value: props.attributes.project_protected
+              }
+            ),
+            el( TextControl,
+              {
+                label: 'Payment Text Message',
+                onChange: ( value ) => {
+                  props.setAttributes( { project_paymentmessage: value } );
+                },
+                value: props.attributes.project_paymentmessage
+              }
+            ),
+            el( TextControl,
+              {
+                label: 'Payment Button Name',
+                onChange: ( value ) => {
+                  props.setAttributes( { paymentbuttonname: value } );
+                },
+                value: props.attributes.paymentbuttonname
+              }
+            ),
+            el( TextControl,
+              {
+                label: 'Payment URL (Leave Blank for No Payment)',
+                onChange: ( value ) => {
+                  props.setAttributes( { project_paymenturl: value } );
+                },
+                value: props.attributes.project_paymenturl
               }
             ),
             el( SelectControl,
