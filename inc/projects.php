@@ -20,7 +20,19 @@ main-content main-content-four-col - this class is for four columns.
 global $post;
 $pageid = $post->ID;
 
+$reels_id = false;
+if(isset($_GET['reels_id'])){
+    $reels_id = $_GET['reels_id'];
+}
+
 $blockdata = get_sidebaroption();
+
+if($blockdata['amsprojectid'])
+{
+  $getamsprojectid = get_projectdetails($blockdata['amsprojectid']);
+  $URL=site_url('/project/'.$blockdata['amsprojectid'].'-'.$getamsprojectid['project']['user_id'].'-'.$pageid);
+  echo "<script type='text/javascript'>document.location.href='".$URL."';</script>";
+}
 
 $gridlayout = $blockdata['radio_attr_project'];
 
@@ -63,6 +75,21 @@ else
                 <h4>Search</h4>
                 <input type="text" class="searrch-input" name="keyword" id="getproject" onkeyup="fetchproject()"></input>
             </div>
+
+            <?php
+              if(empty($blockdata['amsreelid']))
+              {
+                echo "<ul class='ul-cat-wrap getcategoryid'>";
+                echo "<li><a href='".site_url('/project')."'>All Projects</a></li>";
+                $reelsArrayResult = get_getallReels();
+
+                foreach($reelsArrayResult['reels'] as $c => $c_value) 
+                {
+                  echo "<li><a href='".site_url('/project/?reels_id='. $c_value['id'])."'>".$c_value['name']."</a></li>"; 
+                }
+                echo "</ul>";
+              }
+            ?>
         </div>    
         
     </div>  
@@ -74,7 +101,7 @@ else
       <input type="hidden" id="getpageid" value="<?php echo get_the_ID(); ?>">   
       <?php
 
-      $arrayResult = get_projectlisting(NULL);
+      $arrayResult = get_projectlisting(NULL,$reels_id);
       $bgcolor = get_option('wpams_button_colour_btn_label');
       if(empty($bgcolor))
       {
