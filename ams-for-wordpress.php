@@ -395,6 +395,31 @@ add_action('wp_ajax_get_sidebarcategory','get_sidebarcategory');
 add_action('wp_ajax_nopriv_get_sidebarcategory','get_sidebarcategory');
 // End sidebar category
 
+// Get Reels
+function get_getallReels()
+{
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+
+    
+    $reelsArrayResult = "https://".$apiurl.".amsnetwork.ca/api/v3/reels?access_token=".$apikey."&method=get&format=json";
+
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$reelsArrayResult);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    return $arrayEventResultData = json_decode($json, true);
+}
+add_action('wp_ajax_get_getallReels','get_getallReels');
+add_action('wp_ajax_nopriv_get_getallReels','get_getallReels');
+// End Get Resls
+
 // Sidebar category function
 function get_member_types()
 {
@@ -1100,11 +1125,12 @@ add_action('wp_ajax_nopriv_get_eventscheduletime','get_eventscheduletime');
 // End schedule time
 
 // Poroject Listing
-function get_projectlisting($projectdata = '')
+function get_projectlisting($projectdata = '',$reelsid = '')
 {
     
     $apiurl = get_option('wpams_url_btn_label');
     $apikey = get_option('wpams_apikey_btn_label');
+    $blockdata = get_sidebaroption();
 
     if(isset($projectdata))
     {
@@ -1112,7 +1138,7 @@ function get_projectlisting($projectdata = '')
     }
     else
     {
-        $blockdata = get_sidebaroption();
+        
         $numberofprojects = $blockdata['project_pagination'];
 
         if(isset($numberofprojects))
@@ -1124,7 +1150,27 @@ function get_projectlisting($projectdata = '')
             $totalprojects = 8;
         }
 
-        $projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/projects?page=1&per_page=".$totalprojects."&access_token=".$apikey."&method=get&format=json";
+        if($blockdata['amsreelid'])
+        {
+            if($reelsid)
+            {
+                $projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/projects?reel_id=".$reelsid."&access_token=".$apikey."&method=get&format=json";
+            }
+            else
+            {
+
+                $projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/projects?reel_id=".$blockdata['amsreelid']."&access_token=".$apikey."&method=get&format=json";
+            }
+        }
+        else if($reelsid)
+        {
+            $projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/projects?reel_id=".$reelsid."&access_token=".$apikey."&method=get&format=json";
+        }
+        else
+        {
+
+            $projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/projects?page=1&per_page=".$totalprojects."&access_token=".$apikey."&method=get&format=json";
+        }
     }
 
     $ch = curl_init();

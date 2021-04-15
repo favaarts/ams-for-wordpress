@@ -30,6 +30,12 @@
       type: 'boolean',
       default: true
      },
+     amsreelid: {
+        type: 'string',
+     },
+     amsprojectid: {
+        type: 'string',
+     },
      project_protected: {
         type: 'string',
      },
@@ -128,6 +134,24 @@
                   props.setAttributes( { radio_attr_project: value } );
                 },
                 selected: props.attributes.radio_attr_project
+              }
+            ),
+            el( TextControl,
+              {
+                label: '(Advanced) Enter Reel ID to show one specific reel',
+                onChange: ( value ) => {
+                  props.setAttributes( { amsreelid: value } );
+                },
+                value: props.attributes.amsreelid
+              }
+            ),
+            el( TextControl,
+              {
+                label: '(Advanced) Enter Project ID to show one specific project',
+                onChange: ( value ) => {
+                  props.setAttributes( { amsprojectid: value } );
+                },
+                value: props.attributes.amsprojectid
               }
             ),
             el( TextControl,
