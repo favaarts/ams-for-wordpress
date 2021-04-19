@@ -1382,80 +1382,34 @@ function getprojectonclick_action()
         {  
             foreach($arrayResult['projects'] as $x_value) 
             {
-            
-                $synopsis = mb_strimwidth($x_value['synopsis'], 0, 150, '...');
-                    
-                echo "<div class='listview-project'>";
-                echo "<div class='assets-list-items'>";
+                if($x_value['can_view_projects'] == 'true')
+                {
                 
-
-                if($x_value['thumbnail'] == NULL || $x_value['thumbnail'] == "")
-                  {                                    
-                      echo "<div class='product-img'>";
-                      echo "<div class='productthumb'>";
-                      echo "<img src=". plugins_url( 'assets/img/bg-image.png', __FILE__ ) .">";
-                      echo "</div>";  
-                      echo "</div>";
-                  }
-                  else
-                  {
-                       echo "<div class='product-img'>";
-                        echo "<div class='productthumb'>";
-                          echo "<img src=".$x_value['thumbnail'].">";
-                        echo "</div>";  
-                       echo "</div>";
-                  }
-
-                
-                echo "<div class='assetsproduct-content'>";
-                if($_SESSION["projectpassword"] || $blocks[0]['attrs']['project_protected'] == NULL)
-                {
-                    echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$post_id)."'>";
-                    echo  "<p class='product-title'> ". $x_value['name'] ;
-                      if($x_value['completed_year'])
-                      {
-                        echo " (".$x_value['completed_year'].")";
-                      }
-                    echo "</p>";
-                    echo  "</a>";
-                }
-                else
-                {
-                    echo  "<p class='product-title'> ". $x_value['name'] ;
-                      if($x_value['completed_year'])
-                      {
-                        echo " (".$x_value['completed_year'].")";
-                      }
-                    echo "</p>";
-                }
-                echo "<div class='assetsprice'>";
-                echo    "<p class='memberprice'><strong>Created By</strong> - ". $x_value['creator']. "</p>";
-
-                if($synopsis != NULL)
-                {
-                echo "<p class='price-non-mem'><strong>Synopsis</strong> - ". $synopsis ."</p>";
-                }
-                else
-                {
-                    $attributeResult = get_projectattributes($x_value['id']);
-                    if($attributeResult['project_attributes'][0]['value'] != NULL)
-                    {
-
-                    echo "<p class='price-non-mem'><strong>".$attributeResult['project_attributes'][0]['project_attribute_type_name']."</strong> - ". $attributeResult['project_attributes'][0]['value'] ."</p>";
-                    }
-                }
-                echo "</div>";
-                echo "</div>";
-                echo "</div>";
-                echo "</div>";
-            }
-        }
-        else
-        {
-            foreach($arrayResult['projects'] as $x_value) 
-            {
-              echo"<div class='productstyle projectdiv'>";
+                    $synopsis = mb_strimwidth($x_value['synopsis'], 0, 150, '...');
+                        
+                    echo "<div class='listview-project'>";
+                    echo "<div class='assets-list-items'>";
                     
+
+                    if($x_value['thumbnail'] == NULL || $x_value['thumbnail'] == "")
+                      {                                    
+                          echo "<div class='product-img'>";
+                          echo "<div class='productthumb'>";
+                          echo "<img src=". plugins_url( 'assets/img/bg-image.png', __FILE__ ) .">";
+                          echo "</div>";  
+                          echo "</div>";
+                      }
+                      else
+                      {
+                           echo "<div class='product-img'>";
+                            echo "<div class='productthumb'>";
+                              echo "<img src=".$x_value['thumbnail'].">";
+                            echo "</div>";  
+                           echo "</div>";
+                      }
+
+                    
+                    echo "<div class='assetsproduct-content'>";
                     if($_SESSION["projectpassword"] || $blocks[0]['attrs']['project_protected'] == NULL)
                     {
                         echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$post_id)."'>";
@@ -1465,7 +1419,7 @@ function getprojectonclick_action()
                             echo " (".$x_value['completed_year'].")";
                           }
                         echo "</p>";
-                        echo "</a>";
+                        echo  "</a>";
                     }
                     else
                     {
@@ -1476,21 +1430,74 @@ function getprojectonclick_action()
                           }
                         echo "</p>";
                     }
+                    echo "<div class='assetsprice'>";
+                    echo    "<p class='memberprice'><strong>Created By</strong> - ". $x_value['creator']. "</p>";
 
-                    if($x_value['thumbnail'] == NULL || $x_value['thumbnail'] == "")
-                    {                                    
-                        echo "<div class='product-img-wrap'>";
-                          echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ ).">";
-                        echo "</div>";
+                    if($synopsis != NULL)
+                    {
+                    echo "<p class='price-non-mem'><strong>Synopsis</strong> - ". $synopsis ."</p>";
                     }
                     else
                     {
-                         echo "<div class='product-img-wrap'>";
-                            echo "<img src=".$x_value['thumbnail'].">";
-                         echo "</div>";
+                        $attributeResult = get_projectattributes($x_value['id']);
+                        if($attributeResult['project_attributes'][0]['value'] != NULL)
+                        {
+
+                        echo "<p class='price-non-mem'><strong>".$attributeResult['project_attributes'][0]['project_attribute_type_name']."</strong> - ". $attributeResult['project_attributes'][0]['value'] ."</p>";
+                        }
                     }
-                    echo "<p class='memberprice'><strong>Created By</strong> - ". $x_value['creator']. "</p>";
-              echo"</div>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                }    
+            }
+        }
+        else
+        {
+            foreach($arrayResult['projects'] as $x_value) 
+            {
+
+               if($x_value['can_view_projects'] == 'true')
+               {  
+                      echo"<div class='productstyle projectdiv'>";
+                            
+                            if($_SESSION["projectpassword"] || $blocks[0]['attrs']['project_protected'] == NULL)
+                            {
+                                echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$post_id)."'>";
+                                echo  "<p class='product-title'> ". $x_value['name'] ;
+                                  if($x_value['completed_year'])
+                                  {
+                                    echo " (".$x_value['completed_year'].")";
+                                  }
+                                echo "</p>";
+                                echo "</a>";
+                            }
+                            else
+                            {
+                                echo  "<p class='product-title'> ". $x_value['name'] ;
+                                  if($x_value['completed_year'])
+                                  {
+                                    echo " (".$x_value['completed_year'].")";
+                                  }
+                                echo "</p>";
+                            }
+
+                            if($x_value['thumbnail'] == NULL || $x_value['thumbnail'] == "")
+                            {                                    
+                                echo "<div class='product-img-wrap'>";
+                                  echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ ).">";
+                                echo "</div>";
+                            }
+                            else
+                            {
+                                 echo "<div class='product-img-wrap'>";
+                                    echo "<img src=".$x_value['thumbnail'].">";
+                                 echo "</div>";
+                            }
+                            echo "<p class='memberprice'><strong>Created By</strong> - ". $x_value['creator']. "</p>";
+                      echo"</div>";
+                }      
             }
         }    
     }
