@@ -66,6 +66,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 if($attributePhoto['project_attributes'][0]['file_attachment_thumbnail'])
                                 {
                                     $videoBanner = $attributePhoto['project_attributes'][0]['file_attachment_thumbnail'];
+                                    $fileAttachment = $attributePhoto['project_attributes'][0]['file_attachment'];
                                     echo "<a class='video-icon'></a>";
                                 }
                                 else
