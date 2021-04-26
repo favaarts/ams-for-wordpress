@@ -143,7 +143,10 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                     }
                                 }
 
-                                
+                                if($blocks[0]['attrs']['amsfile_attachment'])
+                                {
+                                    echo "<a href=".$fileAttachment."><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
+                                }
                                     
                                 ?>
                             </div>
@@ -198,8 +201,12 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                                     <div class='popup-content'>
                                                         <video id='amspopupvideo".$x_value['id']."' width='600' controls>
                                                         </video>
-                                                        <a class='close-button' popup-close='popup-".$i."' href='javascript:void(0)' data-id='".$x_value['id']."'>x</a>
-                                                    </div>
+                                                        <a class='close-button' popup-close='popup-".$i."' href='javascript:void(0)' data-id='".$x_value['id']."'>x</a>";
+                                                        if($blocks[0]['attrs']['amsfile_attachment'])
+                                                        {    
+                                                            echo "<a href='".$x_value['file_attachment']."'><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
+                                                        }
+                                                echo "</div>
                                                 </div>
                                             </div>";
                                             }

@@ -39,6 +39,10 @@
      project_protected: {
         type: 'string',
      },
+     amsfile_attachment: {
+        type: 'boolean',
+        default: false
+     },
      project_paymenturl: {
         type: 'string',
      },
@@ -119,6 +123,13 @@
                  props.setAttributes( { amscredentials: value } );
               },
               checked: props.attributes.amscredentials,
+            }),
+            el(ToggleControl, {
+              label: 'Allow Users to Download Media?',
+              onChange: ( value ) => {
+                 props.setAttributes( { amsfile_attachment: value } );
+              },
+              checked: props.attributes.amsfile_attachment,
             }),
             el( RadioControl,
               {
