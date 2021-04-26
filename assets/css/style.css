@@ -1611,3 +1611,13 @@ img.organizationlogo {
 @media (max-width:481px){
 .amsvideo-thumb a {width: 30px; height: 30px; }
 }
+
+.amsvideodownload {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 5px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+}
