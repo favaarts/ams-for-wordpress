@@ -63,15 +63,21 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
 
                             <div class="img-sec video-main">
                                 <?php
-                                if($attributePhoto['project_attributes'][0]['file_attachment_thumbnail'])
+                                 foreach($attributePhoto['project_attributes'] as $x_value) 
                                 {
-                                    $videoBanner = $attributePhoto['project_attributes'][0]['file_attachment_thumbnail'];
-                                    $fileAttachment = $attributePhoto['project_attributes'][0]['file_attachment'];
-                                    echo "<a class='video-icon'></a>";
-                                }
-                                else
-                                {
-                                    $videoBanner = plugins_url( 'assets/img/video_poster.jpg', __FILE__ );
+                                    if($x_value['project_attribute_type_name'] == "Video")
+                                    {
+                                        if($attributePhoto['project_attributes'][0]['file_attachment_thumbnail'])
+                                        {
+                                            $videoBanner = $attributePhoto['project_attributes'][0]['file_attachment_thumbnail'];
+                                            $fileAttachment = $attributePhoto['project_attributes'][0]['file_attachment'];
+                                            echo "<a class='video-icon'></a>";
+                                        }
+                                        else
+                                        {
+                                            $videoBanner = plugins_url( 'assets/img/video_poster.jpg', __FILE__ );
+                                        }
+                                    }    
                                 }
                                 ?>
 
@@ -278,7 +284,27 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                         }    
                                         ?>
                                 </div>
-                            <?php } ?>
+                            <?php } 
+
+                             if($longAttribute['project_attributes'])
+                                {
+                                    echo "<div class='enrollment'>
+                                            <h3>Long Attributes:</h3>";
+                                            echo "<div class='text-sec'>";
+                                            echo "<ul>";
+                                    foreach($longAttribute['project_attributes'] as $x_value) 
+                                    {
+                                        if($x_value['project_attribute_type_name'] != "Synopsis")
+                                        {    
+                                            echo "<li>".$x_value['value']."</li>";  
+                                        }
+                                    }
+                                            echo "</ul>";
+                                            echo "</div>";
+                                    echo "</div>";
+                                }                                   
+
+                            ?>
 
                             </div>
                             
