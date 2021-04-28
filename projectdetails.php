@@ -293,19 +293,18 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
 
                              if($longAttribute['project_attributes'])
                                 {
-                                    echo "<div class='enrollment'>
-                                            <h3>Long Attributes:</h3>";
+                                    echo "<div class='enrollment'>";
                                             echo "<div class='text-sec'>";
-                                            echo "<ul>";
+                                            
                                     foreach($longAttribute['project_attributes'] as $x_value) 
                                     {
                                         if($x_value['project_attribute_type_name'] != "Synopsis")
                                         {    
-                                            echo "<li>".$x_value['value']."</li>";  
+                                            echo "<p> <strong>".$x_value['project_attribute_type_name']." : </strong>".$x_value['value']."</p>";  
                                         }
                                     }
-                                            echo "</ul>";
-                                            echo "</div>";
+                                            
+                                            echo "</div>"; 
                                     echo "</div>";
                                 }                                   
 
