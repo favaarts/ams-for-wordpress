@@ -1435,7 +1435,7 @@ function getprojectonclick_action()
 
                     if($synopsis != NULL)
                     {
-                    echo "<p class='price-non-mem'><strong>Synopsis</strong> - ". $synopsis ."</p>";
+                    echo "<p class='price-non-mem'>". $synopsis ."</p>";
                     }
                     else
                     {
