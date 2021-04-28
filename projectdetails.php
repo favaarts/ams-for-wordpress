@@ -63,15 +63,20 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
 
                             <div class="img-sec video-main">
                                 <?php
-                                 foreach($attributePhoto['project_attributes'] as $x_value) 
+                                
+                                foreach($attributePhoto['project_attributes'] as $x_value) 
                                 {
                                     if($x_value['project_attribute_type_name'] == "Video")
                                     {
-                                        if($attributePhoto['project_attributes'][0]['file_attachment_thumbnail'])
+                                        if($x_value['file_attachment_thumbnail'])
                                         {
-                                            $videoBanner = $attributePhoto['project_attributes'][0]['file_attachment_thumbnail'];
-                                            $fileAttachment = $attributePhoto['project_attributes'][0]['file_attachment'];
+                                            $videoBanner = $x_value['file_attachment_thumbnail'];
+                                            
+                                            $fileAttachment = $x_value['file_attachment'];
+                                           
+                                            $amssinglevideonew = $x_value['value_4'];
                                             echo "<a class='video-icon'></a>";
+                                            break;
                                         }
                                         else
                                         {
@@ -357,7 +362,7 @@ jQuery( document ).ready(function() {
 
     var logintoken = "<?php echo $_SESSION["accesstoken"]; ?>";    
     var amscredentials = "<?php echo $blocks[0]['attrs']['amscredentials']; ?>";
-    var amssinglevideo = "<?php echo $amssinglevideo; ?>";
+    var amssinglevideo = "<?php echo $amssinglevideonew; ?>";
     /**/
     jQuery("#videobanner").click(function() {
         if(logintoken || amscredentials == '')
