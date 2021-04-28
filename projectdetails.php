@@ -171,7 +171,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 if($arrayResult['project']['synopsis'])
                                 {
                                     echo "<div class='synopsis prospace'>";
-                                    echo "<h3>Synopsis:</h3>";
+                                    //echo "<h3>Synopsis:</h3>";
                                         echo "<div class='text-sec'>";
                                             echo "<p>".$arrayResult['project']['synopsis']."</p>";
                                         echo "</div>";
@@ -278,7 +278,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 { 
                                 ?>
                                 <div class="crewroles prospace">
-                                    <h3>Crew Roles:</h3>
+                                    <!-- <h3>Crew Roles:</h3> -->
                                         <?php
                                         foreach($attributeCrewResult['project_attributes'] as $x_value) 
                                         {
@@ -293,7 +293,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
 
                              if($longAttribute['project_attributes'])
                                 {
-                                    echo "<div class='enrollment'>";
+                                    echo "<div class='enrollment longattribute'>";
                                             echo "<div class='text-sec'>";
                                             
                                     foreach($longAttribute['project_attributes'] as $x_value) 
@@ -323,9 +323,9 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                             ?>
                             <div class="right-sec">
                                
-                                <div class="location-sec">
+                                <!-- <div class="location-sec">
                                     <h3>Short Attributes</h3>
-                                </div>
+                                </div> -->
                                 <?php
                                 
 

@@ -1621,3 +1621,9 @@ img.organizationlogo {
   font-size: 14px;
   border-radius: 5px;
 }
+
+.longattribute p {
+    font-size: 14px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
