@@ -183,16 +183,12 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 <?php
                                
 
-                                if($attributePhoto['project_attributes'][0]['project_attribute_type_name'] == "Video" && !empty($attributePhoto['project_attributes'][0]['project_attribute_type_name']))
-                                {  
-
-                                   $amssinglevideo = $attributePhoto['project_attributes'][0]['value_4'];
                                    
-                                   if(count($attributePhoto['project_attributes']) > 1)
-                                   {
+                                if(count($attributePhoto['project_attributes']) > 1)
+                                {
                                 ?> 
                                 <div class="videos prospace amsvideos">
-                                    <h3>Videos:</h3>
+                                   
                                     <div class="video-row">
                                         <?php
                                         $i = 1;
@@ -203,6 +199,10 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                         {
                                             if($x_value['project_attribute_type_name'] == "Video")
                                             {
+                                                if ( $x_value === reset( $attributePhoto['project_attributes'] ) ) {          
+                                                    // Desplay the array element
+                                                    echo "<h3>Videos:</h3>";
+                                                }
                                                 
                                             echo "<div class='video-col'>
                                                  <div class='amsvideo-thumb'>
@@ -228,29 +228,33 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
 
                                     </div>
                                 </div>
-                                <?php } } ?>
+                                <?php }  ?>
 
-                                <?php
-                                if($attributePhoto['project_attributes'][0]['project_attribute_type_name'] == "Photo" && !empty($attributePhoto['project_attributes'][0]['project_attribute_type_name']))
-                                {   
-                                ?>
                                 <div class="photos prospace">
-                                    <h3>Photos:</h3>
+                                    
                                     <div class="text-sec">
                                         <?php
-                                        foreach($attributePhoto['project_attributes'] as $x_value) 
+                                         foreach($attributePhoto['project_attributes'] as $xphoto_value) 
                                         {
-                                            if($x_value['project_attribute_type_name'] == "Photo")
+                                            
+                                            if($xphoto_value['project_attribute_type_name'] == "Photo")
                                             {
+                                                
+                                                if ( $xphoto_value === reset( $attributePhoto['project_attributes'] ) ) 
+                                                {          
+                                                    echo "<h3>Photos:</h3>";
+                                                }
+
                                                 echo "<div class='column'>";
-                                                echo   "<img src=".$x_value['file_attachment'] ." class='hover-shadow cursor'>";
+                                                echo   "<img src=".$xphoto_value['file_attachment'] ." class='hover-shadow cursor'>";
                                                 echo "</div>";
                                             }
+                                            
                                         }    
                                         ?>
                                     </div>
                                 </div>
-                                <?php } ?>
+                                
 
                                 <?php
                                 if($attributePhoto['project_attributes'][0]['project_attribute_type_name'] == "Awards/Screenings/Festivals" && !empty($attributePhoto['project_attributes'][0]['project_attribute_type_name']))

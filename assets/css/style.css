@@ -1177,6 +1177,7 @@ img.organizationlogo {
     font-size: 20px;
     margin-bottom: 10px;
     font-weight: bold;
+    width: 100%;
 }
 
 .projectdetail .prospace p {
@@ -1315,6 +1316,7 @@ img.organizationlogo {
 .amsvideos .video-row .video-col {
     padding: 15px;
     width: calc(33.33% - 30px);
+    padding-left: 0;
 }
 
 .amsvideos .video-row .video-col .video-thumb {
@@ -1627,3 +1629,9 @@ img.organizationlogo {
     padding-bottom: 0px;
     margin-bottom: 5px;
 }
+
+.photos .column img
+{
+    height: 100px;
+    padding-right: 5px;
+} 
