@@ -73,7 +73,7 @@ else
         <div class="assetssidebar">
             <div class="searchbox">
                 <h4>Search</h4>
-                <input type="text" class="searrch-input" name="keyword" id="getproject" onkeyup="fetchproject()"></input>
+                <input type="text" class="searrch-input" name="keyword" id="getproject" data-protectedid="<?php echo $blockdata['project_protected']; ?>" onkeyup="fetchproject()"></input>
             </div>
 
             <?php
@@ -310,6 +310,54 @@ jQuery(document).ready(function($) {
    var count = 2;
    var total = jQuery("#inifiniteLoader").data("totalequipment");
    var pageid = jQuery("#getpageid").val();
+
+    /*Password URL Redirect*/
+    var projectpassword = "<?php echo $_GET['password']; ?>";
+    var url = $(this).val();    
+      
+    if(projectpassword != null)
+    {    
+          
+          var getpageid = jQuery('#getpageid').val();
+        
+          $.ajax({
+             url: amsjs_ajax_url.ajaxurl,
+             type:'POST',
+             data: { action: 'get_amsprojectlog', projectpassword:projectpassword,getpageid:getpageid},
+             beforeSend: function(){
+              // Show image container
+                jQuery(".customprojectloader").show();
+                jQuery("#projectsubmit").prop('disabled', true);
+             },
+             success: function (data) {
+               /* console.log(data);*/
+                jQuery('.customprojectloader').hide('1000');
+                jQuery("#projectsubmit").prop('disabled', false);
+
+                var mydata = data.substring(0,data.length - 1);
+
+                console.log(mydata);
+
+                 if(mydata == 'valid')
+                 {
+                    window.location = "<?php echo site_url('/project/'); ?>";
+                    return false;
+                 }
+                 else
+                 {
+                    jQuery("#amscredentials_error").html('<p>AMS Credentials not match.</p>');
+                    jQuery("#amscredentials_error").css("color", "red");
+                    jQuery("#amscredentials_error").css("display", "block");
+
+                    setTimeout(function() {
+                        $('#amscredentials_error').fadeOut('fast');
+                    }, 5000);
+                    
+                 }
+             }
+          });
+    }  
+   /*End password URL redirect*/
 
    $('#inifiniteLoader').hide();
    jQuery(".customprojectloader").hide();
