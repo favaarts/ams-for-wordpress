@@ -226,7 +226,7 @@ get_header();  ?>
                                     if(isset($json_value['insurance_value']))
                                     {
                                     echo "<div class='location-sec'>";
-                                    echo "<h3>Serial Number</h3>";
+                                    echo "<h3>Insurance Value</h3>";
                                     echo "<p>".$json_value['insurance_value']."</p>";
                                     echo "</div>";
                                     }
