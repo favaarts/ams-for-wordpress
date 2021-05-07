@@ -104,11 +104,12 @@ function fetchevent()
 function fetchproject()
 {
 	var pageid = jQuery("#getpageid").val();
+	var projectprotected = jQuery("#getproject").attr("data-protectedid");
 	
 	jQuery.ajax({
         url: amsjs_ajax_url.ajaxurl,
         type: 'post',
-        data: { action: 'searchprojectdata_action', projectdata: jQuery('#getproject').val(), pageid:pageid},
+        data: { action: 'searchprojectdata_action', projectdata: jQuery('#getproject').val(), pageid:pageid, projectprotected:projectprotected},
         success: function(data) {
         	//console.log(data);
         	
