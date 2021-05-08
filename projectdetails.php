@@ -104,7 +104,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 if($arrayResult['project']['creator'])
                                 {
                                     echo "<div class='enrollment enrtop'>
-                                        <h3>Author</h3>";
+                                        <h3>Submitted By</h3>";
                                       if ($blocks[0]['attrs']['projecttomember'] && $connectmemberblocks[0]['blockName'] == "wpdams-amsnetwork-member/amsnetwork-block-member")  
                                       {
                                        
