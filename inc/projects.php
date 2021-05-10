@@ -346,28 +346,14 @@ jQuery(document).ready(function($) {
                 console.log(mydata);
                 if(mydata == 'valid')
                 {
-                  location.reload(true);
+                  location.reload();
                   return false;
                 }
 
-                 /*if(mydata == 'valid')
-                 {
-                    window.location = "<?php //echo site_url('/project/'); ?>";
-                    return false;
-                 }
-                 else
-                 {
-                    jQuery("#amscredentials_error").html('<p>AMS Credentials not match.</p>');
-                    jQuery("#amscredentials_error").css("color", "red");
-                    jQuery("#amscredentials_error").css("display", "block");
-
-                    setTimeout(function() {
-                        $('#amscredentials_error').fadeOut('fast');
-                    }, 5000);
-                    
-                 }*/
+                 
              }
           });
+          return false;
     }  
    /*End password URL redirect*/
 
