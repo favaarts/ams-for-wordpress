@@ -347,6 +347,7 @@ jQuery(document).ready(function($) {
                 if(mydata == 'valid')
                 {
                   location.reload();
+                  return false;
                 }
 
                  /*if(mydata == 'valid')
