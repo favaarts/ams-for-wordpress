@@ -69,7 +69,14 @@ else
   {        
   ?>
     <div class="wp-block-column left-col col-fit" >
-        
+        <?php
+
+            if(isset($_SESSION["billingemail"]))  
+            {
+              echo '<p>Hii, ' . $_SESSION["billingemail"] . '</p>';
+            }
+
+        ?>
         <div class="assetssidebar">
             <div class="searchbox">
                 <h4>Search</h4>
@@ -315,7 +322,7 @@ jQuery(document).ready(function($) {
     var projectpassword = "<?php echo $_GET['password']; ?>";
     var url = $(this).val();    
       
-    if(projectpassword != null)
+    if(projectpassword)
     {    
           
           var getpageid = jQuery('#getpageid').val();
@@ -338,9 +345,9 @@ jQuery(document).ready(function($) {
 
                 console.log(mydata);
 
-                 if(mydata == 'valid')
+                 /*if(mydata == 'valid')
                  {
-                    window.location = "<?php echo site_url('/project/'); ?>";
+                    window.location = "<?php //echo site_url('/project/'); ?>";
                     return false;
                  }
                  else
@@ -353,7 +360,7 @@ jQuery(document).ready(function($) {
                         $('#amscredentials_error').fadeOut('fast');
                     }, 5000);
                     
-                 }
+                 }*/
              }
           });
     }  
