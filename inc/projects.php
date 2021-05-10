@@ -344,16 +344,9 @@ jQuery(document).ready(function($) {
                 var mydata = data.substring(0,data.length - 1);
 
                 console.log(mydata);
-                if(mydata == 'valid')
-                {
-                  location.reload();
-                  return false;
-                }
-
                  
              }
           });
-          return false;
     }  
    /*End password URL redirect*/
 
