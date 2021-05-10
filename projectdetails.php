@@ -127,11 +127,11 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                         <h3>Director(s)</h3>";
                                         if ($blocks[0]['attrs']['projecttomember'] && $connectmemberblocks[0]['blockName'] == "wpdams-amsnetwork-member/amsnetwork-block-member")  
                                         {
-                                            echo "<p><a target='_blank' href='".site_url('/members/'.$attributeCrewResult['project_attributes'][0]['value_2'].'-'.$projectconnectmemberid.'/details' )."'>".$attributeCrewResult['project_attributes'][0]['value']."</a></p>";
+                                            echo "<p><a target='_blank' href='".site_url('/members/'.$x_value['value_2'].'-'.$projectconnectmemberid.'/details' )."'>".$x_value['value']."</a></p>";
                                         }
                                         else
                                         {   
-                                            echo "<p>".$attributeCrewResult['project_attributes'][0]['value']."</p>";
+                                            echo "<p>".$x_value['value']."</p>";
                                         }
                                         echo "</div>";
                                     }
