@@ -610,6 +610,38 @@ add_action('wp_ajax_get_amsprojectlog','get_amsprojectlog');
 add_action('wp_ajax_nopriv_get_amsprojectlog','get_amsprojectlog');
 // End AMS Project login
 
+// AMS Project login with create email and user session
+function get_amsprojectlogwithemail()
+{
+
+    $post_id = $_POST['getpageid'];
+    $post = get_post($post_id);
+    $blocks = parse_blocks($post->post_content);
+    $blockdata = $blocks[0]['attrs'];
+    
+    $projectpassword = $_POST['projectpassword'];
+    
+    if ($blockdata['project_protected'] == $projectpassword)
+    {
+        $_SESSION['projectpassword']=$blockdata['project_protected'];
+        $_SESSION['billingemail']= $_POST['billingEmailAddress'];
+        echo $_POST['billingEmailAddress'];
+        echo "<br>";
+        echo $_POST['billingContactName'];
+
+        echo "valid";
+        
+    }
+    else
+    {
+        echo "error";
+    }
+    
+}
+add_action('wp_ajax_get_amsprojectlogwithemail','get_amsprojectlogwithemail');
+add_action('wp_ajax_nopriv_get_amsprojectlogwithemail','get_amsprojectlogwithemail');
+// End AMS Project login with create email and user session
+
 // AMS Member login
 function get_amsmemberlogout()
 {
