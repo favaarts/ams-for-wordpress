@@ -322,7 +322,7 @@ jQuery(document).ready(function($) {
     var projectpassword = "<?php echo $_GET['password']; ?>";
     var url = $(this).val();    
       
-    if(projectpassword)
+    if(projectpassword != null)
     {    
           
           var getpageid = jQuery('#getpageid').val();
@@ -330,7 +330,7 @@ jQuery(document).ready(function($) {
           $.ajax({
              url: amsjs_ajax_url.ajaxurl,
              type:'POST',
-             data: { action: 'get_amsprojectlog', projectpassword:projectpassword,getpageid:getpageid},
+             data: { action: 'get_amsprojectlogwithemail', projectpassword:projectpassword,getpageid:getpageid},
              beforeSend: function(){
               // Show image container
                 jQuery(".customprojectloader").show();
