@@ -69,14 +69,7 @@ else
   {        
   ?>
     <div class="wp-block-column left-col col-fit" >
-        <?php
-
-            if(isset($_SESSION["billingemail"]))  
-            {
-              echo '<p>Hii, ' . $_SESSION["billingemail"] . '</p>';
-            }
-
-        ?>
+        
         <div class="assetssidebar">
 
             <?php
