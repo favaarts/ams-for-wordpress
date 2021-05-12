@@ -76,12 +76,14 @@ else
 
               //echo $_POST['billingEmailAddress'];
                 $billingEmailAddress = $_POST['billingEmailAddress'];
+                $loginPageURL=site_url('/project/');
                 if($_SESSION['billingEmailAddress'] = $billingEmailAddress)  
                 {
+                  $_SESSION['billingContactName'] = $_POST['billingContactName'];
                   echo "<div class='amsuserlayout'>";
                       echo "<div class='userlogin'><p>Hii, ".$_SESSION['billingEmailAddress']."</p></div>";
                   
-                     get_sentmailproject($_SESSION['billingEmailAddress'],$_GET['password']);     
+                     get_sentmailproject($_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);     
                      /* echo "<div class='amslogoutbutton'>
                               <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
                             </div>";*/
