@@ -78,6 +78,26 @@ else
 
         ?>
         <div class="assetssidebar">
+
+            <?php
+
+              //echo $_POST['billingEmailAddress'];
+                $billingEmailAddress = $_POST['billingEmailAddress'];
+                if($_SESSION['billingEmailAddress'] = $billingEmailAddress)  
+                {
+                  echo "<div class='amsuserlayout'>";
+                      echo "<div class='userlogin'><p>Hii, ".$_SESSION['billingEmailAddress']."</p></div>";
+                  
+                     get_sentmailproject();     
+                     /* echo "<div class='amslogoutbutton'>
+                              <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
+                            </div>";*/
+                            
+                  echo "</div>";                              
+                  
+                }
+              ?>  
+
             <div class="searchbox">
                 <h4>Search</h4>
                 <input type="text" class="searrch-input" name="keyword" id="getproject" data-protectedid="<?php echo $blockdata['project_protected']; ?>" onkeyup="fetchproject()"></input>
@@ -330,7 +350,7 @@ jQuery(document).ready(function($) {
           $.ajax({
              url: amsjs_ajax_url.ajaxurl,
              type:'POST',
-             data: { action: 'get_amsprojectlogwithemail', projectpassword:projectpassword,getpageid:getpageid},
+             data: { action: 'get_amsprojectlog', projectpassword:projectpassword,getpageid:getpageid},
              beforeSend: function(){
               // Show image container
                 jQuery(".customprojectloader").show();
