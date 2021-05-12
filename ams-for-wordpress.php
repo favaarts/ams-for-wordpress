@@ -596,7 +596,7 @@ function get_amsprojectlog()
     if ($blockdata['project_protected'] == $projectpassword)
     {
         $_SESSION['projectpassword']=$blockdata['project_protected'];
-        //echo $_SESSION['billingemail']= $_POST['billingemail'];
+        //echo $_SESSION['billingEmailAddress']= $_POST['billingEmailAddress'];
         echo "valid";
         
     }
@@ -610,37 +610,37 @@ add_action('wp_ajax_get_amsprojectlog','get_amsprojectlog');
 add_action('wp_ajax_nopriv_get_amsprojectlog','get_amsprojectlog');
 // End AMS Project login
 
-// AMS Project login with create email and user session
-function get_amsprojectlogwithemail()
+// AMS Project mail
+function get_sentmailproject()
 {
 
-    $post_id = $_POST['getpageid'];
-    $post = get_post($post_id);
-    $blocks = parse_blocks($post->post_content);
-    $blockdata = $blocks[0]['attrs'];
-    
-    $projectpassword = $_POST['projectpassword'];
-    
-    if ($blockdata['project_protected'] == $projectpassword)
-    {
-        $_SESSION['projectpassword']=$blockdata['project_protected'];
-        $_SESSION['billingemail']= $_POST['billingEmailAddress'];
-        echo $_POST['billingEmailAddress'];
-        echo "<br>";
-        echo $_POST['billingContactName'];
-
-        echo "valid";
-        
-    }
-    else
-    {
-        echo "error";
-    }
+$to = 'jay.bagwansingh@ifuturz.com';
+$subject = 'FAVA FEST 2021';
+$from = 'info@fava.ca';
+ 
+// To send HTML mail, the Content-type header must be set
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+ 
+// Create email headers
+$headers .= 'From: '.$from."\r\n".
+    'Reply-To: '.$from."\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+ 
+// Compose a simple HTML email message
+$message = '<html><body>';
+$message .= '<h1 style="color:#000;">Hi -NAME-!</h1>';
+$message .= '<p style="color:#3e3939;font-size:16px;">Thank you for supporting our festival. Please use this acces credentilas to watch the content.</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;">It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> https://fava.ca/fava-fest-2021-watch/</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> 123</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;">I you have any questions or coments please contact us at programing@fava.ca.</p>';
+$message .= '</body></html>';
     
 }
-add_action('wp_ajax_get_amsprojectlogwithemail','get_amsprojectlogwithemail');
-add_action('wp_ajax_nopriv_get_amsprojectlogwithemail','get_amsprojectlogwithemail');
-// End AMS Project login with create email and user session
+add_action('wp_ajax_get_sentmailproject','get_sentmailproject');
+add_action('wp_ajax_nopriv_get_sentmailproject','get_sentmailproject');
+// End AMS Project mail
 
 // AMS Member login
 function get_amsmemberlogout()
