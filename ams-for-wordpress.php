@@ -611,10 +611,10 @@ add_action('wp_ajax_nopriv_get_amsprojectlog','get_amsprojectlog');
 // End AMS Project login
 
 // AMS Project mail
-function get_sentmailproject()
+function get_sentmailproject($billingEmailAddress,$projectPassword)
 {
 
-$to = 'jay.bagwansingh@ifuturz.com';
+$to = $billingEmailAddress;
 $subject = 'FAVA FEST 2021';
 $from = 'info@fava.ca';
  
@@ -633,7 +633,7 @@ $message .= '<h1 style="color:#000;">Hi -NAME-!</h1>';
 $message .= '<p style="color:#3e3939;font-size:16px;">Thank you for supporting our festival. Please use this acces credentilas to watch the content.</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;">It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> https://fava.ca/fava-fest-2021-watch/</p>';
-$message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> 123</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> '.$projectPassword.'</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;">I you have any questions or coments please contact us at programing@fava.ca.</p>';
 $message .= '</body></html>';
 
