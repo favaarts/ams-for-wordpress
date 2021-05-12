@@ -81,7 +81,7 @@ else
                   echo "<div class='amsuserlayout'>";
                       echo "<div class='userlogin'><p>Hii, ".$_SESSION['billingEmailAddress']."</p></div>";
                   
-                     get_sentmailproject();     
+                     get_sentmailproject($_SESSION['billingEmailAddress'],$_GET['password']);     
                      /* echo "<div class='amslogoutbutton'>
                               <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
                             </div>";*/
@@ -357,6 +357,10 @@ jQuery(document).ready(function($) {
                 var mydata = data.substring(0,data.length - 1);
 
                 console.log(mydata);
+
+                if (window.location.href.indexOf('reload')==-1) {
+                     window.location.replace(window.location.href+'?reload');
+                }
                  
              }
           });
