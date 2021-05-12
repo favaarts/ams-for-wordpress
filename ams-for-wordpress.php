@@ -636,7 +636,9 @@ $message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> htt
 $message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> 123</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;">I you have any questions or coments please contact us at programing@fava.ca.</p>';
 $message .= '</body></html>';
-    
+
+// send email
+mail($to, $subject, $message, $headers);
 }
 add_action('wp_ajax_get_sentmailproject','get_sentmailproject');
 add_action('wp_ajax_nopriv_get_sentmailproject','get_sentmailproject');
