@@ -364,7 +364,7 @@ jQuery(document).ready(function($) {
           
           var getpageid = jQuery('#getpageid').val();
 
-          var custbillingEmail jQuery("#custbillingEmail").val();
+          var custbillingEmail = jQuery("#custbillingEmail").val();
         
           $.ajax({
              url: amsjs_ajax_url.ajaxurl,
