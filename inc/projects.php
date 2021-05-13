@@ -19,6 +19,7 @@ main-content main-content-four-col - this class is for four columns.
 
 global $post;
 $pageid = $post->ID;
+$post_slugpage = $post->post_name;
 
 $reels_id = false;
 if(isset($_GET['reels_id'])){
@@ -76,10 +77,11 @@ else
 
               //echo $_POST['billingEmailAddress'];
                 $billingEmailAddress = $_POST['billingEmailAddress'];
-                $loginPageURL=site_url('/project/');
+                $loginPageURL=site_url($post_slugpage);
                 if($_SESSION['billingEmailAddress'] = $billingEmailAddress)  
                 {
                   $_SESSION['billingContactName'] = $_POST['billingContactName'];
+                  echo "<input type='hidden' id='custbillingEmail' name='custbillingEmail' value='".$_SESSION['billingEmailAddress']."'>";
                   echo "<div class='amsuserlayout'>";
                       echo "<div class='userlogin'><p>Hii, ".$_SESSION['billingEmailAddress']."</p></div>";
                   
@@ -88,7 +90,27 @@ else
                               <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
                             </div>";*/
                             
-                  echo "</div>";                              
+                  echo "</div>";  
+
+                  /* Popup */
+                  echo "<div class='custom-model-main model-open'>
+                            <div class='custom-model-inner amsloginpopup'>        
+                            <div class='close-btn'>×</div>
+                                <div class='custom-model-wrap'>
+                                    <span id='amscredentials_error'></span>
+                                    <div class='pop-up-content-wrap'>
+                                       <h5>Hi ".$_SESSION['billingContactName']."</h2>
+                                      <p>Thank you for supporting our festival. Please use this acces credentilas to watch the content.</p>
+                                      <p>It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>
+                                      <p><strong>URL:</strong> ".$loginPageURL."</p>
+                                      <p><strong>Password:</strong> ".$_GET['password']."</p>
+                                      <p>I you have any questions or coments please contact us at programing@fava.ca</p>
+                                      <a class='paymentclass' href='".$loginPageURL."'>click to continue</a>
+                                    </div>
+                                </div>  
+                            </div>  
+                        </div>";         
+                  /* End Popup */                         
                   
                 }
               ?>  
@@ -337,20 +359,17 @@ jQuery(document).ready(function($) {
     var projectpassword = "<?php echo $_GET['password']; ?>";
     var url = $(this).val();    
       
-    if(projectpassword != null)
+    if(projectpassword)
     {    
           
           var getpageid = jQuery('#getpageid').val();
+
+          var custbillingEmail jQuery("#custbillingEmail").val();
         
           $.ajax({
              url: amsjs_ajax_url.ajaxurl,
              type:'POST',
              data: { action: 'get_amsprojectlog', projectpassword:projectpassword,getpageid:getpageid},
-             beforeSend: function(){
-              // Show image container
-                jQuery(".customprojectloader").show();
-                jQuery("#projectsubmit").prop('disabled', true);
-             },
              success: function (data) {
                /* console.log(data);*/
                 jQuery('.customprojectloader').hide('1000');
@@ -360,12 +379,15 @@ jQuery(document).ready(function($) {
 
                 console.log(mydata);
 
-                if (window.location.href.indexOf('reload')==-1) {
-                     window.location.replace(window.location.href+'?reload');
+                if(custbillingEmail == null)
+                {
+                  location.reload();
                 }
                  
              }
           });
+
+
     }  
    /*End password URL redirect*/
 
