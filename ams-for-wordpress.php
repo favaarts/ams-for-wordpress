@@ -595,6 +595,9 @@ function get_amsprojectlog()
     
     if ($blockdata['project_protected'] == $projectpassword)
     {
+        $_SESSION['start'] = time();
+        $_SESSION['expire'] =  $_SESSION['start'] + (1 * 10800);
+
         $_SESSION['projectpassword']=$blockdata['project_protected'];
         //echo $_SESSION['billingEmailAddress']= $_POST['billingEmailAddress'];
         echo "valid";

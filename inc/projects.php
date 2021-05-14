@@ -59,7 +59,7 @@ else
    $blockclass = 'main-content-three-col';
 }
 
-
+$nowtime = time();
 ?>
 
 <div class="wp-block-columns main-content <?= $blockclass; ?>" >
@@ -187,14 +187,22 @@ else
               echo "<div class='assetsproduct-content'>";
               if($_SESSION["projectpassword"] || $blockdata['project_protected'] == NULL)
               {
-                echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$pageid)."'>";
-                echo  "<p class='product-title'> ". $x_value['name'] ;
-                if($x_value['completed_year'])
+                if($nowtime > $_SESSION['expire'])
                 {
-                  echo " (".$x_value['completed_year'].")";
-                }
-                echo "</p>";
-                echo  "</a>";
+                  session_unset();
+                  session_destroy();
+                }  
+                else
+                {
+                  echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$pageid)."'>";
+                  echo  "<p class='product-title'> ". $x_value['name'] ;
+                  if($x_value['completed_year'])
+                  {
+                    echo " (".$x_value['completed_year'].")";
+                  }
+                  echo "</p>";
+                  echo  "</a>";
+                }  
               }
               else
               {
@@ -240,16 +248,25 @@ else
           {
             echo"<div class='productstyle projectdiv'>";
                  
-                  if($_SESSION["projectpassword"] || $blockdata['project_protected'] == NULL)
-                  {
-                    echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$pageid)."'>";
-                    echo  "<p class='product-title'>".$x_value['name'];
-                    if($x_value['completed_year'])
+                    if($_SESSION["projectpassword"] || $blockdata['project_protected'] == NULL)
                     {
-                      echo " (".$x_value['completed_year'].")";
-                    }
-                    echo "</p>";
-                    echo "</a>";
+                      if($nowtime > $_SESSION['expire'])
+                      {
+                        session_unset();
+                        session_destroy();
+                      }  
+                      else
+                      {
+                        echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$pageid)."'>";
+                        echo  "<p class='product-title'>".$x_value['name'];
+                        if($x_value['completed_year'])
+                        {
+                          echo " (".$x_value['completed_year'].")";
+                        }
+                        echo "</p>";
+                        echo "</a>";
+                      }    
+
                   }
                   else
                   {   
@@ -378,16 +395,13 @@ jQuery(document).ready(function($) {
                 var mydata = data.substring(0,data.length - 1);
 
                 console.log(mydata);
-
-                if(custbillingEmail == null)
-                {
-                  location.reload();
-                }
-                 
              }
           });
 
-
+          if(custbillingEmail == null)
+          {
+            window.location.replace("<?php echo $loginPageURL; ?>");
+          }
     }  
    /*End password URL redirect*/
 
