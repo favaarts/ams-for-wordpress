@@ -340,11 +340,11 @@ $nowtime = time();
                   {
                     if($blockdata['project_paymentmessage'])
                     {
-                      echo "<p>".$blockdata['project_paymentmessage']."</p>"; 
+                      echo "<p class='amsmargintop'>".$blockdata['project_paymentmessage']."</p>"; 
                     }
                     else
                     {
-                      echo "<p>If you don’t have a password, you can make a payment at this link to receive it.</p>"; 
+                      echo "<p class='amsmargintop'>If you don’t have a password, you can make a payment at this link to receive it.</p>"; 
                     }
 
                     if($blockdata['paymentbuttonname'])
