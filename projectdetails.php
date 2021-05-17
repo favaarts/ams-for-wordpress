@@ -2,6 +2,8 @@
 
 get_header();  ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/0.5.14/hls.min.js"></script>
+<script type="text/javascript" src="https://d2nvlqutlc7e9k.cloudfront.net/jwplayer.js"></script>
+<script>jwplayer.key="KfEj20iL73YJlQBSm+6bqoSc148Cf5eSvIn2BWoo/Zg=";</script>
 <div class="container-wrap">
 
 <?php
@@ -87,9 +89,9 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 ?>
 
                                 
-
-                                <video id="videobanner" poster="<?php echo $videoBanner; ?>" controlsList="nodownload" width="517">
-                                </video>
+                                <div class="videobanner" id="video_player"></div>
+                                <!-- <video id="videobanner" poster="<?php //echo $videoBanner; ?>" controlsList="nodownload" width="517">
+                                </video> -->
                             </div>
 
                             <div class="ing-title">
@@ -367,7 +369,20 @@ jQuery( document ).ready(function() {
     var amscredentials = "<?php echo $blocks[0]['attrs']['amscredentials']; ?>";
     var amssinglevideo = "<?php echo $amssinglevideonew; ?>";
     /**/
-    jQuery("#videobanner").click(function() {
+
+    var jw_player = jwplayer("video_player");
+    jw_player.setup({
+                  image: "<?php echo $videoBanner; ?>",
+                  width: "100%",
+                  aspectratio: "12:7",
+                  autostart: "false",
+                  sources: [{
+                    file: amssinglevideo
+                  }],
+                  cast: {},
+                  ga: {}
+                });
+    /*jQuery("#videobanner").click(function() {
         if(logintoken || amscredentials == '')
         {
             if(amssinglevideo != '')
@@ -393,7 +408,7 @@ jQuery( document ).ready(function() {
         {
             alert("Please login to watch the video");
         }
-    });
+    });*/
 
     
     // Open Popup
