@@ -52,6 +52,18 @@
      paymentbuttonname: {
         type: 'string',
      },
+     mailsubject: {
+        type: 'string',
+     },
+     senderemailaddress: {
+        type: 'string',
+     },
+     firstpartmailtext: {
+        type: 'string',
+     },
+     secondpartmailtext: {
+        type: 'string',
+     },
      projecttomember: {
       type: 'boolean',
       default: false
@@ -199,6 +211,42 @@
                   props.setAttributes( { project_paymenturl: value } );
                 },
                 value: props.attributes.project_paymenturl
+              }
+            ),
+            el( TextControl,
+              {
+                label: 'Change the email subject line',
+                onChange: ( value ) => {
+                  props.setAttributes( { mailsubject: value } );
+                },
+                value: props.attributes.mailsubject
+              }
+            ),
+            el( TextControl,
+              {
+                label: 'Change the sender email address (Leave blank for default)',
+                onChange: ( value ) => {
+                  props.setAttributes( { senderemailaddress: value } );
+                },
+                value: props.attributes.senderemailaddress
+              }
+            ),
+            el( TextControl,
+              {
+                label: 'Change the first part of the email',
+                onChange: ( value ) => {
+                  props.setAttributes( { firstpartmailtext: value } );
+                },
+                value: props.attributes.firstpartmailtext
+              }
+            ),
+            el( TextControl,
+              {
+                label: 'Change the last part of the email',
+                onChange: ( value ) => {
+                  props.setAttributes( { secondpartmailtext: value } );
+                },
+                value: props.attributes.secondpartmailtext
               }
             ),
             el( SelectControl,
