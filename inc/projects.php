@@ -190,7 +190,7 @@ $nowtime = time();
                 if($nowtime > $_SESSION['expire'])
                 {
                   session_unset();
-                   //session_destroy();
+                  session_destroy();
                 }  
                 else
                 {
@@ -253,7 +253,7 @@ $nowtime = time();
                       if($nowtime > $_SESSION['expire'])
                       {
                         session_unset();
-                       // session_destroy();
+                        session_destroy();
                       }  
                       else
                       {
