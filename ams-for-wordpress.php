@@ -614,8 +614,18 @@ add_action('wp_ajax_nopriv_get_amsprojectlog','get_amsprojectlog');
 // End AMS Project login
 
 // AMS Project mail
-function get_sentmailproject($billingEmailAddress,$projectPassword,$billingContactName,$loginPageURL)
+function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$billingContactName,$loginPageURL)
 {
+
+$post_id = $produtid;
+$post = get_post($post_id);
+$blocks = parse_blocks($post->post_content);
+$blockdata = $blocks[0]['attrs'];
+
+$blockdata['mailsubject'];
+$blockdata['senderemailaddress'];
+$blockdata['firstpartmailtext'];
+$blockdata['secondpartmailtext'];    
 
 $to = $billingEmailAddress;
 $subject = 'FAVA FEST 2021';
@@ -633,7 +643,7 @@ $headers .= 'From: '.$from."\r\n".
 // Compose a simple HTML email message
 $message = '<html><body>';
 $message .= '<h1 style="color:#000;">Hi '.$billingContactName.'</h1>';
-$message .= '<p style="color:#3e3939;font-size:16px;">Thank you for supporting our festival. Please use this acces credentilas to watch the content.</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;">'.$blockdata['firstpartmailtext'].'</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;">It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> '.$loginPageURL.'</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> '.$projectPassword.'</p>';

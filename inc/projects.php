@@ -85,7 +85,7 @@ $nowtime = time();
                   echo "<div class='amsuserlayout'>";
                       echo "<div class='userlogin'><p>Hii, ".$_SESSION['billingEmailAddress']."</p></div>";
                   
-                     get_sentmailproject($_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);     
+                     get_sentmailproject($pageid,$_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);     
                      /* echo "<div class='amslogoutbutton'>
                               <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
                             </div>";*/
@@ -185,7 +185,7 @@ $nowtime = time();
 
               
               echo "<div class='assetsproduct-content'>";
-              if($_SESSION["projectpassword"] || $blockdata['project_protected'] == NULL)
+              if(isset($_SESSION["projectpassword"]))
               {
                 if($nowtime > $_SESSION['expire'])
                 {
@@ -203,6 +203,17 @@ $nowtime = time();
                   echo "</p>";
                   echo  "</a>";
                 }  
+              }
+              elseif($blockdata['project_protected'] == NULL)
+              {
+                  echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$pageid)."'>";
+                  echo  "<p class='product-title'> ". $x_value['name'] ;
+                  if($x_value['completed_year'])
+                  {
+                    echo " (".$x_value['completed_year'].")";
+                  }
+                  echo "</p>";
+                  echo  "</a>";
               }
               else
               {
@@ -248,7 +259,7 @@ $nowtime = time();
           {
             echo"<div class='productstyle projectdiv'>";
                  
-                    if($_SESSION["projectpassword"] || $blockdata['project_protected'] == NULL)
+                    if(isset($_SESSION["projectpassword"]))
                     {
                       if($nowtime > $_SESSION['expire'])
                       {
@@ -268,6 +279,17 @@ $nowtime = time();
                       }    
 
                   }
+                  elseif($blockdata['project_protected'] == NULL)
+                  {
+                      echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$pageid)."'>";
+                      echo  "<p class='product-title'>".$x_value['name'];
+                      if($x_value['completed_year'])
+                      {
+                        echo " (".$x_value['completed_year'].")";
+                      }
+                      echo "</p>";
+                      echo "</a>";
+                  } 
                   else
                   {   
                     echo  "<p class='product-title'>".$x_value['name'];
