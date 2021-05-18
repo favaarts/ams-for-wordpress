@@ -60,6 +60,28 @@ else
 }
 
 $nowtime = time();
+
+
+/**/
+
+if(isset($blockdata['firstpartmailtext']))
+{
+    $firstpartmailtext = $blockdata['firstpartmailtext'];
+}
+else
+{
+    $firstpartmailtext = "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
+}
+
+if(isset($blockdata['secondpartmailtext']))
+{
+    $secondpartmailtext = $blockdata['secondpartmailtext'];
+}
+else
+{
+    $secondpartmailtext = "I you have any questions or coments please contact us at programing@fava.ca.";
+}
+/**/
 ?>
 
 <div class="wp-block-columns main-content <?= $blockclass; ?>" >
@@ -100,11 +122,11 @@ $nowtime = time();
                                     <span id='amscredentials_error'></span>
                                     <div class='pop-up-content-wrap'>
                                        <h5>Hi ".$_SESSION['billingContactName']."</h2>
-                                      <p>Thank you for supporting our festival. Please use this acces credentilas to watch the content.</p>
+                                      <p>".$firstpartmailtext."</p>
                                       <p>It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>
                                       <p><strong>URL:</strong> ".$loginPageURL."</p>
                                       <p><strong>Password:</strong> ".$_GET['password']."</p>
-                                      <p>I you have any questions or coments please contact us at programing@fava.ca</p>
+                                      <p>".$secondpartmailtext."</p>
                                       <a class='paymentclass' href='".$loginPageURL."'>click to continue</a>
                                     </div>
                                 </div>  

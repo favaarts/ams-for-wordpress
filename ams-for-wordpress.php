@@ -627,9 +627,48 @@ $blockdata['senderemailaddress'];
 $blockdata['firstpartmailtext'];
 $blockdata['secondpartmailtext'];    
 
+
+if(isset($blockdata['mailsubject']))
+{
+    $mailsubject = $blockdata['mailsubject'];
+}
+else
+{
+    $mailsubject = "FAVA FEST";
+}
+
+
+if(isset($blockdata['senderemailaddress']))
+{
+    $senderemailaddress = $blockdata['senderemailaddress'];
+}
+else
+{
+    $senderemailaddress = "info@fava.ca";
+}
+
+if(isset($blockdata['firstpartmailtext']))
+{
+    $firstpartmailtext = $blockdata['firstpartmailtext'];
+}
+else
+{
+    $firstpartmailtext = "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
+}
+
+if(isset($blockdata['secondpartmailtext']))
+{
+    $secondpartmailtext = $blockdata['secondpartmailtext'];
+}
+else
+{
+    $secondpartmailtext = "I you have any questions or coments please contact us at programing@fava.ca.";
+}
+/*==*/
+
 $to = $billingEmailAddress;
-$subject = 'FAVA FEST 2021';
-$from = 'info@fava.ca';
+$subject = $mailsubject;
+$from = $senderemailaddress;
  
 // To send HTML mail, the Content-type header must be set
 $headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -643,11 +682,11 @@ $headers .= 'From: '.$from."\r\n".
 // Compose a simple HTML email message
 $message = '<html><body>';
 $message .= '<h1 style="color:#000;">Hi '.$billingContactName.'</h1>';
-$message .= '<p style="color:#3e3939;font-size:16px;">'.$blockdata['firstpartmailtext'].'</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;">'.$firstpartmailtext.'</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;">It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> '.$loginPageURL.'</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> '.$projectPassword.'</p>';
-$message .= '<p style="color:#3e3939;font-size:16px;">I you have any questions or coments please contact us at programing@fava.ca.</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;">'.$secondpartmailtext.'</p>';
 $message .= '</body></html>';
 
 // send email
