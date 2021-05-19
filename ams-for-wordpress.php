@@ -1509,12 +1509,14 @@ function getprojectonclick_action()
                     }
                     else
                     {
+                        echo "<a href='javascript:void(0)'>";
                         echo  "<p class='product-title'> ". $x_value['name'] ;
                           if($x_value['completed_year'])
                           {
                             echo " (".$x_value['completed_year'].")";
                           }
                         echo "</p>";
+                        echo  "</a>";
                     }
                     echo "<div class='assetsprice'>";
                     echo    "<p class='memberprice'><strong>Created By</strong> - ". $x_value['creator']. "</p>";
@@ -1561,12 +1563,14 @@ function getprojectonclick_action()
                             }
                             else
                             {
+                                echo "<a href='javascript:void(0)'>";
                                 echo  "<p class='product-title'> ". $x_value['name'] ;
                                   if($x_value['completed_year'])
                                   {
                                     echo " (".$x_value['completed_year'].")";
                                   }
                                 echo "</p>";
+                                echo "</a>";
                             }
 
                             if($x_value['thumbnail'] == NULL || $x_value['thumbnail'] == "")

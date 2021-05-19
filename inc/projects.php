@@ -88,6 +88,46 @@ else
 
   <?php
 
+  //echo $_POST['billingEmailAddress'];
+    $billingEmailAddress = $_POST['billingEmailAddress'];
+    $loginPageURL=site_url($post_slugpage);
+    if($_SESSION['billingEmailAddress'] = $billingEmailAddress)  
+    {
+      $_SESSION['billingContactName'] = $_POST['billingContactName'];
+      echo "<input type='hidden' id='custbillingEmail' name='custbillingEmail' value='".$_SESSION['billingEmailAddress']."'>";
+      echo "<div class='amsuserlayout'>";
+          echo "<div class='userlogin'><p>Hii, ".$_SESSION['billingEmailAddress']."</p></div>";
+      
+         get_sentmailproject($pageid,$_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);     
+         /* echo "<div class='amslogoutbutton'>
+                  <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
+                </div>";*/
+                
+      echo "</div>";  
+
+      /* Popup */
+      echo "<div class='custom-model-main model-open'>
+                <div class='custom-model-inner amsloginpopup'>        
+                <div class='close-btn'>×</div>
+                    <div class='custom-model-wrap'>
+                        <span id='amscredentials_error'></span>
+                        <div class='pop-up-content-wrap'>
+                           <h5>Hi ".$_SESSION['billingContactName']."</h2>
+                          <p>".$firstpartmailtext."</p>
+                          <p>It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>
+                          <p><strong>URL:</strong> ".$loginPageURL."</p>
+                          <p><strong>Password:</strong> ".$_GET['password']."</p>
+                          <p>".$secondpartmailtext."</p>
+                          <a class='paymentclass' href='".$loginPageURL."'>click to continue</a>
+                        </div>
+                    </div>  
+                </div>  
+            </div>";         
+      /* End Popup */                         
+      
+    }
+
+  // Remove Project sidebar
   if (!isset($blockdata['projectsidebar']))
   {        
   ?>
@@ -95,47 +135,7 @@ else
         
         <div class="assetssidebar">
 
-            <?php
-
-              //echo $_POST['billingEmailAddress'];
-                $billingEmailAddress = $_POST['billingEmailAddress'];
-                $loginPageURL=site_url($post_slugpage);
-                if($_SESSION['billingEmailAddress'] = $billingEmailAddress)  
-                {
-                  $_SESSION['billingContactName'] = $_POST['billingContactName'];
-                  echo "<input type='hidden' id='custbillingEmail' name='custbillingEmail' value='".$_SESSION['billingEmailAddress']."'>";
-                  echo "<div class='amsuserlayout'>";
-                      echo "<div class='userlogin'><p>Hii, ".$_SESSION['billingEmailAddress']."</p></div>";
-                  
-                     get_sentmailproject($pageid,$_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);     
-                     /* echo "<div class='amslogoutbutton'>
-                              <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
-                            </div>";*/
-                            
-                  echo "</div>";  
-
-                  /* Popup */
-                  echo "<div class='custom-model-main model-open'>
-                            <div class='custom-model-inner amsloginpopup'>        
-                            <div class='close-btn'>×</div>
-                                <div class='custom-model-wrap'>
-                                    <span id='amscredentials_error'></span>
-                                    <div class='pop-up-content-wrap'>
-                                       <h5>Hi ".$_SESSION['billingContactName']."</h2>
-                                      <p>".$firstpartmailtext."</p>
-                                      <p>It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>
-                                      <p><strong>URL:</strong> ".$loginPageURL."</p>
-                                      <p><strong>Password:</strong> ".$_GET['password']."</p>
-                                      <p>".$secondpartmailtext."</p>
-                                      <a class='paymentclass' href='".$loginPageURL."'>click to continue</a>
-                                    </div>
-                                </div>  
-                            </div>  
-                        </div>";         
-                  /* End Popup */                         
-                  
-                }
-              ?>  
+            
 
             <div class="searchbox">
                 <h4>Search</h4>
@@ -239,12 +239,14 @@ else
               }
               else
               {
+                echo "<a href='javascript:void(0)'>";
                 echo  "<p class='product-title'> ". $x_value['name'] ;
                 if($x_value['completed_year'])
                 {
                   echo " (".$x_value['completed_year'].")";
                 }
                 echo "</p>";
+                echo  "</a>";
               }  
 
               echo "<div class='assetsprice'>";
@@ -314,12 +316,14 @@ else
                   } 
                   else
                   {   
+                    echo "<a href='javascript:void(0)'>";
                     echo  "<p class='product-title'>".$x_value['name'];
                     if($x_value['completed_year'])
                     {
                       echo " (".$x_value['completed_year'].")";
                     }
                     echo "</p>";
+                    echo "</a>";
                     
                   } 
 
@@ -353,9 +357,10 @@ else
             <a id="inifiniteLoader"  data-totalequipment="<?php echo $arrayResult['meta']['total_count']; ?>" ><img src="<?php echo esc_url( plugins_url( 'assets/img/loader.svg', dirname(__FILE__) ) ) ?>" ></a>   
 
             <?php
-            
-            echo "<input type='button' id='seemore' style='background-color: $bgcolor' value='View More'>";
-            
+            if (!isset($blockdata['remove_viewmore']))
+            { 
+              echo "<input type='button' id='seemore' style='background-color: $bgcolor' value='View More'>";
+            }
             ?>  
         </div>   
 
