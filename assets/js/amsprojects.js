@@ -72,6 +72,10 @@
       type: 'boolean',
       default: false
     },
+    remove_viewmore: {
+        type: 'boolean',
+        default: true
+    },
     radio_attr_project: {
       type: 'string',
       default: 'three_col',
@@ -142,6 +146,13 @@
                  props.setAttributes( { amsfile_attachment: value } );
               },
               checked: props.attributes.amsfile_attachment,
+            }),
+            el(ToggleControl, {
+              label: 'Remove View More Button',
+              onChange: ( value ) => {
+                 props.setAttributes( { remove_viewmore: value } );
+              },
+              checked: props.attributes.remove_viewmore,
             }),
             el( RadioControl,
               {

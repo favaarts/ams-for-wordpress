@@ -370,18 +370,15 @@ jQuery( document ).ready(function() {
     var amssinglevideo = "<?php echo $amssinglevideonew; ?>";
     /**/
 
-    var jw_player = jwplayer("video_player");
-    jw_player.setup({
-                  image: "<?php echo $videoBanner; ?>",
+    jwplayer("video_player").setup({
+                image: "<?php echo $videoBanner; ?>",
                   width: "100%",
                   aspectratio: "12:7",
                   autostart: "false",
                   sources: [{
                     file: amssinglevideo
-                  }],
-                  cast: {},
-                  ga: {}
-                });
+                  }]
+    });
     /*jQuery("#videobanner").click(function() {
         if(logintoken || amscredentials == '')
         {
@@ -413,18 +410,32 @@ jQuery( document ).ready(function() {
     
     // Open Popup
     jQuery('[popup-open]').on('click', function() {
-        
+
         if(logintoken || amscredentials == '')
         {
             var videourl = jQuery(this).data("img");
             var videourlid = jQuery(this).data("id");
 
             var videonew = document.getElementById('amspopupvideo'+videourlid);
-            if(Hls.isSupported()) {
+
+            jwplayer(videonew).setup({
+                flashplayer: "player.swf",
+                file: videourl
+            });
+            /*jwplayer("amspopupvideo"+videonew).setup({
+                  width: "100%",
+                  aspectratio: "12:7",
+                  autostart: "false",
+                  sources: [{
+                    file: videourl
+                  }]
+            });*/
+
+            /*if(Hls.isSupported()) {
                 var hls = new Hls();
                 hls.loadSource(videourl);
                 hls.attachMedia(videonew);
-            } 
+            } */
 
             var popup_name = jQuery(this).attr('popup-open');
             jQuery('[popup-name="' + popup_name + '"]').fadeIn(300);
@@ -432,7 +443,8 @@ jQuery( document ).ready(function() {
         else
         {
             alert("Please login to watch the video");
-        }   
+        }  
+          
     });
 
 
@@ -441,8 +453,8 @@ jQuery( document ).ready(function() {
         var popup_name = jQuery(this).attr('popup-close');
         var videourlid = jQuery(this).data("id");
 
-        jQuery("[popup-name="+popup_name+"]").find('#amspopupvideo'+videourlid).get(0).pause();
-
+        //jQuery("[popup-name="+popup_name+"]").find('#amspopupvideo'+videourlid).get(0).pause();
+        
         jQuery('[popup-name="' + popup_name + '"]').fadeOut(300);
     });
 
