@@ -568,7 +568,7 @@ jQuery(document).ready(function($) {
                  }
                  else
                  {
-                    jQuery("#amscredentials_error").html('<p>AMS Credentials not match.</p>');
+                    jQuery("#amscredentials_error").html('<p>Access Credentials Denied.</p>');
                     jQuery("#amscredentials_error").css("color", "red");
                     jQuery("#amscredentials_error").css("display", "block");
 
