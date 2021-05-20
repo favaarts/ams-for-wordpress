@@ -1639,3 +1639,11 @@ img.organizationlogo {
 {
     padding-top: 10px;
 }
+
+.continuetag
+{
+    width: 100%;
+    clear: both;
+    text-align: center;
+    padding: 10px 0;
+}
