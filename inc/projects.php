@@ -49,14 +49,17 @@ else
 if($gridlayout == "four_col")
 {
    $blockclass = 'main-content-four-col';
+   $projectperpage = $pagination;
 }
 elseif($gridlayout == "two_col")
 {
   $blockclass = '';
+  $projectperpage = $pagination;
 }
 else
 {
    $blockclass = 'main-content-three-col';
+   $projectperpage = $pagination;
 }
 
 $nowtime = time();
@@ -380,7 +383,7 @@ else
             <div class="pop-up-content-wrap">
               <p>The project content is restricted by a password. Please enter the password to continue.</p>
                <input type="text" name="projectpassword" id="projectpassword">
-               <input type="submit" id="projectsubmit">
+               <input type="submit" id="projectsubmit" style="background-color: <?php echo $bgcolor ?>">
                 <span class="customprojectloader" id="projectinifiniteLoader">
                   <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>">
                 </span>
@@ -404,7 +407,7 @@ else
                     {
                       $buttonname = "Pay Here";
                     }
-                    echo "<div class='paymentdiv'><a target='_blank' class='paymentclass' href=".$blockdata['project_paymenturl'].">".$buttonname."</a></div>";
+                    echo "<div class='paymentdiv'><a target='_blank' class='paymentclass' style='background-color: $bgcolor' href=".$blockdata['project_paymenturl'].">".$buttonname."</a></div>";
                   }
                 ?>
             </div>
@@ -497,7 +500,7 @@ jQuery(document).ready(function($) {
 
     function loadArticle(pageNumber){
      
-    var projectperpg = <?php echo $pagination; ?>;
+    var projectperpg = <?php echo $projectperpage; ?>;
       
      $.ajax({
        url: amsjs_ajax_url.ajaxurl,

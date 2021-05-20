@@ -1571,7 +1571,6 @@ img.organizationlogo {
 {
     padding: 10px;
     color: #fff;
-    background-color: #03c4eb;
     border-radius: 5px;
     text-decoration: none;
     text-transform: uppercase;
@@ -1639,5 +1638,5 @@ img.organizationlogo {
 
 .amsmargintop
 {
-    margin-top: 10px;
+    padding-top: 10px;
 }
