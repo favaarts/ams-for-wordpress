@@ -1573,7 +1573,6 @@ img.organizationlogo {
     color: #fff;
     border-radius: 5px;
     text-decoration: none;
-    text-transform: uppercase;
 }
 
 .paymentclass:active, .paymentclass:focus, .paymentclass:hover

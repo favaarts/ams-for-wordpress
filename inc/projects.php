@@ -85,6 +85,12 @@ else
     $secondpartmailtext = "I you have any questions or coments please contact us at programing@fava.ca.";
 }
 /**/
+
+$bgcolor = get_option('wpams_button_colour_btn_label');
+if(empty($bgcolor))
+{
+    $bgcolor = "#337AB7";
+}
 ?>
 
 <div class="wp-block-columns main-content <?= $blockclass; ?>" >
@@ -121,7 +127,7 @@ else
                           <p><strong>URL:</strong> ".$loginPageURL."</p>
                           <p><strong>Password:</strong> ".$_GET['password']."</p>
                           <p>".$secondpartmailtext."</p>
-                          <a class='paymentclass' href='".$loginPageURL."'>click to continue</a>
+                          <a class='paymentclass' style='background-color:'". $bgcolor."' href='".$loginPageURL."'>click to continue</a>
                         </div>
                     </div>  
                 </div>  
@@ -171,11 +177,7 @@ else
       <?php
 
       $arrayResult = get_projectlisting(NULL,$reels_id);
-      $bgcolor = get_option('wpams_button_colour_btn_label');
-      if(empty($bgcolor))
-      {
-          $bgcolor = "#337AB7";
-      }
+      
 
       if($blockdata['radio_attr_project'] == "list_view")
       {
