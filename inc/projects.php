@@ -123,11 +123,12 @@ if(empty($bgcolor))
                         <div class='pop-up-content-wrap'>
                            <h5>Hi ".$_SESSION['billingContactName']."</h2>
                           <p>".$firstpartmailtext."</p>
-                          <p>It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>
                           <p><strong>URL:</strong> ".$loginPageURL."</p>
                           <p><strong>Password:</strong> ".$_GET['password']."</p>
                           <p>".$secondpartmailtext."</p>
-                          <a class='paymentclass' style='background-color:'". $bgcolor."' href='".$loginPageURL."'>click to continue</a>
+                          <div class='continuetag'>
+                          <a class='paymentclass' style='background-color: $bgcolor' href='".$loginPageURL."'>Continue</a>
+                          </div>
                         </div>
                     </div>  
                 </div>  
