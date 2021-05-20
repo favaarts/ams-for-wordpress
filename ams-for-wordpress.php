@@ -683,7 +683,6 @@ $headers .= 'From: '.$from."\r\n".
 $message = '<html><body>';
 $message .= '<h1 style="color:#000;">Hi '.$billingContactName.'</h1>';
 $message .= '<p style="color:#3e3939;font-size:16px;">'.$firstpartmailtext.'</p>';
-$message .= '<p style="color:#3e3939;font-size:16px;">It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> '.$loginPageURL.'</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> '.$projectPassword.'</p>';
 $message .= '<p style="color:#3e3939;font-size:16px;">'.$secondpartmailtext.'</p>';
