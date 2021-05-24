@@ -1217,6 +1217,20 @@ function get_projectlisting($projectdata = '',$reelsid = '')
     $apikey = get_option('wpams_apikey_btn_label');
     $blockdata = get_sidebaroption();
 
+     /*Get real ID*/
+    $pageid = get_the_ID();
+    $post = get_post($pageid);
+    $blocks = parse_blocks($post->post_content);
+
+    foreach($blocks as $blockdata) 
+    {
+        if($blockdata['blockName'] == 'wpdams-amsnetwork-project/amsnetwork-block-project')
+        {
+          $realdataid = $blockdata['attrs']['amsreelid'];
+        }
+    } 
+    /*GET real ID*/
+
     if(isset($projectdata))
     {
         $projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/projects?user_id=".$projectdata."&access_token=".$apikey."&method=get&format=json";
@@ -1235,7 +1249,7 @@ function get_projectlisting($projectdata = '',$reelsid = '')
             $totalprojects = 8;
         }
 
-        if($blockdata['amsreelid'])
+        if($realdataid)
         {
             if($reelsid)
             {
@@ -1244,7 +1258,7 @@ function get_projectlisting($projectdata = '',$reelsid = '')
             else
             {
 
-                $projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/projects?reel_id=".$blockdata['amsreelid']."&access_token=".$apikey."&method=get&format=json";
+                $projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/projects?reel_id=".$realdataid."&access_token=".$apikey."&method=get&format=json";
             }
         }
         else if($reelsid)
