@@ -125,35 +125,31 @@
                  props.setAttributes( { projectsidebar: value } );
               },
               checked: props.attributes.projectsidebar,
-            }),            
-            el(ToggleControl, {
-              label: 'Connect Projects to Members',
-              onChange: ( value ) => {
-                 props.setAttributes( { projecttomember: value } );
-              },
-              checked: props.attributes.projecttomember,
-            }),
-            el(ToggleControl, {
-              label: 'Restrict Videos with AMS Credentials',
-              onChange: ( value ) => {
-                 props.setAttributes( { amscredentials: value } );
-              },
-              checked: props.attributes.amscredentials,
-            }),
-            el(ToggleControl, {
-              label: 'Allow Users to Download Media?',
-              onChange: ( value ) => {
-                 props.setAttributes( { amsfile_attachment: value } );
-              },
-              checked: props.attributes.amsfile_attachment,
-            }),
-            el(ToggleControl, {
-              label: 'Remove View More Button',
-              onChange: ( value ) => {
-                 props.setAttributes( { remove_viewmore: value } );
-              },
-              checked: props.attributes.remove_viewmore,
-            }),
+            }), 
+            el( SelectControl,
+              {
+                label: 'Number of project display in this page.',
+                //help: 'Some kind of description',
+                options : [
+                  { label: '1', value: '1' },
+                  { label: '2', value: '2' },
+                  { label: '3', value: '3' },
+                  { label: '4', value: '4' },
+                  { label: '5', value: '5' },
+                  { label: '6', value: '6' },
+                  { label: '7', value: '7' },
+                  { label: '8', value: '8' },
+                  { label: '9', value: '9' },
+                  { label: '10', value: '10' },
+                  { label: '11', value: '11' },
+                  { label: '12', value: '12' },
+                ],
+                onChange: ( value ) => {
+                  props.setAttributes( { project_pagination: value } );
+                },
+                value: props.attributes.project_pagination
+              }
+            ),
             el( RadioControl,
               {
                 label: 'Grid Layout',
@@ -169,25 +165,36 @@
                 },
                 selected: props.attributes.radio_attr_project
               }
-            ),
-            el( TextControl,
-              {
-                label: '(Advanced) Enter Reel ID to show one specific reel',
-                onChange: ( value ) => {
-                  props.setAttributes( { amsreelid: value } );
-                },
-                value: props.attributes.amsreelid
-              }
-            ),
-            el( TextControl,
-              {
-                label: '(Advanced) Enter Project ID to show one specific project',
-                onChange: ( value ) => {
-                  props.setAttributes( { amsprojectid: value } );
-                },
-                value: props.attributes.amsprojectid
-              }
-            ),
+            ),           
+            el(ToggleControl, {
+              label: 'Connect Projects to Members',
+              onChange: ( value ) => {
+                 props.setAttributes( { projecttomember: value } );
+              },
+              checked: props.attributes.projecttomember,
+            }),
+            el(ToggleControl, {
+              label: 'Allow Users to Download Media?',
+              onChange: ( value ) => {
+                 props.setAttributes( { amsfile_attachment: value } );
+              },
+              checked: props.attributes.amsfile_attachment,
+            }),
+            el(ToggleControl, {
+              label: 'Restrict Videos with AMS Credentials',
+              onChange: ( value ) => {
+                 props.setAttributes( { amscredentials: value } );
+              },
+              checked: props.attributes.amscredentials,
+            }),
+            
+            el(ToggleControl, {
+              label: 'Remove View More Button',
+              onChange: ( value ) => {
+                 props.setAttributes( { remove_viewmore: value } );
+              },
+              checked: props.attributes.remove_viewmore,
+            }),
             el( TextControl,
               {
                 label: 'Password for Protecting Content (Leave Blank if Public)',
@@ -195,6 +202,15 @@
                   props.setAttributes( { project_protected: value } );
                 },
                 value: props.attributes.project_protected
+              }
+            ),
+            el( TextControl,
+              {
+                label: 'Payment URL (Leave Blank for No Payment)',
+                onChange: ( value ) => {
+                  props.setAttributes( { project_paymenturl: value } );
+                },
+                value: props.attributes.project_paymenturl
               }
             ),
             el( TextControl,
@@ -217,11 +233,20 @@
             ),
             el( TextControl,
               {
-                label: 'Payment URL (Leave Blank for No Payment)',
+                label: '(Advanced) Enter Reel ID to show one specific reel',
                 onChange: ( value ) => {
-                  props.setAttributes( { project_paymenturl: value } );
+                  props.setAttributes( { amsreelid: value } );
                 },
-                value: props.attributes.project_paymenturl
+                value: props.attributes.amsreelid
+              }
+            ),
+            el( TextControl,
+              {
+                label: '(Advanced) Enter Project ID to show one specific project',
+                onChange: ( value ) => {
+                  props.setAttributes( { amsprojectid: value } );
+                },
+                value: props.attributes.amsprojectid
               }
             ),
             el( TextControl,
@@ -260,31 +285,6 @@
                 value: props.attributes.secondpartmailtext
               }
             ),
-            el( SelectControl,
-              {
-                label: 'Number of project display in this page.',
-                //help: 'Some kind of description',
-                options : [
-                  { label: '1', value: '1' },
-                  { label: '2', value: '2' },
-                  { label: '3', value: '3' },
-                  { label: '4', value: '4' },
-                  { label: '5', value: '5' },
-                  { label: '6', value: '6' },
-                  { label: '7', value: '7' },
-                  { label: '8', value: '8' },
-                  { label: '9', value: '9' },
-                  { label: '10', value: '10' },
-                  { label: '11', value: '11' },
-                  { label: '12', value: '12' },
-                ],
-                onChange: ( value ) => {
-                  props.setAttributes( { project_pagination: value } );
-                },
-                value: props.attributes.project_pagination
-              }
-            ),
-            
             
             
           )

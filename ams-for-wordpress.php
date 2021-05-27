@@ -1215,7 +1215,6 @@ function get_projectlisting($projectdata = '',$reelsid = '')
     
     $apiurl = get_option('wpams_url_btn_label');
     $apikey = get_option('wpams_apikey_btn_label');
-    $blockdata = get_sidebaroption();
 
      /*Get real ID*/
     $pageid = get_the_ID();
@@ -1238,7 +1237,7 @@ function get_projectlisting($projectdata = '',$reelsid = '')
     else
     {
         
-        $numberofprojects = $blockdata['project_pagination'];
+        $numberofprojects = $blocks[0]['attrs']['project_pagination'];
 
         if(isset($numberofprojects))
         {

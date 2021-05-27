@@ -420,6 +420,7 @@ jQuery( document ).ready(function() {
 
             jwplayer(videonew).setup({
                 flashplayer: "player.swf",
+                width: "100%",
                 file: videourl
             });
             /*jwplayer("amspopupvideo"+videonew).setup({
