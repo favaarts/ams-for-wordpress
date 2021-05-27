@@ -363,7 +363,7 @@ if(empty($bgcolor))
             <a id="inifiniteLoader"  data-totalequipment="<?php echo $arrayResult['meta']['total_count']; ?>" ><img src="<?php echo esc_url( plugins_url( 'assets/img/loader.svg', dirname(__FILE__) ) ) ?>" ></a>   
 
             <?php
-            if (!isset($blockdata['remove_viewmore']))
+            if (isset($blockdata['remove_viewmore']))
             { 
               echo "<input type='button' id='seemore' style='background-color: $bgcolor' value='View More'>";
             }
