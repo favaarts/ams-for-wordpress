@@ -302,8 +302,8 @@ p.price-non-mem {
 .eventdetail .event-img-sec .ing-title {width: 35%; padding: 60px 30px 0; background-color: #ececec; }
 .eventdetail .event-img-sec .ing-title h1{font-size: 20px; color: #1E0A3C; font-weight: bold; text-transform: capitalize; line-height: 1.5;}
 
-.eventdetail .event-detail-sec {width: 100%;display: flex; flex-wrap: wrap;}
-.eventdetail .event-detail-sec .left-sec {width: 65%; padding: 60px 50px; }
+.eventdetail .event-detail-sec {width: 100%;display: flex; /*flex-wrap: wrap;*/}
+.eventdetail .event-detail-sec .left-sec {width: 65%; padding: 60px 15px; }
 .eventdetail .event-detail-sec .left-sec h1 {font-size: 16px; margin-bottom: 30px; font-weight: bold; text-transform: lowercase; }
 .eventdetail .event-detail-sec .left-sec h2 {font-size: 20px;margin-bottom: 0;}
 .eventdetail .event-detail-sec .left-sec .text-sec{margin: 30px 0;}
@@ -337,6 +337,7 @@ p.price-non-mem {
 .eventdetail .event-detail-sec .right-sec {width: 40%; padding: 0;}
 .eventdetail .event-img-sec .img-sec img{ height: auto !important;}
 .assetssidebar{width: 100%; margin: 0px 15px 30px 0px !important; padding: 15px 15px !important;}
+.eventdetail .event-detail-sec { flex-wrap: wrap;}
 
 }
 
@@ -1602,6 +1603,28 @@ img.organizationlogo {
     transform: translate(-50%, -50%);
 }
 
+.amsaudio-thumbnew a {
+    position: absolute;
+    display: block;
+    background: url(../img/amsaudio.png);
+    height: 50px;
+    width: 50px;
+    top: 50%;
+    left: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.amsaudioicon
+{
+    height: 90px;
+}
+
 
 @media (max-width:767px){
 .amsvideos .video-row .video-col {margin: 8px; width: calc(50% - 16px);}
@@ -1611,6 +1634,7 @@ img.organizationlogo {
 
 @media (max-width:481px){
 .amsvideo-thumb a {width: 30px; height: 30px; }
+.amsaudio-thumbnew a {width: 30px; height: 30px; }
 }
 
 .amsvideodownload {
@@ -1654,4 +1678,9 @@ img.organizationlogo {
     display: inline-block;
     clear: both;
     margin-right: 10px;
+}
+
+.amsaudio-thumbnew
+{
+    position: relative;
 }
