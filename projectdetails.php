@@ -192,6 +192,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 <div class="videos prospace amsvideos">
                                    
                                     <div class="video-row">
+                                    <h3>Media:</h3>    
                                         <?php
                                         $i = 1;
                                         
@@ -215,7 +216,7 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                                     <div class='popup-content'>
                                                         <video id='amspopupvideo".$x_value['id']."' width='600' controls>
                                                         </video>
-                                                        <a class='close-button' popup-close='popup-".$i."' href='javascript:void(0)' data-id='".$x_value['id']."'>x</a>";
+                                                        <a class='close-button' popup-close='popup-".$i."' href='javascript:void(0)' data-id='amspopupvideo".$x_value['id']."'>x</a>";
                                                         if($blocks[0]['attrs']['amsfile_attachment'])
                                                         {    
                                                             echo "<a href='".$x_value['file_attachment']."'><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
@@ -232,6 +233,36 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                 </div>
                                 <?php }  ?>
 
+                                <div class="amsaudiosection amsvideos">
+                                <?php
+                                $i = 5;
+                                
+                                array_shift($attributePhoto['project_attributes']);
+
+                                foreach($attributePhoto['project_attributes'] as $ams_audio) 
+                                {
+                                    if($ams_audio['project_attribute_type_name'] == "Audio")
+                                    {
+                                    echo "<div class='audio-col'>
+                                        <div class='amsaudio-thumbnew'>
+                                            
+                                            <a class='open-button' audiopopup-open='popup-".$i."' href='javascript:void(0)' data-id='".$ams_audio['id']."' data-audiourl='".$ams_audio['file_attachment']."' ><img src='https://free-mp3-download.net/img/icon.png'> </a>
+                                        </div>
+                                        <div class='popup' audiopopup-name='popup-".$i."' style='display: none;'>
+                                            <div class='popup-content'>
+                                                <div id='player".$ams_audio['id']."'>
+                                                        
+                                                    </div>
+                                             <a class='close-button' audiopopup-close='popup-".$i."' href='javascript:void(0)' data-id='player".$ams_audio['id']."'>x</a>";
+                                        echo "</div>
+                                        </div>
+                                    </div>";
+                                    }
+                                  $i++;      
+                                }  
+                                ?>
+                                </div>
+
                                 <div class="photos prospace">
                                     
                                     <div class="text-sec">
@@ -241,11 +272,11 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                             
                                             if($xphoto_value['project_attribute_type_name'] == "Photo")
                                             {
-                                                
-                                                if ( $xphoto_value === reset( $attributePhoto['project_attributes'] ) ) 
+                                                echo "<br>";
+                                                /*if ( $xphoto_value === reset( $attributePhoto['project_attributes'] ) ) 
                                                 {          
                                                     echo "<h3>Photos:</h3>";
-                                                }
+                                                }*/
 
                                                 echo "<div class='column'>";
                                                 echo   "<img src=".$xphoto_value['file_attachment'] ." class='hover-shadow cursor'>";
@@ -448,15 +479,48 @@ jQuery( document ).ready(function() {
           
     });
 
+    /* ==== MP3 audio ====*/
+    jQuery('[audiopopup-open]').on('click', function() {
+
+        var audiourlid = jQuery(this).data("id");
+        var audiourl = jQuery(this).data("audiourl");
+
+        console.log(audiourl);
+
+        console.log(audiourlid);
+
+         audioSetUp("player"+audiourlid,audiourl);
+
+        function audioSetUp(id, url){
+         jwplayer(id).setup({
+                    file: url,
+                    width: 500,
+                    height: 30,
+             primary:"flash"
+                });
+        }
+          
+        var audiopopup = jQuery(this).attr('audiopopup-open');
+        jQuery('[audiopopup-name="' + audiopopup + '"]').fadeIn(300);
+          
+    });
+    /* ==== End MP3 audio ====*/
+
 
     // Close Popup
     jQuery('[popup-close]').on('click', function() {
         var popup_name = jQuery(this).attr('popup-close');
         var videourlid = jQuery(this).data("id");
-
-        //jQuery("[popup-name="+popup_name+"]").find('#amspopupvideo'+videourlid).get(0).pause();
+        jwplayer(videourlid).stop();
         
         jQuery('[popup-name="' + popup_name + '"]').fadeOut(300);
+    });
+
+    jQuery('[audiopopup-close]').on('click', function() {
+        var popup_name = jQuery(this).attr('audiopopup-close');
+        var audiourlid = jQuery(this).data("id");
+        jwplayer(audiourlid).stop();
+        jQuery('[audiopopup-name="' + popup_name + '"]').fadeOut(300);
     });
 
 
