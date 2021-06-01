@@ -1,6 +1,8 @@
 <?php
 
-get_header();  ?>
+get_header();  
+session_start();
+?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/0.5.14/hls.min.js"></script>
 <script type="text/javascript" src="https://d2nvlqutlc7e9k.cloudfront.net/jwplayer.js"></script>
 <script>jwplayer.key="KfEj20iL73YJlQBSm+6bqoSc148Cf5eSvIn2BWoo/Zg=";</script>
@@ -32,6 +34,16 @@ $projectconnectmemberid = $wpdb->get_var('SELECT ID FROM '.$wpdb->prefix.'posts 
 $connectmember = get_post($projectconnectmemberid);
 $connectmemberblocks = parse_blocks($connectmember->post_content);
 
+// Session
+if(isset($_SESSION["projectpassword"]))
+{
+    if($nowtime > $_SESSION['expire'])
+    {
+      session_unset();
+      session_destroy();
+    }  
+    else
+    {
 ?>
 
 
@@ -245,8 +257,8 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
                                     {
                                     echo "<div class='audio-col'>
                                         <div class='amsaudio-thumbnew'>
-                                            
-                                            <a class='open-button' audiopopup-open='popup-".$i."' href='javascript:void(0)' data-id='".$ams_audio['id']."' data-audiourl='".$ams_audio['file_attachment']."' ><img src='https://free-mp3-download.net/img/icon.png'> </a>
+                                            <img class='amsaudioicon' src='".$arrayResult['project']['thumbnail']."'>
+                                            <a class='open-button' audiopopup-open='popup-".$i."' href='javascript:void(0)' data-id='".$ams_audio['id']."' data-audiourl='".$ams_audio['file_attachment']."' > </a>
                                         </div>
                                         <div class='popup' audiopopup-name='popup-".$i."' style='display: none;'>
                                             <div class='popup-content'>
@@ -391,6 +403,16 @@ $connectmemberblocks = parse_blocks($connectmember->post_content);
       </div>  
      </div><!-- .container no-sidebar -->
     </div><!-- .site-content -->
+<?php
+    }
+}    
+else
+{
+    $post->post_name;
+    $URL=site_url($post->post_name);
+    echo "<script type='text/javascript'>document.location.href='".$URL."';</script>";
+}    
+    ?>
 </div>    
 
 <script type="text/javascript">
