@@ -35,7 +35,7 @@ $connectmember = get_post($projectconnectmemberid);
 $connectmemberblocks = parse_blocks($connectmember->post_content);
 
 // Session
-if(isset($_SESSION["projectpassword"]))
+if(isset($_SESSION["projectpassword"]) || empty($blocks[0]['attrs']['project_protected']))
 {
     if($nowtime > $_SESSION['expire'])
     {
