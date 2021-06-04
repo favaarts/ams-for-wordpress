@@ -1645,6 +1645,9 @@ img.organizationlogo {
 
 .video-col img, .audio-col img {height: 103px; width: 100%; }
 .amsimagediv img{height: 103px;}
+#amsaudio_player {
+    width: 100% !important;
+}
 
 @media (max-width:767px){
     .amsvideos .video-row .video-col {margin: 8px; width: calc(50% - 16px);}
