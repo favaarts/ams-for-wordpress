@@ -561,24 +561,6 @@ jQuery( document ).ready(function() {
     });
     /* ==== End MP3 audio ====*/
 
-
-    // Close Popup
-    jQuery('[popup-close]').on('click', function() {
-        var popup_name = jQuery(this).attr('popup-close');
-        var videourlid = jQuery(this).data("id");
-        jwplayer(videourlid).stop();
-        
-        jQuery('[popup-name="' + popup_name + '"]').fadeOut(300);
-    });
-
-    jQuery('[audiopopup-close]').on('click', function() {
-        var popup_name = jQuery(this).attr('audiopopup-close');
-        var audiourlid = jQuery(this).data("id");
-        jwplayer(audiourlid).stop();
-        jQuery('[audiopopup-name="' + popup_name + '"]').fadeOut(300);
-    });
-
-    // Image popup
     jQuery('[imagepopup-open]').on('click', function() {
 
         var imageurlid = jQuery(this).data("id");
@@ -595,12 +577,28 @@ jQuery( document ).ready(function() {
           
     });
 
+
+    jQuery('[popup-close]').on('click', function() {
+        var popup_name = jQuery(this).attr('popup-close');
+        var videourlid = jQuery(this).data("id");
+        jwplayer(videourlid).stop();
+        
+        jQuery('[popup-name="' + popup_name + '"]').fadeOut(300);
+    });
+
+    jQuery('[audiopopup-close]').on('click', function() {
+        var popup_name = jQuery(this).attr('audiopopup-close');
+        var audiourlid = jQuery(this).data("id");
+        jwplayer(audiourlid).stop();
+        jQuery('[audiopopup-name="' + popup_name + '"]').fadeOut(300);
+    });
+
     jQuery('[imagepopup-close]').on('click', function() {
         var popup_name = jQuery(this).attr('imagepopup-close');
         var audiourlid = jQuery(this).data("id");
         jQuery('[imagepopup-name="' + popup_name + '"]').fadeOut(300);
     });
-    // End image popup
+    
 
 
 });        
