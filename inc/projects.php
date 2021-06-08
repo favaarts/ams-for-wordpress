@@ -322,7 +322,7 @@ if(empty($bgcolor))
                   } 
                   else
                   {   
-                    echo "<a href='javascript:void(0)'>";
+                    echo "<a href='javascript:void(0)' data-pageid='".$x_value['id']."' data-userid='".$x_value['user_id']."'>";
                     echo  "<p class='product-title'>".$x_value['name'];
                     if($x_value['completed_year'])
                     {
@@ -386,6 +386,8 @@ if(empty($bgcolor))
             <div class="pop-up-content-wrap">
               <p>The project content is restricted by a password. Please enter the password to continue.</p>
                <input type="text" name="projectpassword" id="projectpassword">
+               <input type="hidden" name="projectidams" id="projectidams">
+               <input type="hidden" name="projectuserams" id="projectuserams">
                <input type="submit" id="projectsubmit" style="background-color: <?php echo $bgcolor ?>">
                 <span class="customprojectloader" id="projectinifiniteLoader">
                   <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>">
@@ -530,9 +532,19 @@ jQuery(document).ready(function($) {
       var project_protected = "<?php echo $blockdata['project_protected']; ?>";
       if(projectpasswordsession == '' && project_protected != '')
       {
-        jQuery(".projectdiv").on('click', function() {
+        /*jQuery(".projectdiv").on('click', function() {
           jQuery(".custom-model-main").addClass('model-open');
-        }); 
+        }); */
+
+        $(document).on("click", ".projectdiv a", function() {
+           var projectpageid = jQuery(this).data("pageid");
+           var projectuserid = jQuery(this).data("userid");
+            console.log(projectuserid);
+            jQuery("input[type=hidden][name=projectidams]").val(projectpageid); 
+            jQuery("input[type=hidden][name=projectuserams]").val(projectuserid); 
+            jQuery(".custom-model-main").addClass('model-open');
+        });
+
         jQuery(".close-btn, .bg-overlay").click(function(){
           jQuery(".custom-model-main").removeClass('model-open');
         });
@@ -543,6 +555,9 @@ jQuery(document).ready(function($) {
         
         var projectpassword = jQuery('#projectpassword').val();
         var getpageid = jQuery('#getpageid').val();
+        var projectidams = jQuery('#projectidams').val();
+        var projectuserams = jQuery('#projectuserams').val();
+        var mailsiteurl = "<?php echo site_url('/project/'); ?>";
         
           $.ajax({
              url: amsjs_ajax_url.ajaxurl,
@@ -564,7 +579,9 @@ jQuery(document).ready(function($) {
 
                  if(mydata == 'valid')
                  {
-                    location.reload();
+                    var siteurl = mailsiteurl+projectidams+'-'+projectuserams+'-'+getpageid;
+                    window.location.href = siteurl;
+                    //location.reload();
                  }
                  else
                  {
