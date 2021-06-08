@@ -10,7 +10,7 @@ function amsprojects_function( $slug ) {
 <div class="entry-content main-content-wrap">
  
 <!-- ======================================================================
-notes::
+notes:: AMS
 main-content - this class is for two columns.
 main-content main-content-three-col - this class is for three columns.
 main-content main-content-four-col - this class is for four columns.
