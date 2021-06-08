@@ -245,7 +245,7 @@ if(empty($bgcolor))
               }
               else
               {
-                echo "<a href='javascript:void(0)'>";
+                echo "<a href='javascript:void(0)' data-pageid='".$x_value['id']."' data-userid='".$x_value['user_id']."'>";
                 echo  "<p class='product-title'> ". $x_value['name'] ;
                 if($x_value['completed_year'])
                 {
