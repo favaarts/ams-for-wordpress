@@ -589,16 +589,24 @@ function get_amsprojectlog()
     $post_id = $_POST['getpageid'];
     $post = get_post($post_id);
     $blocks = parse_blocks($post->post_content);
-    $blockdata = $blocks[0]['attrs'];
+    //$blockdata = $blocks[0]['attrs'];
+
+    foreach($blocks as $blockdata) 
+    {
+        if($blockdata['blockName'] == 'wpdams-amsnetwork-project/amsnetwork-block-project')
+        {
+          $project_protected = $blockdata['attrs']['project_protected'];
+        }
+    } 
     
     $projectpassword = $_POST['projectpassword'];
     
-    if ($blockdata['project_protected'] == $projectpassword)
+    if ($project_protected == $projectpassword)
     {
         $_SESSION['start'] = time();
         $_SESSION['expire'] =  $_SESSION['start'] + (1 * 10800);
 
-        $_SESSION['projectpassword']=$blockdata['project_protected'];
+        $_SESSION['projectpassword']=$project_protected;
         //echo $_SESSION['billingEmailAddress']= $_POST['billingEmailAddress'];
         echo "valid";
         
@@ -1226,6 +1234,7 @@ function get_projectlisting($projectdata = '',$reelsid = '')
         if($blockdata['blockName'] == 'wpdams-amsnetwork-project/amsnetwork-block-project')
         {
           $realdataid = $blockdata['attrs']['amsreelid'];
+          $pagination = $blockdata['attrs']['project_pagination'];
         }
     } 
     /*GET real ID*/
@@ -1237,7 +1246,7 @@ function get_projectlisting($projectdata = '',$reelsid = '')
     else
     {
         
-        $numberofprojects = $blocks[0]['attrs']['project_pagination'];
+        $numberofprojects = $pagination;
 
         if(isset($numberofprojects))
         {

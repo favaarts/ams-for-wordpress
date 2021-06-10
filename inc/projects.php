@@ -28,18 +28,45 @@ if(isset($_GET['reels_id'])){
 
 $blockdata = get_sidebaroption();
 
-if($blockdata['amsprojectid'])
+// Get AMS BLOCK
+$post_id = get_the_ID();
+$post = get_post($post_id);
+$amsblocksetting = parse_blocks($post->post_content);
+
+foreach($amsblocksetting as $amsblock) 
 {
-  $getamsprojectid = get_projectdetails($blockdata['amsprojectid']);
-  $URL=site_url('/project/'.$blockdata['amsprojectid'].'-'.$getamsprojectid['project']['user_id'].'-'.$pageid);
+    if($amsblock['blockName'] == "wpdams-amsnetwork-project/amsnetwork-block-project")
+    { 
+        $protectedpassword = $amsblock['attrs']['project_protected'];
+        $pagination = $amsblock['attrs']['project_pagination'];
+        $amsprojectid = $amsblock['attrs']['amsprojectid'];
+        $radioattrproject = $amsblock['attrs']['radio_attr_project'];
+        $firstpartmailtext = $amsblock['attrs']['firstpartmailtext'];
+        $secondpartmailtext = $amsblock['attrs']['secondpartmailtext'];
+        $projectsidebar = $amsblock['attrs']['projectsidebar'];
+        $amsreelid = $amsblock['attrs']['amsreelid'];
+        $remove_viewmore = $amsblock['attrs']['remove_viewmore'];
+        $project_paymenturl = $amsblock['attrs']['project_paymenturl'];
+        $project_paymentmessage = $amsblock['attrs']['project_paymentmessage'];
+        $paymentbuttonname = $amsblock['attrs']['paymentbuttonname'];
+        
+    }
+}  
+// End AMS BLOCK Setting
+
+
+if($amsprojectid)
+{
+  $getamsprojectid = get_projectdetails($amsprojectid);
+  $URL=site_url('/project/'.$amsprojectid.'-'.$getamsprojectid['project']['user_id'].'-'.$pageid);
   echo "<script type='text/javascript'>document.location.href='".$URL."';</script>";
 }
 
-$gridlayout = $blockdata['radio_attr_project'];
+$gridlayout = $radioattrproject;
 
-if($blockdata['project_pagination'] != NULL)
+if($pagination != NULL)
 {
-  $pagination = $blockdata['project_pagination'];
+  $pagination = $pagination;
 }
 else
 {
@@ -67,18 +94,18 @@ $nowtime = time();
 
 /**/
 
-if(isset($blockdata['firstpartmailtext']))
+if(isset($firstpartmailtext))
 {
-    $firstpartmailtext = $blockdata['firstpartmailtext'];
+    $firstpartmailtext = $firstpartmailtext;
 }
 else
 {
     $firstpartmailtext = "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
 }
 
-if(isset($blockdata['secondpartmailtext']))
+if(isset($secondpartmailtext))
 {
-    $secondpartmailtext = $blockdata['secondpartmailtext'];
+    $secondpartmailtext = $secondpartmailtext;
 }
 else
 {
@@ -138,7 +165,7 @@ if(empty($bgcolor))
     }
 
   // Remove Project sidebar
-  if (!isset($blockdata['projectsidebar']))
+  if (!isset($projectsidebar))
   {        
   ?>
     <div class="wp-block-column left-col col-fit" >
@@ -149,11 +176,11 @@ if(empty($bgcolor))
 
             <div class="searchbox">
                 <h4>Search</h4>
-                <input type="text" class="searrch-input" name="keyword" id="getproject" data-protectedid="<?php echo $blockdata['project_protected']; ?>" onkeyup="fetchproject()"></input>
+                <input type="text" class="searrch-input" name="keyword" id="getproject" data-protectedid="<?php echo $protectedpassword; ?>" onkeyup="fetchproject()"></input>
             </div>
 
             <?php
-              if(empty($blockdata['amsreelid']))
+              if(empty($amsreelid))
               {
                 echo "<ul class='ul-cat-wrap getcategoryid'>";
                 echo "<li><a href='".site_url('/project')."'>All Projects</a></li>";
@@ -180,7 +207,7 @@ if(empty($bgcolor))
       $arrayResult = get_projectlisting(NULL,$reels_id);
       
 
-      if($blockdata['radio_attr_project'] == "list_view")
+      if($radioattrproject == "list_view")
       {
         
           foreach($arrayResult['projects'] as $x_value) 
@@ -232,7 +259,7 @@ if(empty($bgcolor))
                   echo  "</a>";
                 }  
               }
-              elseif($blockdata['project_protected'] == NULL)
+              elseif($protectedpassword == NULL)
               {
                   echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$pageid)."'>";
                   echo  "<p class='product-title'> ". $x_value['name'] ;
@@ -309,7 +336,7 @@ if(empty($bgcolor))
                       }    
 
                   }
-                  elseif($blockdata['project_protected'] == NULL)
+                  elseif($protectedpassword == NULL)
                   {
                       echo "<a href='".site_url('/project/'.$x_value['id'].'-'.$x_value['user_id'].'-'.$pageid)."'>";
                       echo  "<p class='product-title'>".$x_value['name'];
@@ -363,7 +390,7 @@ if(empty($bgcolor))
             <a id="inifiniteLoader"  data-totalequipment="<?php echo $arrayResult['meta']['total_count']; ?>" ><img src="<?php echo esc_url( plugins_url( 'assets/img/loader.svg', dirname(__FILE__) ) ) ?>" ></a>   
 
             <?php
-            if (isset($blockdata['remove_viewmore']))
+            if (isset($remove_viewmore))
             { 
               echo "<input type='button' id='seemore' style='background-color: $bgcolor' value='View More'>";
             }
@@ -393,26 +420,26 @@ if(empty($bgcolor))
                   <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>">
                 </span>
                 <?php
-                  if($blockdata['project_paymenturl'])
+                  if($project_paymenturl)
                   {
-                    if($blockdata['project_paymentmessage'])
+                    if($project_paymentmessage)
                     {
-                      echo "<p class='amsmargintop'>".$blockdata['project_paymentmessage']."</p>"; 
+                      echo "<p class='amsmargintop'>".$project_paymentmessage."</p>"; 
                     }
                     else
                     {
                       echo "<p class='amsmargintop'>If you don’t have a password, you can make a payment at this link to receive it.</p>"; 
                     }
 
-                    if($blockdata['paymentbuttonname'])
+                    if($paymentbuttonname)
                     {
-                      $buttonname = $blockdata['paymentbuttonname'];
+                      $buttonname = $paymentbuttonname;
                     }
                     else
                     {
                       $buttonname = "Pay Here";
                     }
-                    echo "<div class='paymentdiv'><a target='_blank' class='paymentclass' style='background-color: $bgcolor' href=".$blockdata['project_paymenturl'].">".$buttonname."</a></div>";
+                    echo "<div class='paymentdiv'><a target='_blank' class='paymentclass' style='background-color: $bgcolor' href=".$project_paymenturl.">".$buttonname."</a></div>";
                   }
                 ?>
             </div>
@@ -529,7 +556,7 @@ jQuery(document).ready(function($) {
     function amsblocklogin()
     {
       var projectpasswordsession = "<?php echo $_SESSION["projectpassword"]; ?>"; 
-      var project_protected = "<?php echo $blockdata['project_protected']; ?>";
+      var project_protected = "<?php echo $protectedpassword; ?>";
       if(projectpasswordsession == '' && project_protected != '')
       {
         /*jQuery(".projectdiv").on('click', function() {
