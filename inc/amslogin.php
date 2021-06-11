@@ -54,7 +54,7 @@ main-content main-content-four-col - this class is for four columns.
                         <input type="password" id="amspassword" name="password" placeholder="Password" required>
                     </div>
                 
-                    <input type="submit" id="btnSubmit" name="btnSubmit" value="Save Changes" />
+                    <input type="submit" id="btnSubmit" name="btnSubmit" value="LogIn" />
                     
                     <div class="post-group customloader" id="inifiniteLoader" style="text-align: center;">
                       <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>" >
