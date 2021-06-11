@@ -161,7 +161,7 @@ if(isset($_SESSION["projectpassword"]) || empty($blocks[0]['attrs']['project_pro
                                     if($x_value['project_attribute_type_name'] == "Director")
                                     {
                                         echo "<div class='enrollment'>
-                                        <h3>Director(s)</h3>";
+                                        <h3>Director</h3>";
                                         if ($blocks[0]['attrs']['projecttomember'] && $connectmemberblocks[0]['blockName'] == "wpdams-amsnetwork-member/amsnetwork-block-member")  
                                         {
                                             echo "<p><a target='_blank' href='".site_url('/members/'.$x_value['value_2'].'-'.$projectconnectmemberid.'/details' )."'>".$x_value['value']."</a></p>";
