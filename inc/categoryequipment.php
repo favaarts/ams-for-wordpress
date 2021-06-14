@@ -217,7 +217,7 @@ if(empty($detailspage))
                     if($x_value['photo'] == NULL || $x_value['photo'] == "")
                     {                                    
                         echo "<div class='product-img'>";
-                            echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ )." alt=".$x_value['name'].">";
+                            echo "<img src=".esc_url( plugins_url( 'assets/img/bg-image.png', dirname(__FILE__) ) )." alt=".$x_value['name'].">";
                          echo "</div>";
                     }
                     else
@@ -281,7 +281,7 @@ if(empty($detailspage))
                                     if($x_value['photo'] == NULL || $x_value['photo'] == "")
                                     {                                    
                                         echo "<div class='product-img-wrap'>";
-                                            echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ )." alt=".$x_value['name'].">";
+                                            echo "<img src=".esc_url( plugins_url( 'assets/img/bg-image.png', dirname(__FILE__) ) )." alt=".$x_value['name'].">";
                                          echo "</div>";
                                     }
                                     else
