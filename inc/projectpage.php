@@ -572,15 +572,13 @@ jQuery(document).ready(function($) {
    var pageid = jQuery("#getpageid").val();
    jQuery('#projectinifiniteLoader').hide();
 
-   var logintoken = "<?php echo $_SESSION["accesstoken"]; ?>";    
+   var logintoken = "<?php echo $_SESSION['accesstoken']; ?>";    
     var amscredentials = "<?php echo $blocks[0]['attrs']['amscredentials']; ?>";
     var amssinglevideo = "<?php echo $amssinglevideonew; ?>";
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
     var amsprojectpagesidebar = "<?php echo $amsprojectpagesidebar; ?>";
 
-    console.log("hello----");
-    console.log(amsprojectpagesidebar);
     /*Password URL Redirect*/
     var projectpassword = "<?php echo $_GET['password']; ?>";
     var url = $(this).val();   
@@ -588,8 +586,6 @@ jQuery(document).ready(function($) {
     if(amsprojectpagesidebar == 1)
     {    
         $(".video-main").css({"width": "100%"}); 
-        $(".video-main img").css({"height": "auto"}); 
-
     }
       
     if(projectpassword)
@@ -625,7 +621,7 @@ jQuery(document).ready(function($) {
     // Custom popup login
     function amsblocklogin()
     {
-      var projectpasswordsession = "<?php echo $_SESSION["projectpassword"]; ?>"; 
+      var projectpasswordsession = "<?php echo $_SESSION['projectpassword']; ?>"; 
       var project_protected = "<?php echo $protectedpassword; ?>";
       if(projectpasswordsession == '' && project_protected != '')
       {
