@@ -621,6 +621,44 @@ add_action('wp_ajax_get_amsprojectlog','get_amsprojectlog');
 add_action('wp_ajax_nopriv_get_amsprojectlog','get_amsprojectlog');
 // End AMS Project login
 
+// AMS Single Project page login
+function get_amssingleprojectpagelog()
+{
+
+    $post_id = $_POST['getpageid'];
+    $post = get_post($post_id);
+    $blocks = parse_blocks($post->post_content);
+    
+    foreach($blocks as $blockdata) 
+    {
+        if($blockdata['blockName'] == 'wpdams-amsnetwork-projectpage/amsnetwork-block-projectpage')
+        {
+          $project_protected = $blockdata['attrs']['project_protected'];
+        }
+    } 
+
+    $projectpassword = $_POST['projectpassword'];
+    
+    if ($project_protected == $projectpassword)
+    {
+        $_SESSION['start'] = time();
+        $_SESSION['expire'] =  $_SESSION['start'] + (1 * 10800);
+
+        $_SESSION['projectpassword']=$project_protected;
+        //echo $_SESSION['billingEmailAddress']= $_POST['billingEmailAddress'];
+        echo "valid";
+        
+    }
+    else
+    {
+        echo "error";
+    }
+    
+}
+add_action('wp_ajax_get_amssingleprojectpagelog','get_amssingleprojectpagelog');
+add_action('wp_ajax_nopriv_get_amssingleprojectpagelog','get_amssingleprojectpagelog');
+// End AMS Single Project page login
+
 // AMS Project mail
 function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$billingContactName,$loginPageURL)
 {
@@ -995,6 +1033,12 @@ if(!empty($apiurlcheck) && !empty($apikeycheck))
           array( 'wp-blocks', 'wp-element', 'wp-plugins', 'wp-editor', 'wp-edit-post', 'wp-i18n', 'wp-components', 'wp-data' )
        );
 
+        wp_enqueue_script(
+          'projectpage-js',
+          plugins_url( 'assets/js/amsprojectpage.js', __FILE__ ),
+          array( 'wp-blocks', 'wp-element', 'wp-plugins', 'wp-editor', 'wp-edit-post', 'wp-i18n', 'wp-components', 'wp-data' )
+       );
+
        wp_enqueue_style(
           'amsblockstyle-css',
           plugins_url( 'assets/css/amsblockstyle.css', __FILE__ ),
@@ -1046,6 +1090,7 @@ require plugin_dir_path( __FILE__ ). 'inc/eventlisting.php';
 
 // CTA for Short code project listing
 require plugin_dir_path( __FILE__ ). 'inc/projects.php';
+require plugin_dir_path( __FILE__ ). 'inc/projectpage.php';
 
 // CTA for Short code login page
 require plugin_dir_path( __FILE__ ). 'inc/amslogin.php';
