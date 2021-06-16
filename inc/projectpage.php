@@ -579,13 +579,14 @@ jQuery(document).ready(function($) {
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
     var amsprojectpagesidebar = "<?php echo $amsprojectpagesidebar; ?>";
 
-    /*Password URL Redirect*/
+
     var projectpassword = "<?php echo $_GET['password']; ?>";
     var url = $(this).val();   
 
     if(amsprojectpagesidebar == 1)
     {    
         $(".video-main").css({"width": "100%"}); 
+        $(".video-main img").css({"height": "auto"}); 
     }
       
     if(projectpassword)
@@ -600,7 +601,6 @@ jQuery(document).ready(function($) {
              type:'POST',
              data: { action: 'get_amssingleprojectpagelog', projectpassword:projectpassword,getpageid:getpageid},
              success: function (data) {
-               /* console.log(data);*/
                 jQuery('.customprojectloader').hide('1000');
                 jQuery("#projectsubmit").prop('disabled', false);
 
@@ -612,13 +612,10 @@ jQuery(document).ready(function($) {
 
           if(custbillingEmail == null)
           {
-            window.location.replace("<?php echo $loginPageURL; ?>");
+            location.reload();
           }
     }  
-   /*End password URL redirect*/
 
-
-    // Custom popup login
     function amsblocklogin()
     {
       var projectpasswordsession = "<?php echo $_SESSION['projectpassword']; ?>"; 
@@ -648,34 +645,26 @@ jQuery(document).ready(function($) {
         var projectuserams = jQuery('#projectuserams').val();
         var mailsiteurl = "<?php echo site_url('/project/'); ?>";
         
-          $.ajax({
+        $.ajax({
              url: amsjs_ajax_url.ajaxurl,
              type:'POST',
              data: { action: 'get_amssingleprojectpagelog', projectpassword:projectpassword,getpageid:getpageid},
              beforeSend: function(){
-              // Show image container
                 jQuery(".customprojectloader").show();
                 jQuery("#projectsubmit").prop('disabled', true);
              },
              success: function (data) {
-               /* console.log(data);*/
                 jQuery('.customprojectloader').hide('1000');
                 jQuery("#projectsubmit").prop('disabled', false);
 
                 var mydata = data.substring(0,data.length - 1);
 
-                console.log(mydata);
-
-                 if(mydata == 'valid')
-                 {
-                    //var siteurl = site_url('/project/'+projectidams+'-'+projectuserams+'-'+getpageid);
-                    //var siteurl = "<?php //echo $loginPageURL; ?>";
-                    //http://localhost/wp/wp2/projects/
-                    //window.location.href = siteurl;
+                if(mydata == 'valid')
+                {
                     location.reload();
-                 }
-                 else
-                 {
+                }
+                else
+                {
                     jQuery("#amscredentials_error").html('<p>Access Credentials Denied.</p>');
                     jQuery("#amscredentials_error").css("color", "red");
                     jQuery("#amscredentials_error").css("display", "block");
@@ -684,14 +673,12 @@ jQuery(document).ready(function($) {
                         $('#amscredentials_error').fadeOut('fast');
                     }, 5000);
                     
-                 }
-             }
-          });
+                }
+            }
+        });
     
     });
 
-
-    //==================================================
 
     if(amssinglevideo)
     {
@@ -717,9 +704,6 @@ jQuery(document).ready(function($) {
                 });
         }
     }
-
-
-    /* ==== MP3 audio ====*/
    
 
     jQuery('[audiopopup-open]').on('click', function() {
@@ -747,7 +731,7 @@ jQuery(document).ready(function($) {
           
     });
     
-    // Open Popup
+
     jQuery('[popup-open]').on('click', function() {
 
         if(logintoken)
@@ -774,7 +758,7 @@ jQuery(document).ready(function($) {
     });
 
 
-    // Close Popup
+
     jQuery('[popup-close]').on('click', function() {
         var popup_name = jQuery(this).attr('popup-close');
         var videourlid = jQuery(this).data("id");
@@ -791,7 +775,7 @@ jQuery(document).ready(function($) {
     });
 
 
-    // Image popup
+
     jQuery('[imagepopup-open]').on('click', function() {
 
         var imageurlid = jQuery(this).data("id");
@@ -809,7 +793,6 @@ jQuery(document).ready(function($) {
         var audiourlid = jQuery(this).data("id");
         jQuery('[imagepopup-name="' + popup_name + '"]').fadeOut(300);
     });
-    // End image popup
    
 });    
 </script>
