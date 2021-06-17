@@ -45,6 +45,9 @@
     register_assets_url: {
         type: 'string',
     },
+    ams_purchase_url: {
+        type: 'string',
+    },
     register_assets_urltab: {
       type: 'string',
       default: '_self',
@@ -56,6 +59,10 @@
     showhidebookurl: {
       type: 'boolean',
       default: true
+    },
+    showpurchaseurl: {
+      type: 'boolean',
+      default: false
     },
      all_items_url: {
         type: 'string',
@@ -79,6 +86,10 @@
     nonmember: {
       type: 'boolean',
       default: true
+    },
+    purchaseprice: {
+      type: 'boolean',
+      default: false
     },
      type: { type: 'string', default: 'amscategoryequipment' },
       alignment: {
@@ -155,6 +166,15 @@
                 value: props.attributes.register_assets_url
               }
             ),
+            el( TextControl,
+              {
+                label: '(Optional) Purchase URL',
+                onChange: ( value ) => {
+                  props.setAttributes( { ams_purchase_url: value } );
+                },
+                value: props.attributes.ams_purchase_url
+              }
+            ),
             el( SelectControl,
               {
                 label: 'Where to open the Booking URL',
@@ -190,6 +210,13 @@
                  props.setAttributes( { showhidebookurl: value } );
               },
               checked: props.attributes.showhidebookurl,
+            }),
+            el(ToggleControl, {
+              label: 'Display Purchase Button',
+              onChange: ( value ) => {
+                 props.setAttributes( { showpurchaseurl: value } );
+              },
+              checked: props.attributes.showpurchaseurl,
             }),
             el( RadioControl,
               {
@@ -230,6 +257,13 @@
                  props.setAttributes( { nonmember: value } );
               },
               checked: props.attributes.nonmember,
+            }),
+            el(ToggleControl, {
+              label: 'Purchase Price',
+              onChange: ( value ) => {
+                 props.setAttributes( { purchaseprice: value } );
+              },
+              checked: props.attributes.purchaseprice,
             }),
             //
             

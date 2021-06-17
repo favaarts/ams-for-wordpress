@@ -41,6 +41,16 @@ get_header();  ?>
                     $landingurl = "https://".$apiurl.".amsnetwork.ca/login";
                 }
 
+                if($blocks[0]['attrs']['ams_purchase_url'])
+                {
+                    $purchaselandingurl = $blocks[0]['attrs']['ams_purchase_url'];
+                }
+                else
+                {
+                    $apiurl = get_option('wpams_url_btn_label');
+                    $purchaselandingurl = "https://".$apiurl.".amsnetwork.ca/login";
+                }
+
                 $targeturl = $blocks[0]['attrs']['register_assets_urltab'];
                 if(empty($targeturl))
                 {
@@ -86,7 +96,7 @@ get_header();  ?>
                                 echo "</div>";
                                 
                                 echo "<div class='enrollment enrtop'>";
-                                        if (!isset($blocks[0]['attrs']['member']))
+                                        if (!isset($blocks[0]['attrs']['nonmember']))
                                         {    
                                             echo "<h3>Non - Member Price</h3>";
                                         
@@ -94,6 +104,17 @@ get_header();  ?>
                                         } 
                                       
                                 echo "</div>";    
+
+                                echo "<div class='enrollment enrtop'>";
+                                        if (isset($blocks[0]['attrs']['purchaseprice']))
+                                        {   
+                                            if($json_value['purchase_amount'])
+                                            {
+                                                echo "<h3>Purchase Price</h3>";
+                                                echo "<p>$". $json_value['purchase_amount'] ."</p>";
+                                            } 
+                                        } 
+                                echo "</div>";
                                     
                                 echo "</div>";
                             ?>
@@ -202,6 +223,16 @@ get_header();  ?>
                                         }    
                                         ?>
                                         
+                                    </div>
+
+                                    <div class="reg-sec">
+                                        <?php
+                                        if (isset($blocks[0]['attrs']['showpurchaseurl']))
+                                        {
+                                            echo "<a href='$purchaselandingurl' target='$targeturl' style='background-color: $bgcolor;'>Buy This Item</a>";
+                                              
+                                        }    
+                                        ?>
                                     </div>
                                 
                                 </div>
