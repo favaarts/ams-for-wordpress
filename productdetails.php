@@ -229,7 +229,10 @@ get_header();  ?>
                                         <?php
                                         if (isset($blocks[0]['attrs']['showpurchaseurl']))
                                         {
-                                            echo "<a href='$purchaselandingurl' target='$targeturl' style='background-color: $bgcolor;'>Buy This Item</a>";
+                                            if(!empty($json_value['purchase_amount']))
+                                            {
+                                                echo "<a href='$purchaselandingurl' target='$targeturl' style='background-color: $bgcolor;'>Buy This Item</a>";
+                                            }    
                                               
                                         }    
                                         ?>
@@ -238,28 +241,28 @@ get_header();  ?>
                                 </div>
                                 
                                 <?php
-                                    if(isset($json_value['barcode']))
+                                    if($json_value['barcode'])
                                     {
-                                    echo "<div class='location-sec'>";
-                                    echo "<h3>Barcode Number</h3>";
-                                    echo "<p>".$json_value['barcode']."</p>";
-                                    echo "</div>";
+                                        echo "<div class='location-sec'>";
+                                        echo "<h3>Barcode Number</h3>";
+                                        echo "<p>".$json_value['barcode']."</p>";
+                                        echo "</div>";
                                     }
 
-                                    if(isset($json_value['serial_number']))
+                                    if($json_value['serial_number'])
                                     {
-                                    echo "<div class='location-sec'>";
-                                    echo "<h3>Serial Number</h3>";
-                                    echo "<p>".$json_value['serial_number']."</p>";
-                                    echo "</div>";
+                                        echo "<div class='location-sec'>";
+                                        echo "<h3>Serial Number</h3>";
+                                        echo "<p>".$json_value['serial_number']."</p>";
+                                        echo "</div>";
                                     }
 
-                                    if(isset($json_value['insurance_value']))
+                                    if($json_value['insurance_value'])
                                     {
-                                    echo "<div class='location-sec'>";
-                                    echo "<h3>Insurance Value</h3>";
-                                    echo "<p>".$json_value['insurance_value']."</p>";
-                                    echo "</div>";
+                                        echo "<div class='location-sec'>";
+                                        echo "<h3>Insurance Value</h3>";
+                                        echo "<p>".$json_value['insurance_value']."</p>";
+                                        echo "</div>";
                                     }
                                 ?>        
                                 
