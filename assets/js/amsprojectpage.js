@@ -125,7 +125,7 @@
               checked: props.attributes.amscredentials,
             }),
             el(ToggleControl, {
-              label: 'Sidebar',
+              label: 'Banner Sidebar',
               onChange: ( value ) => {
                  props.setAttributes( { amsprojectpagesidebar: value } );
               },
