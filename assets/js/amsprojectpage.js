@@ -67,7 +67,35 @@
     },
     amsprojectpagesidebar: {
       type: 'boolean',
-      default: false
+      default: true
+    },
+    projectsynopsis: {
+      type: 'boolean',
+      default: true
+    },
+    projectmedia: {
+      type: 'boolean',
+      default: true
+    },
+    projectcrewroles: {
+      type: 'boolean',
+      default: true
+    },
+    projectlongattributes: {
+      type: 'boolean',
+      default: true
+    },
+    projectshortattributes: {
+      type: 'boolean',
+      default: true
+    },
+    bannercrewroles: {
+      type: 'boolean',
+      default: true
+    },
+    projecttitle: {
+      type: 'boolean',
+      default: true
     },
     type: { type: 'string', default: 'amsprojectpage' },
       alignment: {
@@ -130,6 +158,55 @@
                  props.setAttributes( { amsprojectpagesidebar: value } );
               },
               checked: props.attributes.amsprojectpagesidebar,
+            }),
+            el(ToggleControl, {
+              label: 'Synopsis section',
+              onChange: ( value ) => {
+                 props.setAttributes( { projectsynopsis: value } );
+              },
+              checked: props.attributes.projectsynopsis,
+            }),
+            el(ToggleControl, {
+              label: 'Media section',
+              onChange: ( value ) => {
+                 props.setAttributes( { projectmedia: value } );
+              },
+              checked: props.attributes.projectmedia,
+            }),
+            el(ToggleControl, {
+              label: 'Crew Roles section',
+              onChange: ( value ) => {
+                 props.setAttributes( { projectcrewroles: value } );
+              },
+              checked: props.attributes.projectcrewroles,
+            }),
+            el(ToggleControl, {
+              label: 'Long Attributes section',
+              onChange: ( value ) => {
+                 props.setAttributes( { projectlongattributes: value } );
+              },
+              checked: props.attributes.projectlongattributes,
+            }),
+            el(ToggleControl, {
+              label: 'Short Attributes section',
+              onChange: ( value ) => {
+                 props.setAttributes( { projectshortattributes: value } );
+              },
+              checked: props.attributes.projectshortattributes,
+            }),
+            el(ToggleControl, {
+              label: 'Banner Crew Roles section',
+              onChange: ( value ) => {
+                 props.setAttributes( { bannercrewroles: value } );
+              },
+              checked: props.attributes.bannercrewroles,
+            }),
+            el(ToggleControl, {
+              label: 'Title',
+              onChange: ( value ) => {
+                 props.setAttributes( { projecttitle: value } );
+              },
+              checked: props.attributes.projecttitle,
             }),
             el( TextControl,
               {

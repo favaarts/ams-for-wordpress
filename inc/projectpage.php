@@ -30,7 +30,23 @@ foreach($blockdata as $amsblock)
         $project_paymenturl = $amsblock['attrs']['project_paymenturl'];
         $project_paymentmessage = $amsblock['attrs']['project_paymentmessage'];
         $paymentbuttonname = $amsblock['attrs']['paymentbuttonname'];
-        $amsprojectpagesidebar = $amsblock['attrs']['amsprojectpagesidebar'];
+
+        if(isset($amsblock['attrs']['amsprojectpagesidebar']))
+        {
+            $amsprojectpagesidebar = 1;
+        }
+        else
+        {
+            $amsprojectpagesidebar = "";
+        }
+
+        $projectsynopsis = $amsblock['attrs']['projectsynopsis'];
+        $projectmedia = $amsblock['attrs']['projectmedia'];
+        $projectcrewroles = $amsblock['attrs']['projectcrewroles'];
+        $projectlongattributes = $amsblock['attrs']['projectlongattributes'];
+        $projectshortattributes = $amsblock['attrs']['projectshortattributes'];
+        $bannercrewroles = $amsblock['attrs']['bannercrewroles'];
+        $projecttitle = $amsblock['attrs']['projecttitle'];
     }
 }    
 
@@ -204,23 +220,26 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                       }
                                       echo "</h1>";
                                     
-                                    if($arrayResult['project']['creator'])
-                                    {
-                                        echo "<div class='enrollment enrtop'>
-                                            <h3>Submitted By</h3>";
-                                          if ($blocks[0]['attrs']['projecttomember'])  
-                                          {
-                                           
-                                                echo "<p><a target='_blank' href='".site_url('/members/'.$arrayResult['project']['user_id'].'-'.$projectconnectmemberid.'/details' )."'>".$arrayResult['project']['creator']."</a></p>";
-                                            
-                                          }
-                                          else
-                                          {
-                                            echo "<p>".$arrayResult['project']['creator']."</p>";
-                                          }
-                                            
-                                        "</div>";
-                                    }
+                                    if (!isset($bannercrewroles)) 
+                                    {     
+                                        if($arrayResult['project']['creator'])
+                                        {
+                                            echo "<div class='enrollment enrtop'>
+                                                <h3>Submitted By</h3>";
+                                              if ($blocks[0]['attrs']['projecttomember'])  
+                                              {
+                                               
+                                                    echo "<p><a target='_blank' href='".site_url('/members/'.$arrayResult['project']['user_id'].'-'.$projectconnectmemberid.'/details' )."'>".$arrayResult['project']['creator']."</a></p>";
+                                                
+                                              }
+                                              else
+                                              {
+                                                echo "<p>".$arrayResult['project']['creator']."</p>";
+                                              }
+                                                
+                                            "</div>";
+                                        }
+                                    }    
 
                                     if(isset($attributeCrewResult['project_attributes']))
                                     {
@@ -280,117 +299,123 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                         <div class="project-detail-sec">
                             <div class="left-sec">
                                 <?php
-                                if($arrayResult['project']['synopsis'])
+                                if (!isset($projectsynopsis))
                                 {
-                                    echo "<div class='synopsis prospace'>";
-                                    //echo "<h3>Synopsis:</h3>";
-                                        echo "<div class='text-sec'>";
-                                            echo "<p>".$arrayResult['project']['synopsis']."</p>";
+                                    if($arrayResult['project']['synopsis'])
+                                    {
+                                        echo "<div class='synopsis prospace'>";
+                                        //echo "<h3>Synopsis:</h3>";
+                                            echo "<div class='text-sec'>";
+                                                echo "<p>".$arrayResult['project']['synopsis']."</p>";
+                                            echo "</div>";
                                         echo "</div>";
-                                    echo "</div>";
-                                }
+                                    }
+                                }    
                                 ?>
                                  
 
                                 <?php
                                
+                                if (!isset($projectmedia)) 
+                                {    
+                                    if(isset($attributePhoto['project_attributes']))   
+                                    {     
+                                    if(count($attributePhoto['project_attributes']) > 1)
+                                    {
+                                    ?> 
+                                    <div class="videos prospace amsvideos">
+                                       
+                                        <div class="video-row">
+                                            <h3>Media:</h3>
+                                            <?php
+                                            $i = 1;
+                                            
+                                            array_shift($attributePhoto['project_attributes']);
 
-                                if(isset($attributePhoto['project_attributes']))   
-                                {     
-                                if(count($attributePhoto['project_attributes']) > 1)
-                                {
-                                ?> 
-                                <div class="videos prospace amsvideos">
-                                   
-                                    <div class="video-row">
-                                        <h3>Media:</h3>
-                                        <?php
-                                        $i = 1;
-                                        
-                                        array_shift($attributePhoto['project_attributes']);
+                                            foreach($attributePhoto['project_attributes'] as $x_value) 
+                                            {
+                                                if($x_value['project_attribute_type_name'] == "Video")
+                                                {
+                                                    
+                                                echo "<div class='video-col'>
+                                                     <div class='amsvideo-thumb'>
+                                                      <img src='".$x_value['file_attachment_thumbnail'] ."'>
+                                                        <a class='open-button' popup-open='popup-".$i."' href='javascript:void(0)' data-img='".$x_value['value_4']."' data-id='".$x_value['id']."'></a>
+                                                        </div>
+                                                        <div class='popup' popup-name='popup-".$i."'>
+                                                        <div class='popup-content'>
+                                                            <video id='amspopupvideo".$x_value['id']."' controls>
+                                                            </video>
+                                                            <a class='close-button' popup-close='popup-".$i."' href='javascript:void(0)' data-id='amspopupvideo".$x_value['id']."'>x</a>";
+                                                            if($blocks[0]['attrs']['amsfile_attachment'])
+                                                            {    
+                                                                echo "<a href='".$x_value['file_attachment']."'><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
+                                                            }
+                                                    echo "</div>
+                                                    </div>
+                                                </div>";
+                                                }
+                                              $i++;      
+                                            } 
 
-                                        foreach($attributePhoto['project_attributes'] as $x_value) 
-                                        {
-                                            if($x_value['project_attribute_type_name'] == "Video")
+
+                                            // Audio div
+                                            foreach($attributePhoto['project_attributes'] as $ams_audio) 
+                                            {
+                                                if($ams_audio['project_attribute_type_name'] == "Audio")
+                                                {
+                                                echo "<div class='audio-col'>
+                                                    <div class='amsaudio-thumbnew'>
+                                                        <img class='amsaudioicon' src='".$arrayResult['project']['thumbnail']."'>
+                                                        <a class='open-button' audiopopup-open='popup-".$i."' href='javascript:void(0)' data-id='".$ams_audio['id']."' data-audiourl='".$ams_audio['file_attachment']."' > </a>
+                                                        
+                                                    </div>
+                                                    <div class='popup' audiopopup-name='popup-".$i."' style='display: none;'>
+                                                        <div class='popup-content'>
+                                                            <div id='player".$ams_audio['id']."'>
+                                                                    
+                                                                </div>
+                                                         <a class='close-button' audiopopup-close='popup-".$i."' href='javascript:void(0)' data-id='player".$ams_audio['id']."'>x</a>";
+                                                    echo "</div>
+                                                    </div>
+                                                </div>";
+                                                }
+                                              $i++;      
+                                            }
+                                            // End audio div 
+
+                                            // Image div
+                                            foreach($attributePhoto['project_attributes'] as $xphoto_value) 
                                             {
                                                 
-                                            echo "<div class='video-col'>
-                                                 <div class='amsvideo-thumb'>
-                                                  <img src='".$x_value['file_attachment_thumbnail'] ."'>
-                                                    <a class='open-button' popup-open='popup-".$i."' href='javascript:void(0)' data-img='".$x_value['value_4']."' data-id='".$x_value['id']."'></a>
+                                                if($xphoto_value['project_attribute_type_name'] == "Photo")
+                                                {
+                                                    echo "<div class='amsimage-col'>";
+
+                                                    echo "<div class='column amsimagediv'>";
+                                                    echo   "<img src=".$xphoto_value['file_attachment'] ." class='hover-shadow cursor'>";
+                                                    echo "<a class='amsimagetag open-button' imagepopup-open='popup-".$i."' href='javascript:void(0)' data-id='".$xphoto_value['id']."' data-imageurl='".$xphoto_value['file_attachment']."' > </a>";
+                                                    echo "</div>";
+
+
+                                                    echo "<div class='popup' imagepopup-name='popup-".$i."' style='display: none;'>
+                                                        <div class='popup-content'>
+                                                            <img id='amsimage".$xphoto_value['id']."'>
+                                                            <a class='close-button' imagepopup-close='popup-".$i."' href='javascript:void(0)' data-id='amsimage".$xphoto_value['id']."'>x</a>";
+                                                    echo "</div>
                                                     </div>
-                                                    <div class='popup' popup-name='popup-".$i."'>
-                                                    <div class='popup-content'>
-                                                        <video id='amspopupvideo".$x_value['id']."' controls>
-                                                        </video>
-                                                        <a class='close-button' popup-close='popup-".$i."' href='javascript:void(0)' data-id='amspopupvideo".$x_value['id']."'>x</a>";
-                                                        if($blocks[0]['attrs']['amsfile_attachment'])
-                                                        {    
-                                                            echo "<a href='".$x_value['file_attachment']."'><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
-                                                        }
-                                                echo "</div>
-                                                </div>
-                                            </div>";
+                                                    </div>";
+                                                }
+                                                $i++; 
                                             }
-                                          $i++;      
-                                        } 
+                                            // Image div   
+                                            ?>
 
-
-                                        // Audio div
-                                        foreach($attributePhoto['project_attributes'] as $ams_audio) 
-                                        {
-                                            if($ams_audio['project_attribute_type_name'] == "Audio")
-                                            {
-                                            echo "<div class='audio-col'>
-                                                <div class='amsaudio-thumbnew'>
-                                                    <img class='amsaudioicon' src='".$arrayResult['project']['thumbnail']."'>
-                                                    <a class='open-button' audiopopup-open='popup-".$i."' href='javascript:void(0)' data-id='".$ams_audio['id']."' data-audiourl='".$ams_audio['file_attachment']."' > </a>
-                                                    
-                                                </div>
-                                                <div class='popup' audiopopup-name='popup-".$i."' style='display: none;'>
-                                                    <div class='popup-content'>
-                                                        <div id='player".$ams_audio['id']."'>
-                                                                
-                                                            </div>
-                                                     <a class='close-button' audiopopup-close='popup-".$i."' href='javascript:void(0)' data-id='player".$ams_audio['id']."'>x</a>";
-                                                echo "</div>
-                                                </div>
-                                            </div>";
-                                            }
-                                          $i++;      
-                                        }
-                                        // End audio div 
-
-                                        // Image div
-                                        foreach($attributePhoto['project_attributes'] as $xphoto_value) 
-                                        {
-                                            
-                                            if($xphoto_value['project_attribute_type_name'] == "Photo")
-                                            {
-                                                echo "<div class='amsimage-col'>";
-
-                                                echo "<div class='column amsimagediv'>";
-                                                echo   "<img src=".$xphoto_value['file_attachment'] ." class='hover-shadow cursor'>";
-                                                echo "<a class='amsimagetag open-button' imagepopup-open='popup-".$i."' href='javascript:void(0)' data-id='".$xphoto_value['id']."' data-imageurl='".$xphoto_value['file_attachment']."' > </a>";
-                                                echo "</div>";
-
-
-                                                echo "<div class='popup' imagepopup-name='popup-".$i."' style='display: none;'>
-                                                    <div class='popup-content'>
-                                                        <img id='amsimage".$xphoto_value['id']."'>
-                                                        <a class='close-button' imagepopup-close='popup-".$i."' href='javascript:void(0)' data-id='amsimage".$xphoto_value['id']."'>x</a>";
-                                                echo "</div>
-                                                </div>
-                                                </div>";
-                                            }
-                                            $i++; 
-                                        }
-                                        // Image div   
-                                        ?>
-
+                                        </div>
                                     </div>
-                                </div>
-                                <?php } }  ?>
+                                    <?php } }  
+                                }    
+                                ?>
                                 
                                 
                                 
@@ -418,8 +443,10 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                 
 
                                 <?php
-                                if($attributeCrewResult['project_attributes'])
-                                { 
+                                if (!isset($projectcrewroles)) 
+                                {    
+                                    if($attributeCrewResult['project_attributes'])
+                                    { 
                                 ?>
                                 <div class="crewroles prospace">
                                     <!-- <h3>Crew Roles:</h3> -->
@@ -433,25 +460,28 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                         }    
                                         ?>
                                 </div>
-                            <?php } 
+                                <?php } 
+                                }
 
-                             if($longAttribute['project_attributes'])
-                                {
-                                    echo "<div class='enrollment longattribute'>";
-                                            echo "<div class='text-sec'>";
-                                            
-                                    foreach($longAttribute['project_attributes'] as $x_value) 
+                                if (!isset($projectlongattributes)) 
+                                {     
+                                    if($longAttribute['project_attributes'])
                                     {
-                                        if($x_value['project_attribute_type_name'] != "Synopsis")
-                                        {    
-                                            echo "<p> <strong>".$x_value['project_attribute_type_name']." : </strong>".$x_value['value']."</p>";  
+                                        echo "<div class='enrollment longattribute'>";
+                                                echo "<div class='text-sec'>";
+                                                
+                                        foreach($longAttribute['project_attributes'] as $x_value) 
+                                        {
+                                            if($x_value['project_attribute_type_name'] != "Synopsis")
+                                            {    
+                                                echo "<p> <strong>".$x_value['project_attribute_type_name']." : </strong>".$x_value['value']."</p>";  
+                                            }
                                         }
-                                    }
-                                            
-                                            echo "</div>"; 
-                                    echo "</div>";
-                                }                                   
-
+                                                
+                                                echo "</div>"; 
+                                        echo "</div>";
+                                    }                                   
+                                }    
                             ?>
 
                             </div>
@@ -461,7 +491,8 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                             $shortattribute = "Short%20Attributes";
                             $shortAttributeResult = get_projectattributes($amsprojectid,$shortattribute);
 
-
+                            if (!isset($projectshortattributes)) 
+                            {     
                              if($shortAttributeResult['project_attributes'])   
                              { 
                             ?>
@@ -483,7 +514,9 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                 ?>
                                 
                             </div>
-                            <?php } ?>
+                            <?php } 
+                            }
+                            ?>
                             
                         </div>
                     </div>  
