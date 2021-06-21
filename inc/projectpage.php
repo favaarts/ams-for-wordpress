@@ -45,8 +45,6 @@ foreach($blockdata as $amsblock)
         $projectcrewroles = $amsblock['attrs']['projectcrewroles'];
         $projectlongattributes = $amsblock['attrs']['projectlongattributes'];
         $projectshortattributes = $amsblock['attrs']['projectshortattributes'];
-        $bannercrewroles = $amsblock['attrs']['bannercrewroles'];
-        $projecttitle = $amsblock['attrs']['projecttitle'];
     }
 }    
 
@@ -164,7 +162,16 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                         {
                                             if($x_value['file_attachment_thumbnail'])
                                             {
-                                                $videoBanner = $x_value['file_attachment_thumbnail'];
+                                                //$videoBanner = $x_value['file_attachment_thumbnail'];
+                                                $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                                 if(empty($thumbnailimage))
+                                                 {
+                                                    $videoBanner = $x_value['file_attachment_thumbnail'];
+                                                 }
+                                                 else
+                                                 {
+                                                    $videoBanner = $thumbnailimage;
+                                                 }
                                                 
                                                 $fileAttachment = $x_value['file_attachment'];
                                                
@@ -194,8 +201,17 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                     }
                                     else
                                     {
+                                         $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                         if(empty($thumbnailimage))
+                                         {
+                                            $thumbnailurl = $arrayResult['project']['thumbnail'];
+                                         }
+                                         else
+                                         {
+                                            $thumbnailurl = $thumbnailimage;
+                                         }
 
-                                        echo  "<img src=".$arrayResult['project']['thumbnail'] ." class='hover-shadow cursor'>";
+                                        echo  "<img src=".$thumbnailurl." class='hover-shadow cursor'>";
                                     }
                                 }
                                 
@@ -220,17 +236,14 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                       }
                                       echo "</h1>";
                                     
-                                    if (!isset($bannercrewroles)) 
-                                    {     
+                                         
                                         if($arrayResult['project']['creator'])
                                         {
                                             echo "<div class='enrollment enrtop'>
                                                 <h3>Submitted By</h3>";
                                               if ($blocks[0]['attrs']['projecttomember'])  
                                               {
-                                               
-                                                    echo "<p><a target='_blank' href='".site_url('/members/'.$arrayResult['project']['user_id'].'-'.$projectconnectmemberid.'/details' )."'>".$arrayResult['project']['creator']."</a></p>";
-                                                
+                                                echo "<p><a target='_blank' href='".site_url('/members/'.$arrayResult['project']['user_id'].'-'.$projectconnectmemberid.'/details' )."'>".$arrayResult['project']['creator']."</a></p>";
                                               }
                                               else
                                               {
@@ -239,7 +252,7 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                                 
                                             "</div>";
                                         }
-                                    }    
+                                        
 
                                     if(isset($attributeCrewResult['project_attributes']))
                                     {
@@ -491,10 +504,9 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                             $shortattribute = "Short%20Attributes";
                             $shortAttributeResult = get_projectattributes($amsprojectid,$shortattribute);
 
-                            if (!isset($projectshortattributes)) 
-                            {     
-                             if($shortAttributeResult['project_attributes'])   
-                             { 
+                                 
+                            if($shortAttributeResult['project_attributes'])   
+                            { 
                             ?>
                             <div class="right-sec">
                                
@@ -514,8 +526,8 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                 ?>
                                 
                             </div>
-                            <?php } 
-                            }
+                            <?php }
+
                             ?>
                             
                         </div>

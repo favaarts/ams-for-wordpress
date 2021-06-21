@@ -89,14 +89,6 @@
       type: 'boolean',
       default: true
     },
-    bannercrewroles: {
-      type: 'boolean',
-      default: true
-    },
-    projecttitle: {
-      type: 'boolean',
-      default: true
-    },
     type: { type: 'string', default: 'amsprojectpage' },
       alignment: {
         type: 'string',
@@ -193,20 +185,6 @@
                  props.setAttributes( { projectshortattributes: value } );
               },
               checked: props.attributes.projectshortattributes,
-            }),
-            el(ToggleControl, {
-              label: 'Banner Crew Roles section',
-              onChange: ( value ) => {
-                 props.setAttributes( { bannercrewroles: value } );
-              },
-              checked: props.attributes.bannercrewroles,
-            }),
-            el(ToggleControl, {
-              label: 'Title',
-              onChange: ( value ) => {
-                 props.setAttributes( { projecttitle: value } );
-              },
-              checked: props.attributes.projecttitle,
             }),
             el( TextControl,
               {
