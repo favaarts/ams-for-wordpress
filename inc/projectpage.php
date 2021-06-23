@@ -22,6 +22,7 @@ foreach($blockdata as $amsblock)
     if($amsblock['blockName'] == "wpdams-amsnetwork-projectpage/amsnetwork-block-projectpage")
     { 
         $amsprojectid = $amsblock['attrs']['amsprojectid'];
+        $projecttomember = $amsblock['attrs']['projecttomember'];
         $project_protected = $amsblock['attrs']['project_protected'];
 
         $firstpartmailtext = $amsblock['attrs']['firstpartmailtext'];
@@ -45,6 +46,7 @@ foreach($blockdata as $amsblock)
         $projectcrewroles = $amsblock['attrs']['projectcrewroles'];
         $projectlongattributes = $amsblock['attrs']['projectlongattributes'];
         $projectshortattributes = $amsblock['attrs']['projectshortattributes'];
+        $amsfile_attachment = $amsblock['attrs']['amsfile_attachment'];
     }
 }    
 
@@ -241,7 +243,7 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                         {
                                             echo "<div class='enrollment enrtop'>
                                                 <h3>Submitted By</h3>";
-                                              if ($blocks[0]['attrs']['projecttomember'])  
+                                              if ($projecttomember)  
                                               {
                                                 echo "<p><a target='_blank' href='".site_url('/members/'.$arrayResult['project']['user_id'].'-'.$projectconnectmemberid.'/details' )."'>".$arrayResult['project']['creator']."</a></p>";
                                               }
@@ -262,7 +264,7 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                             {
                                                 echo "<div class='enrollment'>
                                                 <h3>Director(s)</h3>";
-                                                if ($blocks[0]['attrs']['projecttomember'] )  
+                                                if ($projecttomember )  
                                                 {
                                                     echo "<p><a target='_blank' href='".site_url('/members/'.$x_value['value_2'].'-'.$projectconnectmemberid.'/details' )."'>".$x_value['value']."</a></p>";
                                                 }
@@ -281,7 +283,7 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                             {
                                                 echo "<div class='enrollment'>
                                                 <h3>Writer(s)</h3>";
-                                                if ($blocks[0]['attrs']['projecttomember'])  
+                                                if ($projecttomember)  
                                                 {
                                                     echo "<p><a target='_blank' href='".site_url('/members/'.$x_value['value_2'].'-'.$projectconnectmemberid.'/details' )."'>".$x_value['value']."</a></p>";
                                                 }
@@ -293,7 +295,7 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                             }
                                         }
 
-                                        if($blocks[0]['attrs']['amsfile_attachment'])
+                                        if($amsfile_attachment)
                                         {
                                             echo "<a href=".$fileAttachment."><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
                                         }
@@ -360,7 +362,7 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                                             <video id='amspopupvideo".$x_value['id']."' controls>
                                                             </video>
                                                             <a class='close-button' popup-close='popup-".$i."' href='javascript:void(0)' data-id='amspopupvideo".$x_value['id']."'>x</a>";
-                                                            if($blocks[0]['attrs']['amsfile_attachment'])
+                                                            if($amsfile_attachment)
                                                             {    
                                                                 echo "<a href='".$x_value['file_attachment']."'><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
                                                             }
@@ -779,27 +781,20 @@ jQuery(document).ready(function($) {
 
     jQuery('[popup-open]').on('click', function() {
 
-        if(logintoken)
-        {
-            var videourl = jQuery(this).data("img");
-            var videourlid = jQuery(this).data("id");
+        var videourl = jQuery(this).data("img");
+        var videourlid = jQuery(this).data("id");
 
-            var videonew = document.getElementById('amspopupvideo'+videourlid);
+        var videonew = document.getElementById('amspopupvideo'+videourlid);
 
-            jwplayer(videonew).setup({
-                flashplayer: "player.swf",
-                width: "100%",
-                file: videourl
-            });
-            
-            var popup_name = jQuery(this).attr('popup-open');
-            jQuery('[popup-name="' + popup_name + '"]').fadeIn(300);
-        }    
-        else
-        {
-            alert("Please login to watch the video");
-        }  
-          
+        jwplayer(videonew).setup({
+            flashplayer: "player.swf",
+            width: "100%",
+            file: videourl
+        });
+        
+        var popup_name = jQuery(this).attr('popup-open');
+        jQuery('[popup-name="' + popup_name + '"]').fadeIn(300);
+                    
     });
 
 
