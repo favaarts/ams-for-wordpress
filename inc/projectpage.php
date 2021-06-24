@@ -13,10 +13,6 @@ $post_id = get_the_ID();
 $post = get_post($post_id);
 $blockdata = parse_blocks($post->post_content);
 
-/*echo "<pre>";
-print_r($blockdata);
-echo "</pre>";*/
-
 foreach($blockdata as $amsblock) 
 {
     if($amsblock['blockName'] == "wpdams-amsnetwork-projectpage/amsnetwork-block-projectpage")
@@ -114,15 +110,6 @@ echo "</pre>";*/
 
 //
 
-if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
-{
-    if($nowtime > $_SESSION['expire'])
-    {
-      session_unset();
-      session_destroy();
-    }  
-    else
-    {
 ?>
 
 
@@ -150,7 +137,7 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                         
                       }
                     ?>
-                    <div class="projectdetail">
+                    <div class="projectdetail projectpagebanner">
                         
                         <div class="project-img-sec">
 
@@ -178,7 +165,7 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                                 $fileAttachment = $x_value['file_attachment'];
                                                
                                                 $amssinglevideonew = $x_value['value_4'];
-                                                echo "<a class='video-icon'></a>";
+                                                
                                                 break;
                                             }
                                             else
@@ -217,15 +204,48 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                     }
                                 }
                                 
+                                //NEW ams login
+                                if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
+                                {
+                                    if($nowtime > $_SESSION['expire'])
+                                    {
+                                      session_unset();
+                                      session_destroy();
+                                    }  
+                                    else
+                                    {
+                                       echo "<div class='videobanner' id='video_player'></div>";     
+                                    }
+                                }
+                                else
+                                {
+                                    echo "<a class='video-icon'></a>";
+
+                                    $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                     if(empty($thumbnailimage))
+                                     {
+                                        $thumbnailurl = $arrayResult['project']['thumbnail'];
+                                     }
+                                     else if(empty($arrayResult['project']['thumbnail']))
+                                     {
+                                        $thumbnailurl = plugins_url( 'assets/img/bg-image.png', __FILE__ );
+                                     }
+                                     else
+                                     {
+                                        $thumbnailurl = $thumbnailimage;
+                                     }
+
+                                    echo "<img src='".$thumbnailurl."'>";
+                                }       
                                 ?>
 
-                                
-                                <div class="videobanner" id="video_player"></div>
                                 <div class="amsaudio" id="amsaudio_player"></div>
+                                
                                     
                             </div>
 
                             <?php
+                                
                             if (empty($amsprojectpagesidebar))
                             { 
                             ?>
@@ -295,11 +315,19 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
                                             }
                                         }
 
-                                        if($amsfile_attachment)
-                                        {
-                                            echo "<a href=".$fileAttachment."><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
-                                        }
+                                        echo "<div class='projectpagebutton'>";
+                                            if($amsfile_attachment)
+                                            {
+                                                echo "<a href=".$fileAttachment."><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
+                                            }
 
+                                            if($paymentbuttonname)
+                                            {
+                                                $buttonname = $paymentbuttonname;
+
+                                                echo "<a target='_blank' href=".$project_paymenturl."><button class='amsvideodownload'> ".$buttonname."</button></a>";
+                                            }
+                                        echo "</div>";
                                     }    
 
                                     
@@ -547,66 +575,50 @@ if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
     </div><!-- .site-content -->
 
 <?php
-    }
-}    
-else
-{   
 
-    if($amsprojectid == null)
-    {
-        echo "<p>Please add a Project ID to use the AMS Project Page Block. If you want to see a list of projects, use the AMS Projects Block.</p>";
-    }
-    else
-    {
-        echo "<div class='custom-model-main model-open'>
-            <div class='custom-model-inner amsloginpopup'>        
-              <div class='close-btn'>×</div>
-                  <div class='custom-model-wrap'>
-                      <span id='amscredentials_error'></span>
-                      <div class='pop-up-content-wrap'>
-                        <p>The project content is restricted by a password. Please enter the password to continue.</p>
-                         <input type='hidden' id='getpageid' value=".get_the_ID().">
-                         <input type='text' name='projectpassword' id='projectpassword'>
-                         <input type='submit' id='projectsubmit' style='background-color: ".$bgcolor."'>
-                          <span class='customprojectloader' id='projectinifiniteLoader'>
-                            <img src=".esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ).">
-                          </span>";
-                          
-                            if($project_paymenturl)
-                            {
-                              if($project_paymentmessage)
-                              {
-                                echo "<p class='amsmargintop'>".$project_paymentmessage."</p>"; 
-                              }
-                              else
-                              {
-                                echo "<p class='amsmargintop'>If you don’t have a password, you can make a payment at this link to receive it.</p>"; 
-                              }
+echo "<div class='custom-model-main'>
+        <div class='custom-model-inner amsloginpopup'>        
+          <div class='close-btn'>×</div>
+              <div class='custom-model-wrap'>
+                  <span id='amscredentials_error'></span>
+                  <div class='pop-up-content-wrap'>
+                    <p>The project content is restricted by a password. Please enter the password to continue.</p>
+                     <input type='hidden' id='getpageid' value=".get_the_ID().">
+                     <input type='text' name='projectpassword' id='projectpassword'>
+                     <input type='submit' id='projectsubmit' style='background-color: ".$bgcolor."'>
+                      <span class='customprojectloader' id='projectinifiniteLoader'>
+                        <img src=".esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ).">
+                      </span>";
+                      
+                        if($project_paymenturl)
+                        {
+                          if($project_paymentmessage)
+                          {
+                            echo "<p class='amsmargintop'>".$project_paymentmessage."</p>"; 
+                          }
+                          else
+                          {
+                            echo "<p class='amsmargintop'>If you don’t have a password, you can make a payment at this link to receive it.</p>"; 
+                          }
 
-                              if($paymentbuttonname)
-                              {
-                                $buttonname = $paymentbuttonname;
-                              }
-                              else
-                              {
-                                $buttonname = "Pay Here";
-                              }
-                              echo "<div class='paymentdiv'><a target='_blank' class='paymentclass' style='background-color: $bgcolor' href=".$project_paymenturl.">".$buttonname."</a></div>";
-                            }
-                          
-                      echo "</div>
-                  </div>  
+                          if($paymentbuttonname)
+                          {
+                            $buttonname = $paymentbuttonname;
+                          }
+                          else
+                          {
+                            $buttonname = "Pay Here";
+                          }
+                          echo "<div class='paymentdiv'><a target='_blank' class='paymentclass' style='background-color: $bgcolor' href=".$project_paymenturl.">".$buttonname."</a></div>";
+                        }
+                      
+                  echo "</div>
               </div>  
-            </div>  
-            <div class='bg-overlay'></div>
-        </div>"; 
-    }
-           
+          </div>  
+        </div>  
+        
+    </div>"; 
 
-    /*$post->post_name;
-    $URL=site_url($post->post_name);
-    echo "<script type='text/javascript'>document.location.href='".$URL."';</script>";*/
-}    
 ?>
 
 </div>    
@@ -620,6 +632,7 @@ jQuery(document).ready(function($) {
    jQuery('#projectinifiniteLoader').hide();
 
    var logintoken = "<?php echo $_SESSION['accesstoken']; ?>";    
+   var projectpagepw = "<?php echo $_SESSION['projectpassword']; ?>";    
     var amscredentials = "<?php echo $blocks[0]['attrs']['amscredentials']; ?>";
     var amssinglevideo = "<?php echo $amssinglevideonew; ?>";
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
@@ -629,6 +642,14 @@ jQuery(document).ready(function($) {
 
     var projectpassword = "<?php echo $_GET['password']; ?>";
     var url = $(this).val();   
+
+    jQuery(".video-icon").click(function(){
+      jQuery(".custom-model-main").addClass("model-open");
+    });
+
+    jQuery(".close-btn").click(function(){
+         jQuery(".custom-model-main").removeClass("model-open");
+    });
 
     if(amsprojectpagesidebar == 1)
     {    
@@ -727,73 +748,80 @@ jQuery(document).ready(function($) {
     });
 
 
-    if(amssinglevideo)
+    if(projectpagepw)
     {
-        jwplayer("video_player").setup({
-                image: "<?php echo $videoBanner; ?>",
-                width: "100%",
-                aspectratio: "12:7",
-                autostart: "false",
-                sources: [{
-                    file: amssinglevideo
-                }]
-        });
-    }
-    else if(audiofileAttachment)
-    {
-        audioSetUp("amsaudio_player",audiofileAttachment);
+        if(amssinglevideo)
+        {
+            jwplayer("video_player").setup({
+                    image: "<?php echo $videoBanner; ?>",
+                    width: "100%",
+                    aspectratio: "12:7",
+                    autostart: "false",
+                    sources: [{
+                        file: amssinglevideo
+                    }]
+            });
+        }
+        else if(audiofileAttachment)
+        {
+            audioSetUp("amsaudio_player",audiofileAttachment);
 
-        function audioSetUp(id, url){
-         jwplayer(id).setup({
-                    file: url,
-                    height: 30,
-             primary:"flash"
-                });
+            function audioSetUp(id, url){
+             jwplayer(id).setup({
+                        file: url,
+                        height: 30,
+                 primary:"flash"
+                    });
+            }
         }
     }
+
    
 
     jQuery('[audiopopup-open]').on('click', function() {
 
-        var audiourlid = jQuery(this).data("id");
-        var audiourl = jQuery(this).data("audiourl");
+            var audiourlid = jQuery(this).data("id");
+            var audiourl = jQuery(this).data("audiourl");
 
-        console.log(audiourl);
+            console.log(audiourl);
 
-        console.log(audiourlid);
+            console.log(audiourlid);
 
-        audioSetUp("player"+audiourlid,audiourl);
+            audioSetUp("player"+audiourlid,audiourl);
 
-        function audioSetUp(id, url){
-         jwplayer(id).setup({
-                    file: url,
-                    width: 500,
-                    height: 30,
-             primary:"flash"
-                });
-        }
-          
-        var audiopopup = jQuery(this).attr('audiopopup-open');
-        jQuery('[audiopopup-name="' + audiopopup + '"]').fadeIn(300);
+            function audioSetUp(id, url){
+             jwplayer(id).setup({
+                        file: url,
+                        width: 500,
+                        height: 30,
+                 primary:"flash"
+                    });
+            }
+              
+            var audiopopup = jQuery(this).attr('audiopopup-open');
+            jQuery('[audiopopup-name="' + audiopopup + '"]').fadeIn(300);
+           
           
     });
     
 
     jQuery('[popup-open]').on('click', function() {
-
-        var videourl = jQuery(this).data("img");
-        var videourlid = jQuery(this).data("id");
-
-        var videonew = document.getElementById('amspopupvideo'+videourlid);
-
-        jwplayer(videonew).setup({
-            flashplayer: "player.swf",
-            width: "100%",
-            file: videourl
-        });
         
-        var popup_name = jQuery(this).attr('popup-open');
-        jQuery('[popup-name="' + popup_name + '"]').fadeIn(300);
+
+            var videourl = jQuery(this).data("img");
+            var videourlid = jQuery(this).data("id");
+
+            var videonew = document.getElementById('amspopupvideo'+videourlid);
+
+            jwplayer(videonew).setup({
+                flashplayer: "player.swf",
+                width: "100%",
+                file: videourl
+            });
+            
+            var popup_name = jQuery(this).attr('popup-open');
+            jQuery('[popup-name="' + popup_name + '"]').fadeIn(300);
+          
                     
     });
 
@@ -817,14 +845,15 @@ jQuery(document).ready(function($) {
 
 
     jQuery('[imagepopup-open]').on('click', function() {
+        
+            var imageurlid = jQuery(this).data("id");
+            var imageurl = jQuery(this).data("imageurl");
 
-        var imageurlid = jQuery(this).data("id");
-        var imageurl = jQuery(this).data("imageurl");
-
-        document.getElementById('amsimage'+imageurlid).src = imageurl;
-          
-        var imagepopup = jQuery(this).attr('imagepopup-open');
-        jQuery('[imagepopup-name="' + imagepopup + '"]').fadeIn(300);
+            document.getElementById('amsimage'+imageurlid).src = imageurl;
+              
+            var imagepopup = jQuery(this).attr('imagepopup-open');
+            jQuery('[imagepopup-name="' + imagepopup + '"]').fadeIn(300);
+           
           
     });
 

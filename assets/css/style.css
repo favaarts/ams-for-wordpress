@@ -1720,3 +1720,13 @@ img.organizationlogo {
 {
     position: relative;
 }
+
+.projectpagebutton a{
+        padding-right: 10px;
+}
+
+.projectpagebanner .video-main img
+{
+    height: 422px !important;
+    object-fit: fill !important;
+}
