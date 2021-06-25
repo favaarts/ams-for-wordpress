@@ -89,6 +89,10 @@
       type: 'boolean',
       default: true
     },
+    passwordprotected: {
+      type: 'boolean',
+      default: false
+    },
     type: { type: 'string', default: 'amsprojectpage' },
       alignment: {
         type: 'string',
@@ -185,6 +189,13 @@
                  props.setAttributes( { projectshortattributes: value } );
               },
               checked: props.attributes.projectshortattributes,
+            }),
+            el(ToggleControl, {
+              label: 'Password Protect Additional Content',
+              onChange: ( value ) => {
+                 props.setAttributes( { passwordprotected: value } );
+              },
+              checked: props.attributes.passwordprotected,
             }),
             el( TextControl,
               {
