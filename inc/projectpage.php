@@ -43,6 +43,7 @@ foreach($blockdata as $amsblock)
         $projectlongattributes = $amsblock['attrs']['projectlongattributes'];
         $projectshortattributes = $amsblock['attrs']['projectshortattributes'];
         $amsfile_attachment = $amsblock['attrs']['amsfile_attachment'];
+        $passwordprotected = $amsblock['attrs']['passwordprotected'];
     }
 }    
 
@@ -321,7 +322,7 @@ echo "</pre>";*/
                                                 echo "<a href=".$fileAttachment."><button class='amsvideodownload'><i class='fa fa-download'></i> Download</button></a>";
                                             }
 
-                                            if($paymentbuttonname)
+                                            if($paymentbuttonname && empty($_SESSION['projectpassword']))
                                             {
                                                 $buttonname = $paymentbuttonname;
 
@@ -338,7 +339,10 @@ echo "</pre>";*/
                             }
                             ?>    
                         </div>
-
+                        <?php
+                        if($passwordprotected == 1)
+                        {
+                        ?>
                         <div class="project-detail-sec">
                             <div class="left-sec">
                                 <?php
@@ -561,6 +565,9 @@ echo "</pre>";*/
                             ?>
                             
                         </div>
+                        <?php
+                        }
+                        ?>
                     </div>  
                 </div> 
             </div>
