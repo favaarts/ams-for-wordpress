@@ -339,10 +339,7 @@ echo "</pre>";*/
                             }
                             ?>    
                         </div>
-                        <?php
-                        if($passwordprotected == 1)
-                        {
-                        ?>
+                        
                         <div class="project-detail-sec">
                             <div class="left-sec">
                                 <?php
@@ -565,9 +562,7 @@ echo "</pre>";*/
                             ?>
                             
                         </div>
-                        <?php
-                        }
-                        ?>
+                        
                     </div>  
                 </div> 
             </div>
@@ -645,7 +640,7 @@ jQuery(document).ready(function($) {
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
     var amsprojectpagesidebar = "<?php echo $amsprojectpagesidebar; ?>";
-
+    var passwordprotected = "<?php echo $passwordprotected; ?>";
 
     var projectpassword = "<?php echo $_GET['password']; ?>";
     var url = $(this).val();   
@@ -787,12 +782,10 @@ jQuery(document).ready(function($) {
 
     jQuery('[audiopopup-open]').on('click', function() {
 
+        if(passwordprotected != 1 || projectpagepw)
+        {
             var audiourlid = jQuery(this).data("id");
             var audiourl = jQuery(this).data("audiourl");
-
-            console.log(audiourl);
-
-            console.log(audiourlid);
 
             audioSetUp("player"+audiourlid,audiourl);
 
@@ -807,6 +800,11 @@ jQuery(document).ready(function($) {
               
             var audiopopup = jQuery(this).attr('audiopopup-open');
             jQuery('[audiopopup-name="' + audiopopup + '"]').fadeIn(300);
+        } 
+        else 
+        {
+            jQuery(".custom-model-main").addClass("model-open");        
+        }     
            
           
     });
@@ -814,7 +812,8 @@ jQuery(document).ready(function($) {
 
     jQuery('[popup-open]').on('click', function() {
         
-
+        if(passwordprotected != 1 || projectpagepw)
+        {
             var videourl = jQuery(this).data("img");
             var videourlid = jQuery(this).data("id");
 
@@ -828,6 +827,11 @@ jQuery(document).ready(function($) {
             
             var popup_name = jQuery(this).attr('popup-open');
             jQuery('[popup-name="' + popup_name + '"]').fadeIn(300);
+        }    
+        else 
+        {
+            jQuery(".custom-model-main").addClass("model-open");        
+        }    
           
                     
     });
@@ -853,6 +857,8 @@ jQuery(document).ready(function($) {
 
     jQuery('[imagepopup-open]').on('click', function() {
         
+        if(passwordprotected != 1 || projectpagepw)
+        {
             var imageurlid = jQuery(this).data("id");
             var imageurl = jQuery(this).data("imageurl");
 
@@ -860,6 +866,11 @@ jQuery(document).ready(function($) {
               
             var imagepopup = jQuery(this).attr('imagepopup-open');
             jQuery('[imagepopup-name="' + imagepopup + '"]').fadeIn(300);
+        }    
+        else 
+        {
+            jQuery(".custom-model-main").addClass("model-open");        
+        }    
            
           
     });
