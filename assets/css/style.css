@@ -671,7 +671,7 @@ line-height: 28px;
 
 .event-detail-sec .tabs > input,
 .event-detail-sec .tabs > span {
-    width: 50%;
+    width: 32%;
     height: 60px;
     line-height: 60px;
     position: absolute;
@@ -720,9 +720,15 @@ line-height: 28px;
 }
 
 .event-detail-sec #tab-2, .event-detail-sec #tab-2 + span {
-    left: 50%;
-    font-size: 18px;
+    left: 32%;
+    font-size: 16px;
 }
+
+.event-detail-sec #tab-3, .event-detail-sec #tab-3 + span {
+    left: 64%;
+    font-size: 16px;
+}
+
 
 /*New for member*/
 .event-detail-sec .memberdetail .tabs > input,
@@ -741,12 +747,12 @@ line-height: 28px;
 }
 
 .event-detail-sec .memberdetail #tab-2, .event-detail-sec .memberdetail #tab-2 + span {
-    left: 30%;
+    left: 32%;
 }
 
 .event-detail-sec .memberdetail #tab-3, .event-detail-sec .memberdetail #tab-3 + span {
-    left: 60%;
-    font-size: 18px;
+    left: 64%;
+    font-size: 16px;
 }
 /*End for member*/
 
@@ -782,6 +788,13 @@ line-height: 28px;
     padding: 0px 25px;
 }
 
+.event-detail-sec #tab-3:checked ~ .tab-content #tab-item-3  {
+    display: block;
+    white-space: pre-line;
+    font-size: 16px;
+    padding: 0px 25px;
+}
+
 /*New for member*/
 .event-detail-sec .memberdetail #tab-1:checked ~ .tab-content #tab-item-1  {
     display: block;
@@ -809,7 +822,7 @@ line-height: 28px;
 
 .event-detail-sec .effect-3 .line{
     background: #3498DB;
-    width: 50%;
+    width: 32%;
     height: 4px;
     position: absolute;
     top: 56px;
@@ -820,7 +833,11 @@ line-height: 28px;
 }
 
 .event-detail-sec #tab-2:checked ~ .line {
-    left: 50%;
+    left: 32%;
+}
+
+.event-detail-sec #tab-3:checked ~ .line {
+    left: 64%;
 }
 
 /*New for member*/
@@ -837,11 +854,11 @@ line-height: 28px;
 }
 
 .event-detail-sec .memberdetail #tab-2:checked ~ .line {
-    left: 30%;
+    left: 32%;
 }
 
 .event-detail-sec .memberdetail #tab-3:checked ~ .line {
-    left: 60%;
+    left: 64%;
 }
 /*End fo member*/
 
@@ -1729,4 +1746,24 @@ img.organizationlogo {
 {
     height: 422px !important;
     object-fit: fill !important;
+}
+
+.ams-content .eventdetail .fc-content {
+    background: #fb6e6e;
+    color: #fff;
+}
+.ams-content .eventdetail .fc-event, .ams-content .eventdetail .fc-event-dot {
+    background-color: #fb6e6e !important;
+}
+
+.ams-content .eventdetail .fc-event
+{
+    border: 1px solid #fb6e6e !important;
+}
+.ams-content .eventdetail span.fc-time {
+    display: none;
+}
+
+.ams-content .eventdetail .fc-content {
+    text-align: center;
 }

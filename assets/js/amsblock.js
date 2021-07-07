@@ -42,6 +42,10 @@
       type: 'boolean',
       default: true
      },
+     availabilitycalendar: {
+      type: 'boolean',
+      default: true
+     },
     register_assets_url: {
         type: 'string',
     },
@@ -156,6 +160,13 @@
                  props.setAttributes( { warrantyinfo: value } );
               },
               checked: props.attributes.warrantyinfo,
+            }),
+            el(ToggleControl, {
+              label: 'Availability',
+              onChange: ( value ) => {
+                 props.setAttributes( { availabilitycalendar: value } );
+              },
+              checked: props.attributes.availabilitycalendar,
             }),
             el( TextControl,
               {
