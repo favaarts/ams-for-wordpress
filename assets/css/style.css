@@ -1666,12 +1666,48 @@ img.organizationlogo {
     width: 100% !important;
 }
 
+.fc-scroller.fc-day-grid-container
+{
+    height: auto !important;
+    overflow: unset !important;
+}
+
 @media (max-width:767px){
     .amsvideos .video-row .video-col {margin: 8px; width: calc(50% - 16px);}
     .amsvideos .video-row .video-col, .amsvideos .video-row .audio-col, .amsvideos .video-row .amsimage-col {
         padding: 15px;
         width: calc(50% - 30px);
         padding-left: 0;
+    }
+
+    .assetsdetail .event-detail-sec .left-sec {
+        padding: 10px 5px;
+    }
+    .event-detail-sec #tab-1:checked ~ .tab-content #tab-item-1, .event-detail-sec #tab-2:checked ~ .tab-content #tab-item-2, .event-detail-sec #tab-3:checked ~ .tab-content #tab-item-3 {
+        padding: 0px;
+    }
+
+    .event-detail-sec .tabs > input, .event-detail-sec .tabs > span
+    {
+        font-size: 14px !important;
+    }
+
+    .assetsdetail .fc th, .assetsdetail .fc td {
+        font-size: 10px;
+    }
+
+    .assetsdetail .fc button
+    {
+        padding: 0 .2em;
+        font-size: 12px;
+    }
+
+    .eventdetail .event-detail-sec .left-sec h2 {
+        font-size: 16px;
+    }
+
+    .reg-sec {
+    margin-bottom: 28px;
     }
 }
 
