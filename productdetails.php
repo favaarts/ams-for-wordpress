@@ -1,7 +1,11 @@
 <?php
 
 get_header();  ?>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 <div class="container-wrap">
     <div class="site-content"> <!-- site-content" -->
      <div class="container no-sidebar ams-content">
@@ -174,6 +178,12 @@ get_header();  ?>
                                     <span style='color: $bgcolor;'>Warranty Information</span>";
                                     }
                                 }    
+
+                                if (!isset($blocks[0]['attrs']['availabilitycalendar']))
+                                {
+                                echo "<input type='radio' id='tab-3' name='tab-effect-3'>
+                                    <span style='color: $bgcolor;'>Availability</span>";
+                                }
                                 
                                 if($json_value['included_accessories'] || $json_value['warranty_info'])
                                     {        
@@ -194,7 +204,15 @@ get_header();  ?>
                                 echo    "<section id='tab-item-2'>
                                             ".$json_value['warranty_info']."
                                         </section>";
-                                    }    
+                                    }   
+
+                                if (!isset($blocks[0]['attrs']['availabilitycalendar']))
+                                {    
+                                echo    "<section id='tab-item-3'>
+                                            <div id='calendar'></div>
+                                        </section>";
+                                }     
+
                                 echo "</div>";
                                 echo "</div>";
                                 }
@@ -285,6 +303,29 @@ get_header();  ?>
       </div>  
      </div><!-- .container no-sidebar -->
     </div><!-- .site-content -->
-</div>    
+</div>   
+<script>
+   
+
+  jQuery(document).ready(function() {
+    $("#tab-3").click ( function(){
+        var calendar = jQuery('#calendar').fullCalendar({
+        editable:false,
+        header:{
+         left:'prev,next today',
+         center:'title',
+         right:'month,agendaWeek,agendaDay'
+        },
+        events: <?php include( plugin_dir_path( __FILE__ ) . '/inc/getassetscalendar.php') ?>,
+        selectable:true,
+        selectHelper:true,
+        editable:true,
+    });
+  
+   });
+
+  });
+   
+  </script> 
 <?php
 get_footer();

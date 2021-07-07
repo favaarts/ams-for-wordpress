@@ -1692,6 +1692,34 @@ add_action('wp_ajax_get_projectdetails','get_projectdetails');
 add_action('wp_ajax_nopriv_get_projectdetails','get_projectdetails');
 // End Project details
 
+// assets Available bookings calendar
+function get_assetscalendar($asets_id = '')
+{
+
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+
+    $currentyear = date("Y"); 
+    $nextyear = date("Y", strtotime('+1 year'));
+    $assetscalendar = "https://".$apiurl.".amsnetwork.ca/api/v3/assets/bookings_calendar?id=".$asets_id."&access_token=".$apikey."&month_start=01-07-".$currentyear."&month_end=30-07-".$nextyear."&method=get&format=json";
+
+
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$assetscalendar);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    return $arrayProjectResultData = json_decode($json, true);
+}
+add_action('wp_ajax_get_assetscalendar','get_assetscalendar');
+add_action('wp_ajax_nopriv_get_assetscalendar','get_assetscalendar');
+// End assets Available bookings calendar
+
 //project_attributes
 function get_projectattributes($attribute_id = '', $attribute_type = '')
 {
