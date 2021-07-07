@@ -141,7 +141,7 @@ get_header();  ?>
                                 {
                                     if (!isset($blocks[0]['attrs']['externallink']))
                                     {
-                                    echo "<div class='wrapper'>";
+                                    echo "<div class='externaldiv'>";
                                     echo "<a class='external after' href='".$json_value['external_url_resources']."' target='_blank' style='color: $bgcolor;'>External Resources <span><i class='fa fa-external-link' aria-hidden='true'></i></span></a>";
                                     echo "</div>";
                                     }
