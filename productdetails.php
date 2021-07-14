@@ -148,47 +148,55 @@ get_header();  ?>
                                 }
                                 
                                 /*-- html tab --*/
-                                if($json_value['included_accessories'] || $json_value['warranty_info'])
-                                {     
-                                echo "<div class='tabs effect-3'>";
+                                   
+                                echo "<div class='tabs effect-3 assetstab'>";
                                     /*-- tab-title --*/
-                                if (!isset($blocks[0]['attrs']['includedacc']))
-                                {
+                                    if (!isset($blocks[0]['attrs']['includedacc']))
+                                    {
+                                        if($json_value['included_accessories'])
+                                        {
+                                    echo "<input type='radio' id='tab-1' name='tab-effect-3'>";
+                                        }
+                                    }
                                     
-                                    if($json_value['included_accessories'])
-                                    {    
-                                echo "<input type='radio' id='tab-1' name='tab-effect-3' checked='checked'>
-                                    <span style='color: $bgcolor;'>Included Accessories</span>";
+                                    if (!isset($blocks[0]['attrs']['warrantyinfo']))
+                                    {
+                                        if($json_value['warranty_info'])
+                                        {    
+                                    echo "<input type='radio' id='tab-2' name='tab-effect-3'>";
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    if($json_value['warranty_info'])
+                                     
+                                    if (!isset($blocks[0]['attrs']['availabilitycalendar']))
                                     {    
-                                echo "<input type='radio' id='tab-2' name='tab-effect-3' checked='checked'>
-                                    <span style='color: $bgcolor;'>Warranty Information</span>";
-                                    }
-                                }     
+                                        echo "<input type='radio' id='tab-3' name='tab-effect-3'>";
+                                    } 
 
-                                if (!isset($blocks[0]['attrs']['warrantyinfo']))
-                                {
-                                    if($json_value['warranty_info'])
-                                    {    
-                                echo "<input type='radio' id='tab-2' name='tab-effect-3'>
-                                    <span style='color: $bgcolor;'>Warranty Information</span>";
+                                echo "<div class='labels'>";
+                                    if (!isset($blocks[0]['attrs']['includedacc']))
+                                    {
+                                        if($json_value['included_accessories'])
+                                        {    
+                                    echo "<label for='tab-1' id='label-tab-1' class='label'><span style='color: $bgcolor;'>Included Accessories</span></label>";
+                                        }
                                     }
-                                }    
+                                       
 
-                                if (!isset($blocks[0]['attrs']['availabilitycalendar']))
-                                {
-                                echo "<input type='radio' id='tab-3' name='tab-effect-3'>
-                                    <span style='color: $bgcolor;'>Availability</span>";
-                                }
+                                    if (!isset($blocks[0]['attrs']['warrantyinfo']))
+                                    {
+                                        if($json_value['warranty_info'])
+                                        {    
+                                    echo "<label for='tab-2' id='label-tab-2' class='label'><span style='color: $bgcolor;'>Warranty Information</span></label>";
+                                        }
+                                    }    
+
+                                    if (!isset($blocks[0]['attrs']['availabilitycalendar']))
+                                    {
+                                    echo "<label for='tab-3' id='label-tab-3' class='label'><span style='color: $bgcolor;'>Availability</span></label>";
+                                    }    
+                                echo "</div>";
                                 
-                                if($json_value['included_accessories'] || $json_value['warranty_info'])
-                                    {        
-                                echo "<div class='line ease' style='background-color: $bgcolor;'></div>";
-                                    }
+                                
                                     /*-- tab-content --*/
 
                                 echo "<div class='tab-content'>";
@@ -215,7 +223,7 @@ get_header();  ?>
 
                                 echo "</div>";
                                 echo "</div>";
-                                }
+                                
                                 /*-- html end tab --*/
 
                                 ?>
@@ -308,21 +316,40 @@ get_header();  ?>
    
 
   jQuery(document).ready(function() {
-    $("#tab-3").click ( function(){
-        var calendar = jQuery('#calendar').fullCalendar({
-        editable:false,
-        header:{
-         left:'prev,next today',
-         center:'title',
-         right:'month,agendaWeek,agendaDay'
-        },
-        events: <?php include( plugin_dir_path( __FILE__ ) . '/inc/getassetscalendar.php') ?>,
-        selectable:true,
-        selectHelper:true,
-        editable:true,
+
+    $('.assetstab').each(function(){
+      $(this).find('input[type=radio]:nth-child(1)').attr('checked', true);
     });
-  
-   });
+
+    function getCalendarData()
+    {
+        var calendarone = jQuery('#calendar').fullCalendar({
+            editable:false,
+            header:{
+             left:'prev,next today',
+             center:'title',
+             right:'month,agendaWeek,agendaDay'
+            },
+            events: <?php include( plugin_dir_path( __FILE__ ) . '/inc/getassetscalendar.php') ?>,
+            selectable:true,
+            selectHelper:true,
+            editable:true,
+            eventOverlap: function(stillEvent, movingEvent) {
+                return stillEvent.allDay && movingEvent.allDay;
+              }
+        });
+    }
+
+    if ($('input#tab-3').is(':checked')) 
+    {
+        getCalendarData();
+    }
+
+    $("#tab-3").click(function () {
+        if ($(this).is(":checked")) {
+             getCalendarData();
+        }
+    });
 
   });
    
