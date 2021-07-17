@@ -181,6 +181,14 @@ get_header();  ?>
                                     <p class="text-italic">
                                         <?php echo $arrayResult['program']['description']; ?>
                                     </p>
+                                    <p class="text-italic">
+                                        <?php
+                                            if($arrayResult['program']['program_details'])
+                                            {
+                                                echo $arrayResult['program']['program_details']; 
+                                            }
+                                        ?>
+                                    </p>
                                 </div>
                             </div>
                             
@@ -198,20 +206,20 @@ get_header();  ?>
                                 <?php 
                                     $eventtime = get_eventscheduletime($arrayevid[1]);
                                      
-                                    if(isset($eventtime['scheduled_program_dates']))
+                                    if(isset($eventtime['json']['scheduled_program_dates']))
                                     {    
-                                        $keys = array_keys($eventtime['scheduled_program_dates']);
+                                        $keys = array_keys($eventtime['json']['scheduled_program_dates']);
                                          $lastKey = $keys[count($keys)-1];
                                          
                                         $total = count($keys);
-                                        $start=date_create($eventtime['scheduled_program_dates'][$lastKey]['start']);
-                                        $end=date_create($eventtime['scheduled_program_dates'][$lastKey]['end']);
+                                        $start=date_create($eventtime['json']['scheduled_program_dates'][$lastKey]['start']);
+                                        $end=date_create($eventtime['json']['scheduled_program_dates'][$lastKey]['end']);
 
                                         if($total > 1)
                                         {
                                             echo "<div class='ragister-sec'>";
                                                 echo "<div class='classevent'>"; 
-                                                foreach ($eventtime['scheduled_program_dates'] as $key => $daytime) { 
+                                                foreach ($eventtime['json']['scheduled_program_dates'] as $key => $daytime) { 
                                                 echo "<div class='daytimediv'>";    
                                                     echo  "<div class='evtdate'>";
                                                             echo "<p>".date('D, M d, Y', strtotime($daytime['start']))."</p>";
