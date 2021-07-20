@@ -344,6 +344,9 @@ main-content main-content-four-col - this class is for four columns.
                     <div class="post-group customloader" id="inifiniteLoader" style="text-align: center; display: none;">
                       <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>" >
                     </div>
+                    <div class="post-group">
+                      <h4><a class="text-info float-right" href="https://wpd.amsnetwork.ca/reset_password">Forgot password?</a></h4>
+                    </div>
              
               <?php } ?>      
             </div>
