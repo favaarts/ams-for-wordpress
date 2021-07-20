@@ -252,7 +252,7 @@ main-content main-content-four-col - this class is for four columns.
                                       </div>
                                       <div class="col-md-6"><p>Alternate Email</p><div><div><div><div class=""></div>
                                       <div class="form-group">
-                                         <input class="form-control undefined" name="email" placeholder="" value="<?php echo $logindata['email']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                         <input class="form-control undefined" name="email" id="email" placeholder="" value="<?php echo $logindata['email']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
                                       </div></div></div></div></div>
                                         </div>
                                         <div class="row">
@@ -416,7 +416,11 @@ jQuery(document).ready(function($) {
       elm.value = u;
       return elm.validity.valid;
     }//end of function
-
+    function isEmail(email) {
+      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      return regex.test(email);
+    }//end of function
+    
     $("#userUpdate").on('submit', function (e) {
         var focusSet = false;
         var websiteurl = isValidURL(jQuery('#website').val());
@@ -425,6 +429,19 @@ jQuery(document).ready(function($) {
         var instagramurl = isValidURL(jQuery('#instagram').val());
         var linkedinurl = isValidURL(jQuery('#linkedin').val());
         var youtubeurl = isValidURL(jQuery('#youtube').val());
+        var email = jQuery('#email').val();
+        if(email == '' || email == 'undefined'){
+             $("#email").parent().after("<div class='validation' id='emailurl' style='color:red;margin-bottom: 20px;'>Please enter email</div>");
+             e.preventDefault(); // prevent form from POST to server
+             $('#email').focus();
+             focusSet = true;
+        }
+        if(isEmail(email) == false){
+           $("#email").parent().after("<div class='validation' id='emailurl' style='color:red;margin-bottom: 20px;'>Please enter a valid email</div>");
+           e.preventDefault(); // prevent form from POST to server
+           $('#email').focus();
+          focusSet = true;
+        }
         if(websiteurl == false){
           if(jQuery('#websiteurl').length == 0){
              $("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
@@ -488,6 +505,7 @@ jQuery(document).ready(function($) {
         if(focusSet == true){ return false; }
         e.preventDefault(); // prevent actual form submit
         if(confirm("Are you sure want to update the information?")) {
+          return false;
           this.click;
           var form = $(this);
           var user_id = '<?php echo $_SESSION["user_id"]; ?>';
