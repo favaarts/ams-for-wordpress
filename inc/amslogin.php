@@ -30,7 +30,7 @@ main-content main-content-four-col - this class is for four columns.
       <div class="right-col-wrap">
         <div class="amsloginform">
             <div class="post-form-main">
-              <?php //echo "<pre/>"; print_r($usersData); 
+              <?php //echo "<pre/>"; print_r($_SESSION); 
               if(isset($_SESSION["username"]))  
               {
                 echo '<p>Hii, ' . $_SESSION["username"] . '</p>';
@@ -241,27 +241,29 @@ main-content main-content-four-col - this class is for four columns.
                                         <div class="col-md-3"><p>Post Code</p><div><div><div><div class=""></div><div class="form-group">
                                           <input class="form-control undefined" name="postal_code" placeholder="" value="<?php echo $logindata['postal_code']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div></div>
                                         </div>
-                                        <div class="row"><div class="col-md-3"><p>Land Phone </p><div><div><div><div class=""></div><div class="form-group">
-                                          <input class="form-control undefined" name="home_phone" type="text" placeholder="" value="<?php echo $logindata['home_phone']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div></div>
-                                        <div class="col-md-3"><p>Mobile Phone </p><div><div><div><div class=""></div><div class="form-group">
-                                          <input class="form-control undefined" name="mobile_phone" type="text" placeholder="" value="<?php echo $logindata['mobile_phone']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                        <div class="row"></div><div class="row">
+                                      <div class="col-md-3"><p>Land Phone</p><div><div><div><div class=""></div>
+                                      <div class="form-group">
+                                        <input class="form-control undefined" name="home_phone" placeholder="" value="<?php echo $logindata['home_phone']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                      </div>
+                                      <div class="col-md-3"><p>Mobile Phone</p><div><div><div><div class=""></div>
+                                      <div class="form-group">
+                                        <input class="form-control undefined" name="mobile_phone" placeholder="" value="<?php echo $logindata['mobile_phone']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                      </div>
+                                      <div class="col-md-6"><p>Alternate Email</p><div><div><div><div class=""></div>
+                                      <div class="form-group">
+                                         <input class="form-control undefined" name="email" placeholder="" value="<?php echo $logindata['email']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                      </div></div></div></div></div>
                                         </div>
-                                        <div class="col-md-3"><p>Alternate Email </p><div><div><div><div class=""></div>
-                                          <div class="form-group">
-                                            <input class="form-control undefined" name="email" type="email" placeholder="" value="<?php echo $logindata['email']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                          </div></div></div></div>
-                                        </div>
-                                        <div class="col-md-3"><p>Website </p><div><div><div><div class=""></div>
-                                          <div class="form-group">
-                                            <input class="form-control undefined" name="website" id="website" type="text" placeholder="" value="<?php echo $logindata['website']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                          </div></div></div></div>
-                                        </div></div>
-                                        <div class="row"><div class="col-md-6"><p>Job Title</p><div><div><div><div class=""></div>
+                                        <div class="row">
+                                          <div class="col-md-4"><p>Website</p><div><div><div><div class=""></div><div class="form-group">
+                                            <input class="form-control undefined" name="website" id="website" placeholder="" value="<?php echo $logindata['website']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div></div>
+                                          <div class="col-md-4"><p>Job Title</p><div><div><div><div class=""></div>
                                           <div class="form-group">
                                             <input class="form-control undefined" name="job_position" placeholder="" value="<?php echo $logindata['job_position']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
                                           </div></div></div></div>
                                         </div>
-                                        <div class="col-md-6"><p>Bio</p><div><div><div><div class=""></div>
+                                        <div class="col-md-4"><p>Bio</p><div><div><div><div class=""></div>
                                           <div class="form-group">
                                             <input class="form-control undefined" name="bio_link" placeholder="" value="<?php echo $logindata['bio_link']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
                                           </div></div></div></div>
@@ -306,7 +308,7 @@ main-content main-content-four-col - this class is for four columns.
                                             <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>" >
                                           </div>
                                           <br/><br/>
-                                          <div id="updateMsg" style="display: none;"><center><h3 style="color: green;">Your Infromation Updated Successfully.</h3></center></div>
+                                          <div id="updateMsg" style="display: none;"><center><h3 style="color: green;">Your Information Updated Successfully.</h3></center></div>
                                         </div>
                                       </div>
                               </form>
@@ -392,13 +394,13 @@ jQuery(document).ready(function($) {
                  }
                  else
                  {
-                    jQuery("#amscredentials_error").html('<p>AMS Credentials not match.</p>');
+                    jQuery("#amscredentials_error").html('<p>The AMS credentials are incorrect. Please verify your Username or Password.</p>');
                     jQuery("#amscredentials_error").css("color", "red");
                     jQuery("#amscredentials_error").css("display", "block");
 
                     setTimeout(function() {
                         $('#amscredentials_error').fadeOut('fast');
-                    }, 5000);
+                    }, 6000);
                  }
              }
           });
@@ -425,7 +427,7 @@ jQuery(document).ready(function($) {
         var youtubeurl = isValidURL(jQuery('#youtube').val());
         if(websiteurl == false){
           if(jQuery('#websiteurl').length == 0){
-             $("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter valid URL</div>");
+             $("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
              $('#website').focus();
           }
@@ -435,7 +437,7 @@ jQuery(document).ready(function($) {
         }
         if(facebookurl == false){
           if(jQuery('#facebookurl').length == 0){
-             $("#facebook").parent().after("<div class='validation' id='facebookurl' style='color:red;margin-bottom: 20px;'>Please enter valid URL</div>");
+             $("#facebook").parent().after("<div class='validation' id='facebookurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
              $('#facebook').focus();
           }
@@ -445,7 +447,7 @@ jQuery(document).ready(function($) {
         }
         if(twitterurl == false){
           if(jQuery('#twitterurl').length == 0){
-            $("#twitter").parent().after("<div class='validation' id='twitterurl' style='color:red;margin-bottom: 20px;'>Please enter valid URL</div>");
+            $("#twitter").parent().after("<div class='validation' id='twitterurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
              $('#twitter').focus();
            }
@@ -455,7 +457,7 @@ jQuery(document).ready(function($) {
         }
         if(instagramurl == false){
           if(jQuery('#instagramurl').length == 0){
-            $("#instagram").parent().after("<div class='validation' id='instagramurl' style='color:red;margin-bottom: 20px;'>Please enter valid URL</div>");
+            $("#instagram").parent().after("<div class='validation' id='instagramurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
              $('#instagram').focus();
           }
@@ -465,7 +467,7 @@ jQuery(document).ready(function($) {
         }
         if(linkedinurl == false){
           if(jQuery('#linkedinurl').length == 0){
-            $("#linkedin").parent().after("<div class='validation' id='linkedinurl' style='color:red;margin-bottom: 20px;'>Please enter valid URL</div>");
+            $("#linkedin").parent().after("<div class='validation' id='linkedinurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
              $('#linkedin').focus();
           }
@@ -475,7 +477,7 @@ jQuery(document).ready(function($) {
         }
         if(youtubeurl == false){
           if(jQuery('#youtubeurl').length == 0){
-            $("#youtube").parent().after("<div class='validation' id='youtubeurl' style='color:red;margin-bottom: 20px;'>Please enter valid URL</div>");
+            $("#youtube").parent().after("<div class='validation' id='youtubeurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
              $('#youtube').focus();
           }
@@ -519,7 +521,7 @@ jQuery(document).ready(function($) {
                   jQuery("#updateMsg").css('display','block');
                   setTimeout(function(){
                      jQuery("#updateMsg").css('display','none');
-                  }, 5000);
+                  }, 6000);
                 }
                 else
                 {

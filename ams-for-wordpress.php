@@ -652,7 +652,17 @@ function get_amsmemberlogindetails()
     $arrayEventResultData = json_decode($result);
     if ($arrayEventResultData->status == 'valid')
     {
+        $key = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
+        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $ciphertext = sodium_crypto_secretbox($amspassword, $nonce, $key);
+        $pwd = base64_encode($nonce . $ciphertext);
+
+        $emailtext = sodium_crypto_secretbox($amsemailoruser, $nonce, $key);
+        $email = base64_encode($nonce . $emailtext);
+        
         $_SESSION['username'] = $arrayEventResultData->social_data->name;
+        $_SESSION['useremail'] = $email;
+        $_SESSION['password'] = $pwd;
         $_SESSION['user_id'] = $arrayEventResultData->user_id;
         $_SESSION['accesstoken'] = $arrayEventResultData->access_token;
         echo "valid";
