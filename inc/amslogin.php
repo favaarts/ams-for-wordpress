@@ -430,17 +430,21 @@ jQuery(document).ready(function($) {
         var linkedinurl = isValidURL(jQuery('#linkedin').val());
         var youtubeurl = isValidURL(jQuery('#youtube').val());
         var email = jQuery('#email').val();
-        if(email == '' || email == 'undefined'){
-             $("#email").parent().after("<div class='validation' id='emailurl' style='color:red;margin-bottom: 20px;'>Please enter email</div>");
+        if(email == ''){
+             jQuery("#email").parent().after("<div class='validation' id='emailurl' style='color:red;margin-bottom: 20px;'>Please enter email</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#email').focus();
+             jQuery('#email').focus();
              focusSet = true;
-        }
-        if(isEmail(email) == false){
-           $("#email").parent().after("<div class='validation' id='emailurl' style='color:red;margin-bottom: 20px;'>Please enter a valid email</div>");
-           e.preventDefault(); // prevent form from POST to server
-           $('#email').focus();
-          focusSet = true;
+        }else{
+          if(isEmail(email) == false){
+             jQuery("#email").parent().next(".validation").remove();          
+             jQuery("#email").parent().after("<div class='validation' id='emailurl' style='color:red;margin-bottom: 20px;'>Please enter a valid email</div>");
+             e.preventDefault(); // prevent form from POST to server
+             jQuery('#email').focus();
+            focusSet = true;
+          }else{
+            jQuery("#email").parent().next(".validation").remove(); // remove it
+          }
         }
         if(websiteurl == false){
           if(jQuery('#websiteurl').length == 0){
