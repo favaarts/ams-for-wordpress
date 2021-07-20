@@ -504,7 +504,7 @@ jQuery(document).ready(function($) {
           }
           focusSet = true;
         }else{
-          $("#youtube").parent().next(".validation").remove(); // remove it
+          $("#youtube").parent().next(".validation").remove();
         }
         if(focusSet == true){ return false; }
         e.preventDefault(); // prevent actual form submit
