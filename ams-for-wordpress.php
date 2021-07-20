@@ -522,6 +522,91 @@ add_action('wp_ajax_get_eventorganizationtags','get_eventorganizationtags');
 add_action('wp_ajax_nopriv_get_eventorganizationtags','get_eventorganizationtags');
 // End Event organization tags
 
+// AMS user update data after login (This function for when user login and Update data or edit profile.)
+function updateUserDetails()
+{
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+    
+    //print_r($_POST['usersdata'][0]); exit;
+    $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
+    $accesstoken = isset($_POST['access_token']) ? $_POST['access_token'] : 0;
+    $usersdata = isset($_POST['usersdata']) ? $_POST['usersdata'] : [];
+    $token = 'Bearer '.$accesstoken;
+
+    // User data to send using HTTP PUT method in curl
+    $data = [$usersdata[4]['name']=>$usersdata[4]['value'],$usersdata[8]['name']=>$usersdata[8]['value'],$usersdata[7]['name'] => $usersdata[7]['value'],$usersdata[0]['name'] =>$usersdata[0]['value'],$usersdata[1]['name']=>$usersdata[1]['value'],$usersdata[2]['name']=>$usersdata[2]['value'],$usersdata[3]['name']=>$usersdata[3]['value'],$usersdata[5]['name']=>$usersdata[5]['value'],$usersdata[6]['name']=>$usersdata[6]['value'],$usersdata[9]['name']=>$usersdata[9]['value'],$usersdata[10]['name']=>$usersdata[10]['value'],$usersdata[11]['name']=>$usersdata[11]['value'],'data'=>[$usersdata[12]['name']=>$usersdata[12]['value'],$usersdata[15]['name']=>$usersdata[15]['value'],$usersdata[14]['name']=>$usersdata[14]['value'],$usersdata[16]['name']=>$usersdata[16]['value'],$usersdata[13]['name']=>$usersdata[13]['value']],$usersdata[17]['name']=>$usersdata[17]['value'],$usersdata[19]['name']=>$usersdata[19]['value'],$usersdata[18]['name']=>$usersdata[18]['value']];
+    // Data should be passed as json format
+    $data_json = json_encode($data);
+
+    // API URL to update data with employee id
+    $url = "https://wpd.amsnetwork.ca/api/v3/users/".$user_id;
+
+    // curl initiate
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+
+    $headers = array(
+       "Content-Type: application/json",
+       "Authorization: ".$token,
+    );
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+   // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: ' . strlen($data_json)));
+
+    // SET Method as a PUT
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+
+    // Pass user data in POST command
+    curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Execute curl and assign returned data
+    $result  = curl_exec($ch);
+
+    // Close curl
+    curl_close($ch);
+
+    $response = json_decode($result, true);
+    if($response['json']['success'] == 1):
+        $msg = ['msg'=>'valid', 'status'=>true];
+    else:
+        $msg = ['msg'=>'invalid', 'status'=>false];
+    endif;
+    echo json_encode($msg);
+    exit;
+}
+add_action('wp_ajax_updateUserDetails','updateUserDetails');
+add_action('wp_ajax_nopriv_updateUserDetails','updateUserDetails');
+// End AMS user update data after login
+
+
+// AMS user login data (This function for when suer login get data of users.)
+function get_amsmemberlogindata($accesstoken, $user_id)
+{
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+
+    $usersdataurl = "https://".$apiurl.".amsnetwork.ca/api/v3/users/".$user_id."?access_token=".$accesstoken."&method=get&format=json";
+    //In itiate cURL.
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$usersdataurl);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    return $arrayResultData = json_decode($json, true);
+}
+add_action('wp_ajax_get_amsmemberlogindata','get_amsmemberlogindata');
+add_action('wp_ajax_nopriv_get_amsmemberlogindata','get_amsmemberlogindata');
+// End AMS user login data
+
 // AMS Member login
 function get_amsmemberlogindetails()
 {
@@ -565,11 +650,21 @@ function get_amsmemberlogindetails()
     $result = curl_exec($ch);
 
     $arrayEventResultData = json_decode($result);
-    
     if ($arrayEventResultData->status == 'valid')
     {
-        $_SESSION['username']=$arrayEventResultData->social_data->name;
-        $_SESSION['accesstoken']=$arrayEventResultData->access_token;
+        $key = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
+        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $ciphertext = sodium_crypto_secretbox($amspassword, $nonce, $key);
+        $pwd = base64_encode($nonce . $ciphertext);
+
+        $emailtext = sodium_crypto_secretbox($amsemailoruser, $nonce, $key);
+        $email = base64_encode($nonce . $emailtext);
+        
+        $_SESSION['username'] = $arrayEventResultData->social_data->name;
+        $_SESSION['useremail'] = $email;
+        $_SESSION['password'] = $pwd;
+        $_SESSION['user_id'] = $arrayEventResultData->user_id;
+        $_SESSION['accesstoken'] = $arrayEventResultData->access_token;
         echo "valid";
     }
     else
