@@ -509,7 +509,6 @@ jQuery(document).ready(function($) {
         if(focusSet == true){ return false; }
         e.preventDefault(); // prevent actual form submit
         if(confirm("Are you sure want to update the information?")) {
-          return false;
           this.click;
           var form = $(this);
           var user_id = '<?php echo $_SESSION["user_id"]; ?>';
