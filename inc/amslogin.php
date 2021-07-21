@@ -31,7 +31,7 @@ main-content main-content-four-col - this class is for four columns.
       <div class="right-col-wrap">
         <div class="amsloginform">
             <div class="post-form-main">
-              <?php //echo "<pre/>"; print_r($_SESSION); 
+              <?php 
               if(isset($_SESSION["username"]))  
               {
                 echo '<p>Hii, ' . $_SESSION["username"] . '</p>';
