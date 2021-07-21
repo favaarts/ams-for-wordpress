@@ -1785,16 +1785,22 @@ img.organizationlogo {
 }
 
 .ams-content .eventdetail .fc-content {
-    background: #fb6e6e;
+    background: #337AB7;
     color: #fff;
 }
+.ams-content .notavailable .fc-content {
+    background-color: #fb6e6e;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 0px;
+}
 .ams-content .eventdetail .fc-event, .ams-content .eventdetail .fc-event-dot {
-    background-color: #fb6e6e !important;
+    background-color: #fb6e6e00;
 }
 
 .ams-content .eventdetail .fc-event
 {
-    border: 1px solid #fb6e6e !important;
+    border: 1px solid #fb6e6e00;
 }
 .ams-content .eventdetail span.fc-time {
     display: none;

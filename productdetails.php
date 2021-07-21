@@ -64,6 +64,9 @@ get_header();  ?>
                 $arrayResult = get_apirequest(NULL,NULL,$prodictid[1]);
             ?>
             <div class="wp-block-columns main-content main-content-three-col">
+            <input type="hidden" id="getpageid" value="<?php echo $prodictid[1]; ?>">
+            <input type="hidden" id="assettype" value="<?php echo $arrayResult['asset_detail']['type']; ?>">
+            <input type="hidden" id="bulkassetscalendar" value="<?php echo $arrayResult['asset_detail']['is_bulk_asset']; ?>">    
                 <?php
                 foreach($arrayResult as $json_value) 
                 {
@@ -314,8 +317,98 @@ get_header();  ?>
 </div>   
 <script>
    
+    jQuery(document).ready(function() {
+    jQuery("#inifiniteLoaderUpdate").hide();
 
-  jQuery(document).ready(function() {
+    var assettype = jQuery("#assettype").val();
+    var isbulkproduct = jQuery("#bulkassetscalendar").val();
+
+    console.log(isbulkproduct);
+
+    if(assettype == 'Facility')
+    {
+        var calendardata = 'month,agendaWeek,agendaDay';
+        var defaultview = 'agendaWeek';
+    }
+    else 
+    {
+        var calendardata = 'month';
+        var defaultview = 'month';
+    }
+
+
+
+    if(isbulkproduct == 1)
+    {     
+        $('body').on('click', '.fc-next-button', function () {
+                var nextmonth = $('#calendar').fullCalendar('getView').intervalStart.format('MM');
+                var nextyear = $('#calendar').fullCalendar('getView').intervalEnd.format('YYYY');
+                var getpageid = $('#getpageid').val();
+
+                $.ajax({
+                    url: amsjs_ajax_url.ajaxurl,
+                    type:'post',
+                    dataType: 'JSON',
+                    data: { action: 'get_ajaxbulkassetscalendar', getpageid:getpageid,nextmonth:nextmonth,nextyear:nextyear},
+                    success: function (datanew) {
+
+                             console.log(datanew);      
+
+                            $('#calendar').fullCalendar( 'destroy' );
+
+                            jQuery('#calendar').fullCalendar({
+                                editable:false,
+                                header:{
+                                 left:'prev,next today',
+                                 center:'title',
+                                 right:calendardata,
+                                },
+                                defaultDate: moment().format(nextyear+'-'+nextmonth+'-'+'01'),
+                                events: datanew,
+                                eventRender: function(event, eventElement) {
+                                    if (event.title == "Not Available") {
+                                      eventElement.addClass('notavailable');
+                                    }
+                                }
+                            });
+                    }
+                });
+        });
+
+        $('body').on('click', '.fc-prev-button', function () {
+            var nextmonth = $('#calendar').fullCalendar('getView').intervalStart.format('MM');
+            var nextyear = $('#calendar').fullCalendar('getView').intervalEnd.format('YYYY');
+            var getpageid = $('#getpageid').val();
+
+            $.ajax({
+                url: amsjs_ajax_url.ajaxurl,
+                type:'post',
+                dataType: 'JSON',
+                data: { action: 'get_ajaxbulkassetscalendar', getpageid:getpageid,nextmonth:nextmonth,nextyear:nextyear},
+
+                success: function (datanew) {
+
+                        $('#calendar').fullCalendar( 'destroy' );
+
+                        jQuery('#calendar').fullCalendar({
+                            editable:false,
+                            header:{
+                             left:'prev,next today',
+                             center:'title',
+                             right:calendardata,
+                            },
+                            defaultDate: moment().format(nextyear+'-'+nextmonth+'-'+'01'),
+                            events: datanew,
+                            eventRender: function(event, eventElement) {
+                                if (event.title == "Not Available") {
+                                  eventElement.addClass('notavailable');
+                                }
+                            }
+                        });  
+                }
+            });
+        });
+    }    
 
     $('.assetstab').each(function(){
       $(this).find('input[type=radio]:nth-child(1)').attr('checked', true);
@@ -323,21 +416,28 @@ get_header();  ?>
 
     function getCalendarData()
     {
-        var calendarone = jQuery('#calendar').fullCalendar({
+
+        $('#calendar').fullCalendar( 'destroy' );
+        jQuery('#calendar').fullCalendar({
             editable:false,
             header:{
              left:'prev,next today',
              center:'title',
-             right:'month,agendaWeek,agendaDay'
+             right:calendardata,
             },
             events: <?php include( plugin_dir_path( __FILE__ ) . '/inc/getassetscalendar.php') ?>,
+            defaultView: defaultview,
+            aspectRatio: 1.5,
             selectable:true,
             selectHelper:true,
             editable:true,
-            eventOverlap: function(stillEvent, movingEvent) {
-                return stillEvent.allDay && movingEvent.allDay;
-              }
+            eventRender: function(event, eventElement) {
+                if (event.title == "Not Available") {
+                  eventElement.addClass('notavailable');
+                }
+            }
         });
+           
     }
 
     if ($('input#tab-3').is(':checked')) 
@@ -350,9 +450,12 @@ get_header();  ?>
              getCalendarData();
         }
     });
+    
+    
 
   });
+  
    
-  </script> 
+</script> 
 <?php
 get_footer();

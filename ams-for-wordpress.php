@@ -1805,6 +1805,87 @@ add_action('wp_ajax_get_assetscalendar','get_assetscalendar');
 add_action('wp_ajax_nopriv_get_assetscalendar','get_assetscalendar');
 // End assets Available bookings calendar
 
+// assets Available bookings calendar
+function get_bulkassetscalendar($getpageid = '',$nextmonth = '', $nextyear = '')
+{
+
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+    $currentmonth = date("m");
+    $currentyear = date("Y");
+
+    $assetscalendar = "https://".$apiurl.".amsnetwork.ca/api/v3/assets/get_bulk_count?id=".$getpageid."&access_token=".$apikey."&month=".$currentmonth."&year=".$currentyear."&calendar_type=EquipmentItem";
+
+
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$assetscalendar);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    return $arrayProjectResultData = json_decode($json, true);
+}
+add_action('wp_ajax_get_bulkassetscalendar','get_bulkassetscalendar');
+add_action('wp_ajax_nopriv_get_bulkassetscalendar','get_bulkassetscalendar');
+// End assets Available bookings calendar
+
+
+// assets Available bookings calendar
+function get_ajaxbulkassetscalendar($getpageid = '',$nextmonth = '', $nextyear = '')
+{
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+
+    $getpageid = $_POST['getpageid'];
+    $nextmonth = $_POST['nextmonth'];
+    $nextyear = $_POST['nextyear'];
+    
+    $assetscalendar = "https://".$apiurl.".amsnetwork.ca/api/v3/assets/get_bulk_count?id=".$getpageid."&access_token=".$apikey."&month=".$nextmonth."&year=".$nextyear."&calendar_type=EquipmentItem";
+
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$assetscalendar);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    $arrayProjectResultData = json_decode($json, true);
+
+    sort($arrayProjectResultData['json']['bulk_count_total']);
+
+    foreach($arrayProjectResultData['json']['bulk_count_total'] as $x_value) 
+    {    
+            $todaydateset = "".$nextyear."-".$nextmonth."-".$x_value['date']." +1 days";
+
+            if($x_value['bulk_count_left'] == 0)
+            {
+                $checkbulkcount = "Not Available";
+            }
+            else
+            {
+                $checkbulkcount = $x_value['bulk_count_left'] . " Left";
+            }
+
+            $data[] = array(
+              'title'   => $checkbulkcount,
+              'start'   => date('Y-m-d h:i:s', strtotime($todaydateset)),
+            );
+    }
+
+    echo json_encode($data);
+    die();
+}
+add_action('wp_ajax_get_ajaxbulkassetscalendar','get_ajaxbulkassetscalendar');
+add_action('wp_ajax_nopriv_get_ajaxbulkassetscalendar','get_ajaxbulkassetscalendar');
+// End assets Available bookings calendar
+
 //project_attributes
 function get_projectattributes($attribute_id = '', $attribute_type = '')
 {
@@ -1812,8 +1893,6 @@ function get_projectattributes($attribute_id = '', $attribute_type = '')
     die;*/
     $apiurl = get_option('wpams_url_btn_label');
     $apikey = get_option('wpams_apikey_btn_label');
-
-    //$projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/project_attributes?project_id=".$attribute_id."&type=Long%20Attributes&access_token=".$apikey."&method=get&format=json";
 
     if(isset($attribute_type))
     {
