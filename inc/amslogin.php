@@ -3,12 +3,13 @@ session_start();
 function amslogin_function( $slug ) {
     ob_start();  
     $usersData = get_amsmemberlogindata($_SESSION['accesstoken'], $_SESSION['user_id']);
+    $subdomain = get_option('wpams_url_btn_label');
     if(isset($usersData) && !empty($usersData)):
         $logindata = $usersData['user'];
     else:
         $logindata = [];
     endif;
-    ?>
+?>
 
 <div id="category" class="category cat-wrap">
 
@@ -30,13 +31,14 @@ main-content main-content-four-col - this class is for four columns.
       <div class="right-col-wrap">
         <div class="amsloginform">
             <div class="post-form-main">
-              <?php //echo "<pre/>"; print_r($_SESSION); 
+              <?php
               if(isset($_SESSION["username"]))  
               {
                 echo '<p>Hii, ' . $_SESSION["username"] . '</p>';
   
                 echo '<h3>Access Token </h3><p>'.$_SESSION["accesstoken"]. '</p>';
               ?>
+              <a class="text-info" href="javascript:void(0);" onclick="redirectAMSWithKey()">Test Link</a>
                 <div class="container">
                   <div class="row">
                     <div class="col-8">
@@ -345,7 +347,7 @@ main-content main-content-four-col - this class is for four columns.
                       <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>" >
                     </div>
                     <div class="post-group">
-                      <h4><a class="text-info float-right" href="https://wpd.amsnetwork.ca/reset_password">Forgot password?</a></h4>
+                      <h4><a class="text-info float-right" href="https://<?php echo $subdomain; ?>.amsnetwork.ca/reset_password">Forgot password?</a></h4>
                     </div>
              
               <?php } ?>      
@@ -366,12 +368,25 @@ main-content main-content-four-col - this class is for four columns.
 
 
 <script type="text/javascript">
+
+ //start function for use of redirecting on AMS panel when login with wp 
+ function redirectAMSWithKey() 
+ {
+    var organization_id = '<?php echo $_SESSION["user_id"]; ?>';
+    var encryptedKey = CryptoJS.AES.encrypt(organization_id, "My Secret Passphrase");
+    var url = "https://<?php echo $subdomain; ?>.amsnetwork.ca/projects/podcast-fb8a53a3-7209-496d-930a-bb2fd743176d/media?oid=" + encodeURIComponent(encryptedKey);
+    jQuery.cookie("organization_id", encryptedKey);
+    window.location.href = url;
+    return false;
+ }//end of function
+
 jQuery(document).ready(function($) {
     
     jQuery("#updateMsg").hide();
     jQuery("#inifiniteLoader").hide(); 
     jQuery("#inifiniteLoaderUpdate").hide(); 
-    
+
+
     $('#btnSubmit').click(function(){
 
         var amsemailoruser = jQuery('#amsemailoruser').val();
@@ -451,65 +466,67 @@ jQuery(document).ready(function($) {
         }
         if(websiteurl == false){
           if(jQuery('#websiteurl').length == 0){
-             $("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+             jQuery("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#website').focus();
+             jQuery('#website').focus();
           }
           focusSet = true;
         }else{
-          $("#website").parent().next(".validation").remove(); // remove it
+          jQuery("#website").parent().next(".validation").remove(); // remove it
         }
         if(facebookurl == false){
           if(jQuery('#facebookurl').length == 0){
-             $("#facebook").parent().after("<div class='validation' id='facebookurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+             jQuery("#facebook").parent().after("<div class='validation' id='facebookurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#facebook').focus();
+             jQuery('#facebook').focus();
           }
           focusSet = true;
         }else{
-          $("#facebook").parent().next(".validation").remove(); // remove it
+          jQuery("#facebook").parent().next(".validation").remove(); // remove it
         }
         if(twitterurl == false){
           if(jQuery('#twitterurl').length == 0){
-            $("#twitter").parent().after("<div class='validation' id='twitterurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            jQuery("#twitter").parent().after("<div class='validation' id='twitterurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#twitter').focus();
+             jQuery('#twitter').focus();
            }
            focusSet = true;
         }else{
-          $("#twitter").parent().next(".validation").remove(); // remove it
+          jQuery("#twitter").parent().next(".validation").remove(); // remove it
         }
         if(instagramurl == false){
           if(jQuery('#instagramurl').length == 0){
-            $("#instagram").parent().after("<div class='validation' id='instagramurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            jQuery("#instagram").parent().after("<div class='validation' id='instagramurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#instagram').focus();
+             jQuery('#instagram').focus();
           }
           focusSet = true;
         }else{
-          $("#instagram").parent().next(".validation").remove(); // remove it
+          jQuery("#instagram").parent().next(".validation").remove(); // remove it
         }
         if(linkedinurl == false){
           if(jQuery('#linkedinurl').length == 0){
-            $("#linkedin").parent().after("<div class='validation' id='linkedinurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            jQuery("#linkedin").parent().after("<div class='validation' id='linkedinurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#linkedin').focus();
+             jQuery('#linkedin').focus();
           }
           focusSet = true;
         }else{
-          $("#linkedin").parent().next(".validation").remove(); // remove it
+          jQuery("#linkedin").parent().next(".validation").remove(); // remove it
         }
         if(youtubeurl == false){
           if(jQuery('#youtubeurl').length == 0){
-            $("#youtube").parent().after("<div class='validation' id='youtubeurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            jQuery("#youtube").parent().after("<div class='validation' id='youtubeurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#youtube').focus();
+             jQuery('#youtube').focus();
           }
           focusSet = true;
         }else{
-          $("#youtube").parent().next(".validation").remove();
+          jQuery("#youtube").parent().next(".validation").remove(); // remove it
         }
-        if(focusSet == true){ return false; }
+        if(focusSet == true){ 
+          return false;
+        }
         e.preventDefault(); // prevent actual form submit
         if(confirm("Are you sure want to update the information?")) {
           this.click;

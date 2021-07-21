@@ -351,6 +351,10 @@ if( !function_exists('wpdams_plugin_scripts')) {
         //wp_enqueue_style('wpac-css', WPD_AMS_PLUGIN_DIR. 'assets/css/style.css');
         wp_enqueue_script('amsjsajax', WPD_AMS_PLUGIN_DIR. 'assets/js/main.js', 'jQuery', '1.0.0', true );
 
+        wp_enqueue_script('amsjsajaxcrypto', WPD_AMS_PLUGIN_DIR. 'assets/js/amscrypto.js', 'jQuery', '3.1.9', true );
+
+        wp_enqueue_script('amsjsajaxcookies', WPD_AMS_PLUGIN_DIR. 'assets/js/ams.cookie.min.js', 'jQuery', '1.4.1', true );
+
         wp_localize_script( 'amsjsajax', 'amsjs_ajax_url',
             array( 'ajaxurl' => admin_url( 'admin-ajax.php' ))
         );
