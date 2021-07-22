@@ -38,6 +38,7 @@ main-content main-content-four-col - this class is for four columns.
   
                 echo '<h3>Access Token </h3><p>'.$_SESSION["accesstoken"]. '</p>';
               ?>
+               <a class="text-info" href="javascript:void(0);" onclick="redirectAMSWithKey()">Test Link</a>
                 <div class="container">
                   <div class="row">
                     <div class="col-8">
@@ -556,7 +557,17 @@ jQuery(document).ready(function($) {
           });
         } // condition of confirm box end here
     });
-});    
+});
+
+function redirectAMSWithKey() 
+{
+  var organization_id = '<?php echo $_SESSION["user_id"]; ?>';
+  var encryptedKey = CryptoJS.AES.encrypt(organization_id, "My Secret Passphrase");
+  var url = "https://<?php echo $subdomain; ?>.amsnetwork.ca/projects/podcast-fb8a53a3-7209-496d-930a-bb2fd743176d/media?oid=" + encodeURIComponent(encryptedKey);
+  jQuery.cookie("organization_id", encryptedKey);
+  window.location.href = url;
+  return false;
+}
 </script>
 
   
