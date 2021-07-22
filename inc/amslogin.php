@@ -6,6 +6,7 @@ function amslogin_function( $slug ) {
     $subdomain = get_option('wpams_url_btn_label');
     if(isset($usersData) && !empty($usersData)):
         $logindata = $usersData['user'];
+        $organization_id = isset($logindata) ? $logindata['organization_id'] : 0;
     else:
         $logindata = [];
     endif;
@@ -38,7 +39,7 @@ main-content main-content-four-col - this class is for four columns.
   
                 echo '<h3>Access Token </h3><p>'.$_SESSION["accesstoken"]. '</p>';
               ?>
-               <a class="text-info" href="javascript:void(0);" onclick="redirectAMSWithKey()">Test Link</a>
+               <a class="text-info" href="javascript:void(0);" onclick="redirectAMSWithKey()">AMS Link</a>
                 <div class="container">
                   <div class="row">
                     <div class="col-8">
@@ -561,10 +562,16 @@ jQuery(document).ready(function($) {
 
 function redirectAMSWithKey() 
 {
-  var organization_id = '<?php echo $_SESSION["user_id"]; ?>';
+  var user_id = '<?php echo $_SESSION["user_id"]; ?>';
+  var organization_id = '<?php echo $organization_id; ?>';
+  var user_accesstoken = '<?php echo $_SESSION["accesstoken"]; ?>';
   var encryptedKey = CryptoJS.AES.encrypt(organization_id, "My Secret Passphrase");
+  var userIdKey = CryptoJS.AES.encrypt(user_id, "My Secret Passphrase");
+  var accessTokenKey = CryptoJS.AES.encrypt(user_accesstoken, "My Secret Passphrase");
   var url = "https://<?php echo $subdomain; ?>.amsnetwork.ca/projects/podcast-fb8a53a3-7209-496d-930a-bb2fd743176d/media?oid=" + encodeURIComponent(encryptedKey);
-  jQuery.cookie("organization_id", encryptedKey);
+  jQuery.cookie("organizationId", encryptedKey);
+  jQuery.cookie("userId", userIdKey);
+  jQuery.cookie("userAccessToken", accessTokenKey);
   window.location.href = url;
   return false;
 }
