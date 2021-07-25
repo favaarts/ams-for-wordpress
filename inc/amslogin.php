@@ -231,12 +231,12 @@ main-content main-content-four-col - this class is for four columns.
                                       </div>
                                       </div>
                                       <div class="row"></div><div class="row">
-                                        <div class="col-md-3"><p>Bio</p><div><div><div><div class=""></div>
+                                        <div class="col-md-4"><p>Bio</p><div><div><div><div class=""></div>
                                           <div class="form-group">
                                             <input class="form-control undefined" name="bio_link" placeholder="" value="<?php echo $logindata['bio_link']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
                                           </div></div></div></div>
                                         </div>
-                                        <div class="col-md-4"><p>Specializations </p><div><div><div><div class=""></div><div class="form-group">
+                                        <div class="col-md-3"><p>Specializations </p><div><div><div><div class=""></div><div class="form-group">
                                           <input class="form-control undefined" name="specializations" placeholder="" value="<?php echo $logindata['specializations']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
                                         </div>
                                         <div class="col-md-5"><p>Birth Date</p><div class="custom-datepicker"><div class="react-datepicker-wrapper"><div class="react-datepicker__input-container">
