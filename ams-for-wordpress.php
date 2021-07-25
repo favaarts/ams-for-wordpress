@@ -539,7 +539,10 @@ function updateUserDetails()
     $token = 'Bearer '.$accesstoken;
 
     // User data to send using HTTP PUT method in curl
-    $data = [$usersdata[4]['name']=>$usersdata[4]['value'],$usersdata[8]['name']=>$usersdata[8]['value'],$usersdata[7]['name'] => $usersdata[7]['value'],$usersdata[0]['name'] =>$usersdata[0]['value'],$usersdata[1]['name']=>$usersdata[1]['value'],$usersdata[2]['name']=>$usersdata[2]['value'],$usersdata[3]['name']=>$usersdata[3]['value'],$usersdata[5]['name']=>$usersdata[5]['value'],$usersdata[6]['name']=>$usersdata[6]['value'],$usersdata[9]['name']=>$usersdata[9]['value'],$usersdata[10]['name']=>$usersdata[10]['value'],$usersdata[11]['name']=>$usersdata[11]['value'],'data'=>[$usersdata[12]['name']=>$usersdata[12]['value'],$usersdata[15]['name']=>$usersdata[15]['value'],$usersdata[14]['name']=>$usersdata[14]['value'],$usersdata[16]['name']=>$usersdata[16]['value'],$usersdata[13]['name']=>$usersdata[13]['value']],$usersdata[17]['name']=>$usersdata[17]['value'],$usersdata[19]['name']=>$usersdata[19]['value'],$usersdata[18]['name']=>$usersdata[18]['value']];
+    $data = [$usersdata[4]['name']=>$usersdata[4]['value'],$usersdata[8]['name']=>$usersdata[8]['value'],$usersdata[7]['name'] => $usersdata[7]['value'],$usersdata[0]['name'] =>$usersdata[0]['value'],$usersdata[1]['name']=>$usersdata[1]['value'],$usersdata[2]['name']=>$usersdata[2]['value'],$usersdata[3]['name']=>$usersdata[3]['value'],$usersdata[5]['name']=>$usersdata[5]['value'],$usersdata[6]['name']=>$usersdata[6]['value'],$usersdata[9]['name']=>$usersdata[9]['value'],$usersdata[10]['name']=>$usersdata[10]['value'],$usersdata[11]['name']=>$usersdata[11]['value'],
+        $usersdata[12]['name']=>$usersdata[12]['value'],$usersdata[13]['name']=>$usersdata[13]['value'],$usersdata[14]['name']=>$usersdata[14]['value'],
+        'data'=>[$usersdata[15]['name']=>$usersdata[15]['value'],$usersdata[16]['name']=>$usersdata[16]['value'],$usersdata[17]['name']=>$usersdata[17]['value'],$usersdata[18]['name']=>$usersdata[18]['value'],$usersdata[19]['name']=>$usersdata[19]['value']],
+        ];
     // Data should be passed as json format
     $data_json = json_encode($data);
 

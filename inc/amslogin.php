@@ -73,7 +73,7 @@ main-content main-content-four-col - this class is for four columns.
                                     <div class="row mt-3">
                                       <?php if(!empty($logindata['organization_name'])): ?>
                                       <div class="col-md-4">
-                                        <p>Organization Memebr</p>
+                                        <p>Organization Member</p>
                                         <div><div><div><div class=""></div>
                                         <div class="form-group">
                                            <input class="form-control undefined" name="organization_name" placeholder="" value="<?php echo $logindata['organization_name']; ?>" readonly style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
@@ -217,92 +217,103 @@ main-content main-content-four-col - this class is for four columns.
                                 <div class="row">
                                   <div class="col-12">
                                     <div class="row mt-3">
-                                      <div class="col-md-6">
-                                        <p>Address Line 1</p>
-                                        <div><div><div><div class=""></div>
-                                        <div class="form-group">
-                                           <input class="form-control undefined" name="address1" placeholder="" value="<?php echo $logindata['address1']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                         </div></div></div></div>
-                                      </div>
-                                      <div class="col-md-6"><p>Address Line 2</p><div><div><div><div class=""></div>
-                                      <div class="form-group">
-                                        <input class="form-control undefined" name="address2" placeholder="" value="<?php echo $logindata['address2']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div></div>
-                                      </div>
-                                      <div class="row"></div><div class="row">
-                                      <div class="col-md-3"><p>City/Town</p><div><div><div><div class=""></div>
-                                      <div class="form-group">
-                                        <input class="form-control undefined" name="city" placeholder="" value="<?php echo $logindata['city']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
-                                      </div>
-                                      <div class="col-md-3"><p>Province</p><div><div><div><div class=""></div>
-                                      <div class="form-group">
-                                        <input class="form-control undefined" name="province" placeholder="" value="<?php echo $logindata['province']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
-                                      </div>
-                                      <div class="col-md-3"><p>Country</p><div><div><div><div class=""></div>
-                                      <div class="form-group">
-                                         <input class="form-control undefined" name="country" placeholder="" value="<?php echo $logindata['country']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                      </div></div></div></div></div>
-                                        <div class="col-md-3"><p>Post Code</p><div><div><div><div class=""></div><div class="form-group">
-                                          <input class="form-control undefined" name="postal_code" placeholder="" value="<?php echo $logindata['postal_code']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div></div>
-                                        </div>
-                                        <div class="row"></div><div class="row">
-                                      <div class="col-md-3"><p>Land Phone</p><div><div><div><div class=""></div>
-                                      <div class="form-group">
-                                        <input class="form-control undefined" name="home_phone" placeholder="" value="<?php echo $logindata['home_phone']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
-                                      </div>
-                                      <div class="col-md-3"><p>Mobile Phone</p><div><div><div><div class=""></div>
-                                      <div class="form-group">
-                                        <input class="form-control undefined" name="mobile_phone" placeholder="" value="<?php echo $logindata['mobile_phone']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
-                                      </div>
-                                      <div class="col-md-6"><p>Alternate Email</p><div><div><div><div class=""></div>
+                                      <div class="col-md-5"><p>Email</p><div><div><div><div class=""></div>
                                       <div class="form-group">
                                          <input class="form-control undefined" name="email" id="email" placeholder="" value="<?php echo $logindata['email']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
                                       </div></div></div></div></div>
-                                        </div>
-                                        <div class="row">
-                                          <div class="col-md-4"><p>Website</p><div><div><div><div class=""></div><div class="form-group">
-                                            <input class="form-control undefined" name="website" id="website" placeholder="" value="<?php echo $logindata['website']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div></div>
-                                          <div class="col-md-4"><p>Job Title</p><div><div><div><div class=""></div>
-                                          <div class="form-group">
-                                            <input class="form-control undefined" name="job_position" placeholder="" value="<?php echo $logindata['job_position']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                          </div></div></div></div>
-                                        </div>
+                                      <div class="col-md-3"><p>Pronouns </p><div><div><div><div class=""></div><div class="form-group">
+                                          <input class="form-control undefined" name="pronouns" placeholder="" value="<?php echo $logindata['pronouns']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                      </div>
+                                      <div class="col-md-4"><p>Job Title</p><div><div><div><div class=""></div>
+                                        <div class="form-group">
+                                          <input class="form-control undefined" name="job_position" placeholder="" value="<?php echo $logindata['job_position']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                        </div></div></div></div>
+                                      </div>
+                                      </div>
+                                      <div class="row"></div><div class="row">
                                         <div class="col-md-4"><p>Bio</p><div><div><div><div class=""></div>
                                           <div class="form-group">
                                             <input class="form-control undefined" name="bio_link" placeholder="" value="<?php echo $logindata['bio_link']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
                                           </div></div></div></div>
-                                        </div></div>
-                                        <div class="row"><div class="col-md-6"><p>Twitter</p><div><div><div><div class=""></div>
-                                          <div class="form-group">
-                                            <input class="form-control undefined" name="twitter" id="twitter" placeholder="" value="<?php echo $logindata['data']['twitter']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                          </div></div></div></div>
                                         </div>
-                                        <div class="col-md-6"><p>Instagram</p><div><div><div><div class=""></div>
-                                          <div class="form-group">
-                                            <input class="form-control undefined" name="instagram" id="instagram" placeholder="" value="<?php echo $logindata['data']['instagram']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                          </div></div></div></div> </div>
-                                        </div><div class="row"><div class="col-md-6"><p>Facebook</p><div><div><div><div class=""></div>
-                                          <div class="form-group">
-                                            <input class="form-control undefined" name="facebook" id="facebook" placeholder="" value="<?php echo $logindata['data']['facebook']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                          </div></div></div></div>
+                                        <div class="col-md-4"><p>Specializations </p><div><div><div><div class=""></div><div class="form-group">
+                                          <input class="form-control undefined" name="specializations" placeholder="" value="<?php echo $logindata['specializations']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
                                         </div>
-                                        <div class="col-md-6"><p>Youtube / Vimeo</p><div><div><div><div class=""></div>
-                                          <div class="form-group">
-                                            <input class="form-control undefined" name="youtube" id="youtube" placeholder="" value="<?php echo $logindata['data']['youtube']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
-                                          </div></div></div></div>
-                                        </div>
-                                        <div class="col-md-6"><p>Linkedin</p><div><div><div>
-                                          <div class=""></div>
-                                          <div class="form-group">
-                                            <input class="form-control undefined" name="linkedin" id="linkedin" placeholder="" value="<?php echo $logindata['data']['linkedin']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div> </div>
-                                          <div class="col-md-6"><p>Birth Date</p><div class="custom-datepicker"><div class="react-datepicker-wrapper"><div class="react-datepicker__input-container">
+                                        <div class="col-md-4"><p>Birth Date</p><div class="custom-datepicker"><div class="react-datepicker-wrapper"><div class="react-datepicker__input-container">
                                             <input type="date" data-date-inline-picker="true" name="date_of_birth" id="date_of_birth" class="form-control undefined" value="<?php echo $logindata['date_of_birth']; ?>"></div></div></div>
                                           </div>
-                                          <div class="col-md-6"><p>Specializations </p><div><div><div><div class=""></div><div class="form-group">
-                                            <input class="form-control undefined" name="specializations" placeholder="" value="<?php echo $logindata['specializations']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                        </div>
+                                        <div class="row"></div><div class="row">
+                                          <div class="col-md-6">
+                                            <p>Address Line 1</p>
+                                            <div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                               <input class="form-control undefined" name="address1" placeholder="" value="<?php echo $logindata['address1']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                             </div></div></div></div>
                                           </div>
-                                          <div class="col-md-6"><p>Pronouns </p><div><div><div><div class=""></div><div class="form-group">
-                                            <input class="form-control undefined" name="pronouns" placeholder="" value="<?php echo $logindata['pronouns']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
-                                          </div></div></div></div>
+                                          <div class="col-md-6"><p>Address Line 2</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="address2" placeholder="" value="<?php echo $logindata['address2']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                          </div>
+                                          <div class="col-md-4"><p>City/Town</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="city" placeholder="" value="<?php echo $logindata['city']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                          </div>
+                                          <div class="col-md-4"><p>Province</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="province" placeholder="" value="<?php echo $logindata['province']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                          </div>
+                                          <div class="col-md-4"><p>Country</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                               <input class="form-control undefined" name="country" placeholder="" value="<?php echo $logindata['country']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                            </div></div></div></div>
+                                          </div>
+                                          <div class="col-md-4"><p>Post Code</p><div><div><div><div class=""></div><div class="form-group">
+                                                <input class="form-control undefined" name="postal_code" placeholder="" value="<?php echo $logindata['postal_code']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                          </div>
+                                          <div class="col-md-4"><p>Land Phone</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="home_phone" placeholder="" value="<?php echo $logindata['home_phone']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                          </div>
+                                          <div class="col-md-4"><p>Mobile Phone</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="mobile_phone" placeholder="" value="<?php echo $logindata['mobile_phone']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-md-6"><p>Website</p><div><div><div><div class=""></div><div class="form-group">
+                                            <input class="form-control undefined" name="website" id="website" placeholder="" value="<?php echo $logindata['website']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                          </div>
+                                          <div class="col-md-6"><p>Twitter</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="twitter" id="twitter" placeholder="" value="<?php echo $logindata['data']['twitter']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                            </div></div></div></div>
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-md-6"><p>Instagram</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="instagram" id="instagram" placeholder="" value="<?php echo $logindata['data']['instagram']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                            </div></div></div></div>
+                                          </div>
+                                          <div class="col-md-6"><p>Facebook</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="facebook" id="facebook" placeholder="" value="<?php echo $logindata['data']['facebook']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                            </div></div></div></div>
+                                          </div>
+                                          <div class="col-md-6"><p>Youtube / Vimeo</p><div><div><div><div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="youtube" id="youtube" placeholder="" value="<?php echo $logindata['data']['youtube']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                            </div></div></div></div>
+                                          </div>
+                                          <div class="col-md-6"><p>Linkedin</p><div><div><div>
+                                            <div class=""></div>
+                                            <div class="form-group">
+                                              <input class="form-control undefined" name="linkedin" id="linkedin" placeholder="" value="<?php echo $logindata['data']['linkedin']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
+                                          </div>
+                                        </div>
+                                        </div>
+                                        </div>
                                         </div>
                                         <div class="row mt-3"><div class="col-12 text-right">
                                           <!--<button type="button" class="btn float-none mr-1" style="color: rgb(80, 80, 80); background-color: rgb(221, 221, 221);">Cancel</button>-->
@@ -321,7 +332,6 @@ main-content main-content-four-col - this class is for four columns.
                       </div>
                     </div>
                   </div>
-                  <br/><br/>
                 <?php
                 echo "<input type='hidden' id='getaccesstoken' value='".$_SESSION["accesstoken"]."' />";
                 echo "<div class='col-8'><input type='submit' id='btnAMSLogout' class='btn ml-1' onclick='btnAMSLogout()' value='Log Out' /></div>";
@@ -348,7 +358,12 @@ main-content main-content-four-col - this class is for four columns.
                       <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>" >
                     </div>
                     <div class="post-group">
-                      <h4><a class="text-info float-right" href="https://<?php echo $subdomain; ?>.amsnetwork.ca/reset_password">Forgot password?</a></h4>
+                      <h4>
+                        <a class="text-info float-right" href="https://<?php echo $subdomain; ?>.amsnetwork.ca/reset_password" target="popup" 
+                          onclick="window.open('https://<?php echo $subdomain; ?>.amsnetwork.ca/reset_password','popup','width=600,height=600'); return false;">
+                            Forgot password?
+                        </a>
+                      </h4>
                     </div>
              
               <?php } ?>      
