@@ -427,6 +427,7 @@ get_header();  ?>
             },
             events: <?php include( plugin_dir_path( __FILE__ ) . '/inc/getassetscalendar.php') ?>,
             defaultView: defaultview,
+            scrollTime: '07:30:00',
             aspectRatio: 1.5,
             selectable:true,
             selectHelper:true,

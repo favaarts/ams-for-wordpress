@@ -267,16 +267,18 @@ else
                             echo "<p class='locationname'><strong>Location: </strong>".$x_value['location']."</p>";
                           }
                           
-                          //earlybird_cutoff
-                          $earlybirddate=$x_value['earlybird_cutoff'];
-                          if(empty($earlybirddate))
+                          if (!isset($blockdata['earlybird']))
                           {
-                            echo "<p>No Date Scheduled</P>";
-                          }
-                          else
-                          {
-                            echo "<p class='product-date'><span class='datetitle'><strong>Early Bird Registration Deadline: </strong> </span>".date('D, M d Y', strtotime($earlybirddate))."</P>"; 
-                          }
+                            $earlybirddate=$x_value['earlybird_cutoff'];
+                            if(empty($earlybirddate))
+                            {
+                              echo "<p>No Date Scheduled</P>";
+                            }
+                            else
+                            {
+                              echo "<p class='product-date'><span class='datetitle'><strong>Early Bird Registration Deadline: </strong> </span>".date('D, M d Y', strtotime($earlybirddate))."</P>"; 
+                            }
+                          }  
 
                           //drop_cutoff
                           $dropdate=$x_value['drop_cutoff'];
