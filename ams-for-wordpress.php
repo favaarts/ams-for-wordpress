@@ -375,6 +375,27 @@ function wptuts_scripts_important()
 }
 add_action( 'wp_enqueue_scripts', 'wptuts_scripts_important', 20 );
 
+
+function localtimezone($utc = 0)
+{
+    if(isset($_COOKIE['timezoneoffset'])){
+        $timezone = $_COOKIE['timezoneoffset'];
+    }
+    else
+    {
+        $timezone = "";
+    }
+    
+    $timezone_offset_minutes = $timezone; 
+    $timezone_name = timezone_name_from_abbr("", $timezone_offset_minutes*60, false);
+    $dt = new DateTime($utc);
+    $tz = new DateTimeZone($timezone_name); // or whatever zone you're after
+    $dt->setTimezone($tz);
+    return $dt->format('Y-m-d H:i:s');
+}
+add_action('wp_ajax_localtimezone','localtimezone');
+add_action('wp_ajax_nopriv_localtimezone','localtimezone'); 
+
 // Sidebar category function
 function get_sidebarcategory()
 {

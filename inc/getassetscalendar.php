@@ -36,14 +36,14 @@ else
 {
 	foreach($assetsResult['assets'] as $x_value) 
 	{
-		$starttime = strtotime($x_value['details']['start_time'] .' UTC');
-		$endtime = strtotime($x_value['details']['end_time'] .' UTC');
+		$starttime = localtimezone($x_value['details']['start_time']);
+		$endtime = localtimezone($x_value['details']['end_time']);
 
 		$data[] = array(
 		  'id'   => $row["id"],
 		  'title'   => "Not Available",
-		  'start'   => date('Y-m-d H:i:s', $starttime),
-		  'end'   => date('Y-m-d H:i:s', $endtime)
+		  'start'   => $starttime,
+		  'end'   => $endtime
 		);
 
 	}
