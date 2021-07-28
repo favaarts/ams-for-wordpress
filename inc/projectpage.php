@@ -761,7 +761,9 @@ jQuery(document).ready(function($) {
                     autostart: "false",
                     sources: [{
                         file: amssinglevideo
-                    }]
+                    }],
+                    cast: {},
+					ga: {}
             });
         }
         else if(audiofileAttachment)
