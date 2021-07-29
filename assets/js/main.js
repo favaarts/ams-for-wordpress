@@ -6,7 +6,7 @@ jQuery( document ).ready(function() {
 	console.log(timezone_offset_minutes);
 	
 	 var date = new Date();
-	 var minutes = 5;
+	 var minutes = 60;
 	 date.setTime(date.getTime() + (minutes * 60 * 1000));
 
 	jQuery.cookie("timezoneoffset", timezone_offset_minutes , { expires: date });

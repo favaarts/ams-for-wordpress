@@ -1874,3 +1874,21 @@ img.organizationlogo {
     display: flex;
     flex-wrap: wrap;
 }
+
+.assetsdetail .fc-toolbar .fc-left
+{
+    font-size: 14px;
+}
+.assetsdetail .event-detail-sec .left-sec h2 {
+    font-size: 18px;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+.assetsdetail .fc-toolbar .fc-right
+{
+    font-size: 14px;
+}
+.fc-day-header {
+    font-size: 14px;
+    font-weight: 400;
+}
