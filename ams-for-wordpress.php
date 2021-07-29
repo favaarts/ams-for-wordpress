@@ -383,7 +383,7 @@ function localtimezone($utc = 0)
     }
     else
     {
-        $timezone = "";
+        $timezone = 0;
     }
     
     $timezone_offset_minutes = $timezone; 
