@@ -140,6 +140,8 @@ if(isset($_SESSION["projectpassword"]) || empty($blocks[0]['attrs']['project_pro
                                 
                                 if($arrayResult['project']['creator'])
                                 {
+                                    if (!isset($blocks[0]['attrs']['remove_submittedby']))
+                                    {
                                     echo "<div class='enrollment enrtop'>
                                         <h3>Submitted By</h3>";
                                       if ($blocks[0]['attrs']['projecttomember'] && $connectmemberblocks[0]['blockName'] == "wpdams-amsnetwork-member/amsnetwork-block-member")  
@@ -154,6 +156,7 @@ if(isset($_SESSION["projectpassword"]) || empty($blocks[0]['attrs']['project_pro
                                       }
                                         
                                     "</div>";
+                                    }
                                 }
 
                                 foreach($attributeCrewResult['project_attributes'] as $x_value) 

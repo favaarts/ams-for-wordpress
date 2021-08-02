@@ -2285,17 +2285,17 @@ function search_event_action()
         $blocks = parse_blocks($post->post_content);
         $gridlayout = $blocks[0]['attrs']['radio_attr_event'];
         
-        echo "<input type='hidden' id='totalprogram' value='".$arrayResult['meta']['total_count']."'>";
 
         if($gridlayout == "list_view")
         {
+            echo "<input type='hidden' id='totalprogram' value='".$arrayResult['meta']['total_count']."'>";
             foreach($arrayResult['programs'] as $x_value) 
             { 
                   if(isset($x_value['id']))
                   {
 
                    $assetstitle = (strlen($x_value['name']) > 43) ? substr($x_value['name'],0,40).'...' : $x_value['name'];  
-                //List View
+                
                 echo "<div class='listview-events'>";
                   echo "<div class='productstyle-list-items'>";
                        
@@ -2330,16 +2330,7 @@ function search_event_action()
                             echo "</div>";    
                           }
                         }   
-                      /*if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
-                      {                                    
-                          
-                      }
-                      else
-                      {
-                           echo "<div class='product-img'>";
-                              echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
-                           echo "</div>";
-                      }*/
+                      
 
                       echo "<div class='product-content'>";
                         echo "<a href='".site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id'])."'> <p class='product-title'>". $x_value['name'] ."</p> </a>";
@@ -2373,18 +2364,20 @@ function search_event_action()
                           {
                           echo "<p class='locationname'><strong>Location: </strong>".$x_value['location']."</p>";
                           }
-                          //earlybird_cutoff
-                          $earlybirddate=$x_value['earlybird_cutoff'];
-                          if(empty($earlybirddate))
+                          
+                          if (!isset($blockdata['earlybird']))
                           {
-                            echo "<p>No Date Scheduled</P>";
-                          }
-                          else
-                          {
-                            echo "<p class='product-date'><span class='datetitle'><strong>Early Bird Registration Deadline: </strong> </span>".date('D, M d Y', strtotime($earlybirddate))."</P>"; 
-                          }
+                              $earlybirddate=$x_value['earlybird_cutoff'];
+                              if(empty($earlybirddate))
+                              {
+                                echo "<p>No Date Scheduled</P>";
+                              }
+                              else
+                              {
+                                echo "<p class='product-date'><span class='datetitle'><strong>Early Bird Registration Deadline: </strong> </span>".date('D, M d Y', strtotime($earlybirddate))."</P>"; 
+                              }
+                          }    
 
-                          //drop_cutoff
                           $dropdate=$x_value['drop_cutoff'];
                           if(empty($dropdate))
                           {
@@ -2399,13 +2392,50 @@ function search_event_action()
                         
                     echo "</div>";
                 echo "</div>";
-                //End list view
-                   } // End if
-            } // End foreach
+                
+                   } 
+            }
+        }
+        else if($gridlayout == "calendar_view")
+        {
+            foreach($arrayResult['programs'] as $x_value) 
+            {
+                $eventtime = get_eventscheduletime($x_value['id']);
+
+                $eventStatus = $x_value['status'];
+                if($eventStatus = 1)
+                {
+                    $eventStatusbg = "eventactive";
+                }
+                else if($eventStatus = 2)
+                {
+                    $eventStatusbg = "eventcancelled";
+                }
+                else if($eventStatus = 3)
+                {
+                    $eventStatusbg = "eventfinished";
+                }
+
+                foreach ($eventtime['json']['scheduled_program_dates'] as $daytime) 
+                { 
+                   $starttime = date('Y-m-d h:i:s', strtotime($daytime['start']));
+
+                     $data[] = array(
+                      'title'   => $x_value['name'],
+                      'start'   => $starttime,
+                      'url' => site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id']),
+                      'className' => $eventStatusbg
+                    );
+                }
+                
+            }
+
+            echo json_encode($data);
+            die();
         }
         else
         {
-
+            echo "<input type='hidden' id='totalprogram' value='".$arrayResult['meta']['total_count']."'>";
             foreach($arrayResult['programs'] as $x_value) { 
 
                     if(isset($x_value['id']))
