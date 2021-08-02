@@ -719,8 +719,8 @@ function get_amsprogramdata($accesstoken, $program_id)
     $returnarr = isset($arrayResultData) ? $arrayResultData['program'] : [];
     return $returnarr;
 }
-add_action('wp_ajax_get_amsmemberlogindata','get_amsmemberlogindata');
-add_action('wp_ajax_nopriv_get_amsmemberlogindata','get_amsmemberlogindata');
+add_action('wp_ajax_get_amsprogramdata','get_amsprogramdata');
+add_action('wp_ajax_nopriv_get_amsprogramdata','get_amsprogramdata');
 // End AMS events program data
 
 // AMS users specific prgram registration
