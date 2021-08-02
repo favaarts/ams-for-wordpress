@@ -15,9 +15,7 @@ function amslogin_function( $slug ) {
     else:
         $logindata = [];
     endif;
-
-   // echo "<pre/>";print_r($usersData); exit;
-?>
+    ?>
 
 <div id="category" class="category cat-wrap">
 
@@ -39,14 +37,14 @@ main-content main-content-four-col - this class is for four columns.
       <div class="right-col-wrap">
         <div class="amsloginform">
             <div class="post-form-main">
-              <?php
+              <?php 
               if(isset($_SESSION["username"]))  
               {
                 echo '<p>Hii, ' . $_SESSION["username"] . '</p>';
   
                 echo '<h3>Access Token </h3><p>'.$_SESSION["accesstoken"]. '</p>';
               ?>
-              <a class="text-info" href="javascript:void(0);" onclick="redirectAMSWithKey()">AMS Link</a>
+               <a class="text-info" href="javascript:void(0);" onclick="redirectAMSWithKey()">AMS Link</a>
                 <div class="container">
                   <div class="row">
                     <div class="col-8">
@@ -442,8 +440,7 @@ main-content main-content-four-col - this class is for four columns.
 
 
 <script type="text/javascript">
-
- //start function for use of redirecting on AMS panel when login with wp 
+//start function for use of redirecting on AMS panel when login with wp 
  function redirectAMSWithKey() 
  {
     var user_id = '<?php echo $_SESSION["user_id"]; ?>';
@@ -576,7 +573,7 @@ jQuery(document).ready(function($) {
     jQuery("#updateMsg").hide();
     jQuery("#inifiniteLoader").hide(); 
     jQuery("#inifiniteLoaderUpdate").hide(); 
-   
+    
     $('#btnSubmit').click(function(){
 
         var amsemailoruser = jQuery('#amsemailoruser').val();
@@ -656,67 +653,65 @@ jQuery(document).ready(function($) {
         }
         if(websiteurl == false){
           if(jQuery('#websiteurl').length == 0){
-             jQuery("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+             $("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             jQuery('#website').focus();
+             $('#website').focus();
           }
           focusSet = true;
         }else{
-          jQuery("#website").parent().next(".validation").remove(); // remove it
+          $("#website").parent().next(".validation").remove(); // remove it
         }
         if(facebookurl == false){
           if(jQuery('#facebookurl').length == 0){
-             jQuery("#facebook").parent().after("<div class='validation' id='facebookurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+             $("#facebook").parent().after("<div class='validation' id='facebookurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             jQuery('#facebook').focus();
+             $('#facebook').focus();
           }
           focusSet = true;
         }else{
-          jQuery("#facebook").parent().next(".validation").remove(); // remove it
+          $("#facebook").parent().next(".validation").remove(); // remove it
         }
         if(twitterurl == false){
           if(jQuery('#twitterurl').length == 0){
-            jQuery("#twitter").parent().after("<div class='validation' id='twitterurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            $("#twitter").parent().after("<div class='validation' id='twitterurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             jQuery('#twitter').focus();
+             $('#twitter').focus();
            }
            focusSet = true;
         }else{
-          jQuery("#twitter").parent().next(".validation").remove(); // remove it
+          $("#twitter").parent().next(".validation").remove(); // remove it
         }
         if(instagramurl == false){
           if(jQuery('#instagramurl').length == 0){
-            jQuery("#instagram").parent().after("<div class='validation' id='instagramurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            $("#instagram").parent().after("<div class='validation' id='instagramurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             jQuery('#instagram').focus();
+             $('#instagram').focus();
           }
           focusSet = true;
         }else{
-          jQuery("#instagram").parent().next(".validation").remove(); // remove it
+          $("#instagram").parent().next(".validation").remove(); // remove it
         }
         if(linkedinurl == false){
           if(jQuery('#linkedinurl').length == 0){
-            jQuery("#linkedin").parent().after("<div class='validation' id='linkedinurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            $("#linkedin").parent().after("<div class='validation' id='linkedinurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             jQuery('#linkedin').focus();
+             $('#linkedin').focus();
           }
           focusSet = true;
         }else{
-          jQuery("#linkedin").parent().next(".validation").remove(); // remove it
+          $("#linkedin").parent().next(".validation").remove(); // remove it
         }
         if(youtubeurl == false){
           if(jQuery('#youtubeurl').length == 0){
-            jQuery("#youtube").parent().after("<div class='validation' id='youtubeurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            $("#youtube").parent().after("<div class='validation' id='youtubeurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             jQuery('#youtube').focus();
+             $('#youtube').focus();
           }
           focusSet = true;
         }else{
-          jQuery("#youtube").parent().next(".validation").remove(); // remove it
+          $("#youtube").parent().next(".validation").remove();
         }
-        if(focusSet == true){ 
-          return false;
-        }
+        if(focusSet == true){ return false; }
         e.preventDefault(); // prevent actual form submit
         if(confirm("Are you sure want to update the information?")) {
           this.click;
@@ -762,7 +757,7 @@ jQuery(document).ready(function($) {
           });
         } // condition of confirm box end here
     });
-});    
+});
 </script>
 
   
