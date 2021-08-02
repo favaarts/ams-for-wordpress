@@ -633,19 +633,130 @@ jQuery(document).ready(function($) {
 
 function redirectAMSWithKey() 
 {
-  var user_id = '<?php echo $_SESSION["user_id"]; ?>';
-  var organization_id = '<?php echo $organization_id; ?>';
-  var user_accesstoken = '<?php echo $_SESSION["accesstoken"]; ?>';
-  var encryptedKey = CryptoJS.AES.encrypt(organization_id, "My Secret Passphrase");
-  var userIdKey = CryptoJS.AES.encrypt(user_id, "My Secret Passphrase");
-  var accessTokenKey = CryptoJS.AES.encrypt(user_accesstoken, "My Secret Passphrase");
-  var url = "https://<?php echo $subdomain; ?>.amsnetwork.ca/projects/podcast-fb8a53a3-7209-496d-930a-bb2fd743176d/media?oid=" + encodeURIComponent(encryptedKey);
-  jQuery.cookie("organizationId", encryptedKey);
-  jQuery.cookie("userId", userIdKey);
-  jQuery.cookie("userAccessToken", accessTokenKey);
-  window.location.href = url;
-  return false;
+    var user_id = '<?php echo $_SESSION["user_id"]; ?>';
+    var organization_id = '<?php echo $organization_id; ?>';
+    var user_accesstoken = '<?php echo $_SESSION["accesstoken"]; ?>';
+    var encryptedKey = CryptoJS.AES.encrypt(organization_id, "My Secret Passphrase");
+    var userIdKey = CryptoJS.AES.encrypt(user_id, "My Secret Passphrase");
+    var accessTokenKey = CryptoJS.AES.encrypt(user_accesstoken, "My Secret Passphrase");
+    var url = "https://<?php echo $subdomain; ?>.amsnetwork.ca/projects/podcast-fb8a53a3-7209-496d-930a-bb2fd743176d/media?oid=" + encodeURIComponent(encryptedKey);
+    jQuery.cookie("organizationId", encryptedKey);
+    jQuery.cookie("userId", userIdKey);
+    jQuery.cookie("userAccessToken", accessTokenKey);
+    window.location.href = url;
+    return false;
 }
+
+ //start function for use of register user for specific program
+ function registerProgram() 
+ {
+    var user_id = '<?php echo $_SESSION["user_id"]; ?>';
+    var program_id = '<?php echo $program_id; ?>';
+    var first_name = '<?php echo $logindata["first_name"] ?>';
+    var last_name = '<?php echo $logindata["last_name"]; ?>';
+    var access_token = '<?php echo $_SESSION["accesstoken"]; ?>';
+    jQuery.ajax({
+       url: amsjs_ajax_url.ajaxurl,
+       type:'POST',
+       cache: false,
+       data: { 
+              action: 'programRegistration',
+              user_id:user_id,
+              program_id:program_id,
+              access_token:access_token,
+              floating_first_name:first_name,
+              floating_last_name:last_name
+             },
+       dataType: 'JSON',
+       beforeSend: function(){
+       // Show image container
+          jQuery("#inifiniteLoaderRegisration").show();
+          //jQuery("#btnSubmit").attr("disabled", true);
+       },
+       success: function (data) {
+          var mydata = data.msg;
+           if(mydata == 'valid'){
+              jQuery(".registerBtn a#registerBtn").text('Registered');
+              jQuery(".registerBtn a#registerBtn").attr("onclick", "").unbind("click");
+              var account_id = '<?php echo $account_id; ?>';
+              var filter = 'current';
+              var access_token = '<?php echo $_SESSION["accesstoken"]; ?>';
+              var event_title = '<?php echo $programData['name']; ?>';
+                jQuery.ajax({
+                   url: amsjs_ajax_url.ajaxurl,
+                   type:'POST',
+                   cache: false,
+                   data: { 
+                          action: 'invoicesData',
+                          account_id:account_id,
+                          filter:filter,
+                          access_token:access_token,
+                          event_title:event_title
+                         },
+                   dataType: 'JSON',
+                   success: function (response) {
+                    jQuery("#inifiniteLoaderRegisration").hide();
+                    var programId = program_id;
+                    var invoicesData = response.invoicedata;
+                    var registerId = invoicesData.registration_id;
+                    var invoiceId = invoicesData.reference;
+                    var status = invoicesData.status_string;
+                    var invoiceamount = invoicesData.total_due_cached;
+                    jQuery('#invoicedata').html('<p><b>Invocie Number - </b>'+invoiceId+'</p><p><b>Amount :- </b>'+invoiceamount+'</p>');
+                    jQuery('#invoicedata').show();
+                    var html = '<a href="javascript:void(0);" id="paymentBtn" class="btn ml-1">Payment</a> | ';
+                    jQuery('.registerBtn').prepend(html);
+                   }
+                });
+           } else{
+              jQuery("#inifiniteLoaderRegisration").hide();
+              alert('Something went wrong try again!');
+           }
+       }//end of success
+    });
+ }//end of function
+
+ //start function for use of register user for specific program
+ function verifyRegistration() 
+ {
+    jQuery("#verifystatusMsg").hide();
+    var user_id = '<?php echo $_SESSION["user_id"]; ?>';
+    var access_token = '<?php echo $_SESSION["accesstoken"]; ?>';
+    jQuery.ajax({
+       url: amsjs_ajax_url.ajaxurl,
+       type:'POST',
+       cache: false,
+       data: { 
+              action: 'verifyRegistrationStatus',
+              user_id:user_id,
+              access_token:access_token
+             },
+       dataType: 'JSON',
+       beforeSend: function(){
+        // Show image container
+            jQuery("#inifiniteLoaderRegisration").show();
+            //jQuery("#btnSubmit").attr("disabled", true);
+       },
+       success: function (response) {
+         if(response.msg == 'invalid'){
+            jQuery("#inifiniteLoaderRegisration").hide();
+            jQuery("#verifystatusMsg").html("<p style='color:red;'>No current registration.</p>");
+            jQuery("#verifystatusMsg").show();
+            setTimeout(function() {
+                jQuery('#verifystatusMsg').fadeOut('fast');
+            }, 5000);
+         } else{
+            jQuery("#inifiniteLoaderRegisration").hide();
+            var program = response.currentprogram;
+            jQuery("#verifystatusMsg").html("<p style='color:green;'><b>Current Registration </b><br/>"+ program +"</p>");
+            jQuery("#verifystatusMsg").show();
+            setTimeout(function() {
+                jQuery('#verifystatusMsg').fadeOut('fast');
+            }, 10000);
+         }
+       }
+    });
+ }//end of function
 </script>
 
   
