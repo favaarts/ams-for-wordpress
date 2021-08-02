@@ -1892,3 +1892,55 @@ img.organizationlogo {
     font-size: 14px;
     font-weight: 400;
 }
+
+.eventactive
+{
+    background-color: #84b708 !important;
+    border-color: #84b708 !important;
+    color: #fff;
+}
+.eventcancelled
+{
+    background-color: #fbbe30 !important;
+    border-color: #fbbe30 !important;
+}
+.eventfinished
+{
+    background-color: #ff3131 !important;
+    border-color: #ff3131 !important;
+}
+
+.amsblock-amseventlisting .fc-time{display: none;}
+
+.calender-view-main {display: block; }
+.calender-view-main .searchbox {display: none; }
+.calender-view-main .filter-col {width: 100%; display: flex; margin-left: 0; }
+.calender-view-main .othersearch {width: 100%; display: flex; margin: 0 -10px; }
+.calender-view-main .othersearch > div {width: 25%; padding: 0 10px; }
+.calender-view-main .calender-view-main .calender-col {margin-left: 0; }
+.calender-view-main .othersearch .searchbutton {width: 10%; }
+
+@media(max-width: 991px){
+.calender-view-main .alltypeevent .ul-cat-wrap, .calender-view-main .allstatus .ul-cat-wrap, .calender-view-main .evtlocation .ul-cat-wrap, .calender-view-main .taglabels .ul-cat-wrap {font-size: 14px; padding: 4px 8px; }
+    
+}
+
+
+@media(max-width: 767px){
+    .calender-view-main .othersearch > div {width: 100%; }
+    .calender-view-main .othersearch {display: block; }
+    .calender-view-main .othersearch .searchbutton .buttonloader {width: 28px; padding: 0; display: none; position: absolute; left: 50%; transform: translateX(-50%); }
+    .calender-view-main .calender-col{margin-top: 45px; }
+    .calender-view-main .othersearch .searchbutton {width: 100%; }
+    .calender-view-main .alltypeevent .ul-cat-wrap, .calender-view-main .allstatus .ul-cat-wrap, .calender-view-main .evtlocation .ul-cat-wrap, .calender-view-main .taglabels .ul-cat-wrap {margin: 0px 0px 16px 0px; }
+
+}
+
+a.ex1:hover, a.ex1:active {
+  color: red;
+}
+
+.eventactive:hover ,.eventactive:active {
+    background-color: #728641 !important;
+    border-color: #728641 !important;
+}

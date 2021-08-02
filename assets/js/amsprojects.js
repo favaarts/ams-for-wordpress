@@ -76,6 +76,10 @@
         type: 'boolean',
         default: true
     },
+    remove_submittedby: {
+        type: 'boolean',
+        default: true
+    },
     radio_attr_project: {
       type: 'string',
       default: 'three_col',
@@ -194,6 +198,13 @@
                  props.setAttributes( { remove_viewmore: value } );
               },
               checked: props.attributes.remove_viewmore,
+            }),
+            el(ToggleControl, {
+              label: 'Show/Hide Submitted By',
+              onChange: ( value ) => {
+                 props.setAttributes( { remove_submittedby: value } );
+              },
+              checked: props.attributes.remove_submittedby,
             }),
             el( TextControl,
               {

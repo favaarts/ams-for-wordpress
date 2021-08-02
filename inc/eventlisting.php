@@ -2,6 +2,17 @@
 
 function amseventlisting_function( $slug ) {
     ob_start();  
+
+$blockdata = get_sidebaroption();
+if($blockdata['radio_attr_event'] == "calendar_view")
+{ 
+
+echo "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css' />
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js'></script>";
+}   
     ?>
 
 <div id="category" class="category cat-wrap">
@@ -18,7 +29,7 @@ main-content main-content-four-col - this class is for four columns.
 
 <?php
 
-$blockdata = get_sidebaroption();
+
 
 $bgcolor = get_option('wpams_button_colour_btn_label');
 if(empty($bgcolor))
@@ -43,9 +54,14 @@ if($gridlayout == "four_col")
    $blockclass = 'main-content-four-col';
    $eventperpage = $pagination;
 }
-elseif($gridlayout == "two_col")
+else if($gridlayout == "two_col")
 {
   $blockclass = '';
+  $eventperpage = $pagination;
+}
+else if($gridlayout == "calendar_view")
+{
+  $blockclass = 'calender-view-main';
   $eventperpage = $pagination;
 }
 else
@@ -59,10 +75,9 @@ else
 <div class="wp-block-columns main-content <?= $blockclass; ?>" >
    
   <input type="hidden" name="slugurl" id="slugurl" value="<?=$post_slug?>">  
+  <input type="hidden" id="gridlayoutview" value="<?=$blockdata['radio_attr_event'] ?>">
 
     <?php
-    //Block option
-    //$blockdata = get_sidebaroption();
     if (!isset($blockdata['eventsidebar']))
       {
     ?>
@@ -177,27 +192,26 @@ else
         
 
         <?php
-            $arrayResult = get_eventlisting(NULL);
-            
+          $arrayResult = get_eventlisting(NULL);
+          
 
-            global $post;
-            $pageid = $post->ID;
-            $pageslug = $post->post_name;
+          global $post;
+          $pageid = $post->ID;
+          $pageslug = $post->post_name;
 
-            if($blockdata['radio_attr_event'] == "list_view")
-            {
+          if($blockdata['radio_attr_event'] == "list_view")
+          {
                 foreach($arrayResult['programs'] as $x_value) 
                 { 
                   if(isset($x_value['id']))
                   {
 
                    $assetstitle = (strlen($x_value['name']) > 43) ? substr($x_value['name'],0,40).'...' : $x_value['name'];  
-                //List View
+                
                 echo "<div class='listview-events'>";
                   echo "<div class='productstyle-list-items'>";
                      
                       
-                        // Check if organization toogle is ON
                         if (isset($blockdata['organizationevents']))
                         {
                           if(empty($x_value['organization_logo']))
@@ -229,17 +243,6 @@ else
                           }
                         }     
                       
-                          
-                      /*if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
-                      {                                    
-                          
-                      }
-                      else
-                      {
-                           echo "<div class='product-img'>";
-                              echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
-                           echo "</div>";
-                      }*/
 
                       echo "<div class='product-content'>";
                         echo "<a href='".site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id'])."'> <p class='product-title'>". $x_value['name'] ."</p> </a>";
@@ -294,15 +297,20 @@ else
                       
                         
                     echo "</div>";
-                echo "</div>";
-                //End list view
-                   } // End if
-                } // End foreach
+                  echo "</div>";
+                
+                   } 
+                } 
 
         
-        } // End list view if condition
-        else
-        { 
+          }
+          else if($blockdata['radio_attr_event'] == "calendar_view")
+          {
+              echo "<div id='calendar_div'>";
+              echo "</div>";
+          } 
+          else
+          { 
           
             foreach($arrayResult['programs'] as $x_value) { 
 
@@ -386,9 +394,9 @@ else
                 }
             }
                         
-         //End grid view                
-        } // End grid view else condition      
-          ?>
+                        
+          }    
+        ?>
             
        </div>  
             <input type="hidden" id="inputpageslug" value="<?php echo $pageslug; ?>">
@@ -416,13 +424,226 @@ jQuery(document).ready(function($) {
 
    var count = 2;
    var total = jQuery("#inifiniteLoader").data("totalequipment");
-   //var total = 22;
-   
+   var gridlayoutview = jQuery("#gridlayoutview").val();
    $('#inifiniteLoader').hide();
    console.log(total);
 
-   /*Dropdown Ajax call*/
-   $("#alltypeevent").change(function() {
+  if(gridlayoutview == 'calendar_view')
+   {
+      $('.eventbutton').hide();
+
+      jQuery('#calendar_div').fullCalendar({
+        editable:false,
+        header:{
+         left:'prev,next today',
+         center:'title',
+         right:'month,agendaWeek,agendaDay'
+        },
+        defaultDate: moment().format("YYYY-MM-DD"),
+        events: <?php include( plugin_dir_path( __FILE__ ) . 'geteventcalendar.php'); ?>,
+        selectable:true,
+        selectHelper:true,
+        editable:true,
+        eventOverlap: function(stillEvent, movingEvent) {
+            return stillEvent.allDay && movingEvent.allDay;
+          }
+        ,
+        eventClick: function(event) {
+          if (event.url) {
+              window.open(event.url, "_blank");
+              return false;
+          }  
+        },
+        eventMouseover: function(calEvent, jsEvent) {
+            var tooltip = '<div class="tooltipevent" style="width:auto;height:auto;background:#ccc;position:absolute;z-index:10001;border-radius: 2px;padding: 5px;">'+ calEvent.title+'</div>';
+            var $tooltip = $(tooltip).appendTo('body');
+
+            $(this).mouseover(function(e) {
+                $(this).css('z-index', 10000);
+                $tooltip.fadeIn('500');
+                $tooltip.fadeTo('10', 1.9);
+            }).mousemove(function(e) {
+                $tooltip.css('top', e.pageY + 10);
+                $tooltip.css('left', e.pageX + 20);
+            });
+        },
+
+        eventMouseout: function(calEvent, jsEvent) {
+            $(this).css('z-index', 8);
+            $('.tooltipevent').remove();
+        }, 
+      });
+
+      $("#alltypeevent").change(function() {
+        
+        event.preventDefault();
+        
+        var eventtype = $(this).val();
+        var eventstatus = jQuery('#allstatus').val();
+        var evtlocation = jQuery('#evtlocation').val();
+        var pageslug = jQuery('#inputpageslug').val();
+        var pageid = jQuery('#inputpageid').val();
+
+          jQuery.ajax({
+              url: amsjs_ajax_url.ajaxurl,
+              type: 'post',
+              data: { action: 'get_eventlocation', eventtype: eventtype, eventstatus: eventstatus},
+              success: function(data) {
+                jQuery('#evtlocation').html(data);
+              }
+          });
+
+          jQuery.ajax({
+              url: amsjs_ajax_url.ajaxurl,
+              type: 'post',
+              dataType: 'JSON',
+              data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid},
+              success: function(data) {
+                //console.log(data)
+                jQuery(".buttonloader").css("display","none");
+                getEventCalendarData(data)
+              }
+          });
+
+      });
+
+
+      $("#allstatus").change(function() {
+          
+          var eventtype = jQuery('#alltypeevent').val();
+          var eventstatus = $(this).val();
+          var evtlocation = jQuery('#evtlocation').val();
+          var pageslug = jQuery('#inputpageslug').val();
+          var pageid = jQuery('#inputpageid').val();
+
+          jQuery.ajax({
+              url: amsjs_ajax_url.ajaxurl,
+              type: 'post',
+              data: { action: 'get_eventlocation', eventtype: eventtype, eventstatus: eventstatus},
+              success: function(data) {
+                jQuery('#evtlocation').html(data);
+              }
+          });
+
+          jQuery.ajax({
+              url: amsjs_ajax_url.ajaxurl,
+              type: 'post',
+              dataType: 'JSON',
+              data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid},
+              beforeSend: function(){
+                  jQuery(".buttonloader").css("display","initial");
+              },
+              success: function(data) {
+                jQuery(".buttonloader").css("display","none");
+                getEventCalendarData(data)
+              }
+          });
+
+      });
+
+       $("#evtlocation").change(function() {
+        
+        var eventtype = jQuery('#alltypeevent').val();
+        var eventstatus = jQuery('#allstatus').val();
+        var evtlocation = $(this).val();
+        var pageslug = jQuery('#inputpageslug').val();
+        var pageid = jQuery('#inputpageid').val();
+
+        jQuery.ajax({
+              url: amsjs_ajax_url.ajaxurl,
+              type: 'post',
+              dataType: 'JSON',
+              data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid},
+              beforeSend: function(){
+              // Show image container
+                  jQuery(".buttonloader").css("display","initial");
+              },
+              success: function(data) {
+                jQuery(".buttonloader").css("display","none");
+                getEventCalendarData(data)
+              }
+          });
+
+      });
+
+      $("#taglabels").change(function() {
+    
+        var eventtype = jQuery('#alltypeevent').val();
+        var eventstatus = jQuery('#allstatus').val();
+        var evtlocation = jQuery("#evtlocation").val();
+        var taglabels = jQuery(this).val();
+        var pageslug = jQuery('#inputpageslug').val();
+        var pageid = jQuery('#inputpageid').val();
+
+        jQuery.ajax({
+              url: amsjs_ajax_url.ajaxurl,
+              type: 'post',
+              dataType: 'JSON',
+              data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid,taglabels: taglabels},
+              beforeSend: function(){
+                  jQuery(".buttonloader").css("display","initial");
+              },
+              success: function(data) {
+                jQuery(".buttonloader").css("display","none");
+                getEventCalendarData(data)
+              }
+          });
+
+      }); 
+
+      function getEventCalendarData(eventsdata)
+      {
+          $('#calendar_div').fullCalendar( 'destroy' );
+
+          jQuery('#calendar_div').fullCalendar({
+              editable:false,
+              header:{
+               left:'prev,next today',
+               center:'title',
+               right:'month,agendaWeek,agendaDay',
+              },
+              defaultDate: moment().format("YYYY-MM-DD"),
+              events: eventsdata,
+              selectable:true,
+              selectHelper:true,
+              editable:true,
+              eventOverlap: function(stillEvent, movingEvent) {
+                  return stillEvent.allDay && movingEvent.allDay;
+                }
+              ,
+              eventClick: function(event) {
+                if (event.url) {
+                    window.open(event.url, "_blank");
+                    return false;
+                }  
+              },
+              eventMouseover: function(calEvent, jsEvent) {
+                  var tooltip = '<div class="tooltipevent" style="width:auto;height:auto;background:#ccc;position:absolute;z-index:10001;border-radius: 2px;padding: 5px;">'+ calEvent.title+'</div>';
+                  var $tooltip = $(tooltip).appendTo('body');
+
+                  $(this).mouseover(function(e) {
+                      $(this).css('z-index', 10000);
+                      $tooltip.fadeIn('500');
+                      $tooltip.fadeTo('10', 1.9);
+                  }).mousemove(function(e) {
+                      $tooltip.css('top', e.pageY + 10);
+                      $tooltip.css('left', e.pageX + 20);
+                  });
+              },
+
+              eventMouseout: function(calEvent, jsEvent) {
+                  $(this).css('z-index', 8);
+                  $('.tooltipevent').remove();
+              },  
+          });
+      }
+
+ }
+ else
+ { 
+
+
+    $("#alltypeevent").change(function() {
       count = 2;     
       event.preventDefault();
       
@@ -435,29 +656,25 @@ jQuery(document).ready(function($) {
       var eventperpg = <?php echo $pagination; ?>;
       console.log(eventperpg);
 
-      // Testing
         jQuery.ajax({
             url: amsjs_ajax_url.ajaxurl,
             type: 'post',
             data: { action: 'get_eventlocation', eventtype: eventtype, eventstatus: eventstatus},
             success: function(data) {
               jQuery('#evtlocation').html(data);
-              //jQuery('#seemore').hide();
             }
         });
-      //
+
 
         jQuery.ajax({
             url: amsjs_ajax_url.ajaxurl,
             type: 'post',
             data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid,eventperpg: eventperpg},
             beforeSend: function(){
-            // Show image container
                 jQuery(".buttonloader").css("display","initial");
             },
             success: function(data) {
               jQuery('.right-col-wrap').html(data);
-              //jQuery('#seemore').hide();
               jQuery('#getevent').val('');
               jQuery(".buttonloader").css("display","none");
               AjaxInitProgram()
@@ -480,29 +697,25 @@ jQuery(document).ready(function($) {
       var eventperpg = <?php echo $pagination; ?>;
       console.log(eventperpg);
 
-      // Testing
         jQuery.ajax({
             url: amsjs_ajax_url.ajaxurl,
             type: 'post',
             data: { action: 'get_eventlocation', eventtype: eventtype, eventstatus: eventstatus},
             success: function(data) {
               jQuery('#evtlocation').html(data);
-              //jQuery('#seemore').hide();
             }
         });
-      //
+
 
         jQuery.ajax({
             url: amsjs_ajax_url.ajaxurl,
             type: 'post',
             data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid,eventperpg: eventperpg},
             beforeSend: function(){
-            // Show image container
                 jQuery(".buttonloader").css("display","initial");
             },
             success: function(data) {
               jQuery('.right-col-wrap').html(data);
-              //jQuery('#seemore').hide();
               jQuery('#getevent').val('');
               jQuery(".buttonloader").css("display","none");
               AjaxInitProgram()
@@ -529,12 +742,10 @@ jQuery(document).ready(function($) {
             type: 'post',
             data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid,eventperpg: eventperpg},
             beforeSend: function(){
-            // Show image container
                 jQuery(".buttonloader").css("display","initial");
             },
             success: function(data) {
               jQuery('.right-col-wrap').html(data);
-              //jQuery('#seemore').hide();
               jQuery('#getevent').val('');
               jQuery(".buttonloader").css("display","none");
               AjaxInitProgram()
@@ -542,9 +753,7 @@ jQuery(document).ready(function($) {
         });
 
     });
-   /* End Dropdown ajax*/
 
-  /*Select Labels*/
     $("#taglabels").change(function() {
       count = 2;     
       event.preventDefault();
@@ -559,17 +768,15 @@ jQuery(document).ready(function($) {
       var eventperpg = <?php echo $pagination; ?>;
       console.log(eventperpg);
 
-      jQuery.ajax({
+        jQuery.ajax({
             url: amsjs_ajax_url.ajaxurl,
             type: 'post',
             data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid,eventperpg: eventperpg,taglabels: taglabels},
             beforeSend: function(){
-            // Show image container
                 jQuery(".buttonloader").css("display","initial");
             },
             success: function(data) {
               jQuery('.right-col-wrap').html(data);
-              //jQuery('#seemore').hide();
               jQuery('#getevent').val('');
               jQuery(".buttonloader").css("display","none");
               AjaxInitProgram()
@@ -577,9 +784,8 @@ jQuery(document).ready(function($) {
         });
 
     });
-    /*End Select Labels*/ 
 
-    /*Select organizations*/
+
     $("#organizations").change(function() {
       count = 2;     
       event.preventDefault();
@@ -595,17 +801,15 @@ jQuery(document).ready(function($) {
       var eventperpg = <?php echo $pagination; ?>;
       console.log(eventperpg);
 
-      jQuery.ajax({
+        jQuery.ajax({
             url: amsjs_ajax_url.ajaxurl,
             type: 'post',
             data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid,eventperpg: eventperpg,taglabels: taglabels, organizations: organizations},
             beforeSend: function(){
-            // Show image container
                 jQuery(".buttonloader").css("display","initial");
             },
             success: function(data) {
               jQuery('.right-col-wrap').html(data);
-              //jQuery('#seemore').hide();
               jQuery('#getevent').val('');
               jQuery(".buttonloader").css("display","none");
               AjaxInitProgram()
@@ -613,41 +817,38 @@ jQuery(document).ready(function($) {
         });
 
     });
-    /*End Select organizations*/
+    
 
-  // On keyup
-  $("#getevent").keyup(function(){
 
-    count = 2;     
-    event.preventDefault();
+    $("#getevent").keyup(function(){
 
-    var getevent = jQuery('#getevent').val();
-    var eventtype = jQuery('#alltypeevent').val();
-    var eventstatus = jQuery('#allstatus').val();
-    var evtlocation = jQuery("#evtlocation").val();
-    var taglabels = jQuery("#taglabels").val();
-    var pageslug = jQuery('#inputpageslug').val();
-    var pageid = jQuery('#inputpageid').val();
-    var organizations = jQuery('#organizations').val();
+      count = 2;     
+      event.preventDefault();
 
-    var eventperpg = <?php echo $pagination; ?>;
-    console.log(eventperpg);
+      var getevent = jQuery('#getevent').val();
+      var eventtype = jQuery('#alltypeevent').val();
+      var eventstatus = jQuery('#allstatus').val();
+      var evtlocation = jQuery("#evtlocation").val();
+      var taglabels = jQuery("#taglabels").val();
+      var pageslug = jQuery('#inputpageslug').val();
+      var pageid = jQuery('#inputpageid').val();
+      var organizations = jQuery('#organizations').val();
 
-    jQuery.ajax({
-        url: amsjs_ajax_url.ajaxurl,
-        type: 'post',
-        data: { action: 'searcheventdata_action', getevent: getevent, organizations: organizations, eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid, eventperpg: eventperpg},
-        success: function(data) {
-          
-          jQuery('.right-col-wrap').html(data);
-          jQuery('#seemore').hide();
-        }
+      var eventperpg = <?php echo $pagination; ?>;
+      console.log(eventperpg);
+
+      jQuery.ajax({
+          url: amsjs_ajax_url.ajaxurl,
+          type: 'post',
+          data: { action: 'searcheventdata_action', getevent: getevent, organizations: organizations, eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid, eventperpg: eventperpg},
+          success: function(data) {
+            jQuery('.right-col-wrap').html(data);
+            jQuery('#seemore').hide();
+          }
+      });
+
     });
 
-  });
-  // End keyup
-
-    /*On serach ajax call =====================*/
     $('#searchdata').click(function(){
       count = 2;     
       event.preventDefault();
@@ -662,48 +863,41 @@ jQuery(document).ready(function($) {
       var eventperpg = <?php echo $pagination; ?>;
       console.log(eventperpg);
 
-      jQuery.ajax({
+        jQuery.ajax({
             url: amsjs_ajax_url.ajaxurl,
             type: 'post',
             data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid,eventperpg: eventperpg},
             beforeSend: function(){
-            // Show image container
                 jQuery(".buttonloader").css("display","initial");
             },
             success: function(data) {
               jQuery('.right-col-wrap').html(data);
-              //jQuery('#seemore').hide();
               jQuery('#getevent').val('');
               jQuery(".buttonloader").css("display","none");
               AjaxInitProgram()
             }
         });
     });
-    /*End On serach ajax call =================*/
+    
 
    
 
-  function AjaxInitProgram() {
-    var totalprogram = jQuery("#totalprogram").val();
-    total = totalprogram;
-    console.log(total);
-    if(total >= 10)
-    {
-      jQuery('#seemore').show();
-      jQuery(".para").hide();
-    }
-    else
-    {
-      jQuery('#seemore').hide();
-    }
-  }  
+    function AjaxInitProgram() {
+      var totalprogram = jQuery("#totalprogram").val();
+      total = totalprogram;
+      console.log(total);
+      if(total >= 10)
+      {
+        jQuery('#seemore').show();
+        jQuery(".para").hide();
+      }
+      else
+      {
+        jQuery('#seemore').hide();
+      }
+    }  
     
-   $('#seemore').click(function(){
-
-     /* var position = $(window).scrollTop();
-      var bottom = $(document).height() - $(window).height();*/
-        //$('#seemore').hide();
-        
+    $('#seemore').click(function(){
         var numItems = jQuery('.productstyle').length;
         var listnumItems = jQuery('.listview-events').length;   
         
@@ -730,41 +924,37 @@ jQuery(document).ready(function($) {
         }
         count++;
         
-   });
+    });
 
 
     function loadArticle(pageNumber){
-     //$('a#inifiniteLoader').show();
      var eventperpg = <?php echo $eventperpage; ?>;
-     /*console.log(amsjs_ajax_url.ajaxurl);
-     console.log("hello");*/
      var slugvar = $('#inputpageslug').val();
      var slugvarid = $('#inputpageid').val();
 
-     //
-     var eventtype = jQuery('#alltypeevent').val();
+      var eventtype = jQuery('#alltypeevent').val();
       var eventstatus = jQuery('#allstatus').val();
       var evtlocation = jQuery('#evtlocation').val();
       var taglabels = jQuery("#taglabels").val();
       var organizations = jQuery('#organizations').val();
-     //
 
-     $.ajax({
-       url: amsjs_ajax_url.ajaxurl,
-       type:'POST',
-       data: { action: 'geteventonclick_action', page:pageNumber, eventperpg:eventperpg, eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslugname: slugvar, pageslugid: slugvarid, taglabels: taglabels, organizations: organizations},
-       beforeSend: function(){
-        // Show image container
-            $("#inifiniteLoader").show();
-       },
-       success: function (html) {
-         jQuery('#inifiniteLoader').hide('1000');
-         jQuery('.right-col-wrap').append(html);
-         jQuery('#seemore').show();
-       }
-     });
-     return false;
+      $.ajax({
+         url: amsjs_ajax_url.ajaxurl,
+         type:'POST',
+         data: { action: 'geteventonclick_action', page:pageNumber, eventperpg:eventperpg, eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslugname: slugvar, pageslugid: slugvarid, taglabels: taglabels, organizations: organizations},
+         beforeSend: function(){
+              $("#inifiniteLoader").show();
+         },
+         success: function (html) {
+           jQuery('#inifiniteLoader').hide('1000');
+           jQuery('.right-col-wrap').append(html);
+           jQuery('#seemore').show();
+         }
+      });
+      return false;
     }
+
+  }  
    
 });    
 </script>
