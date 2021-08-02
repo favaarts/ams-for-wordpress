@@ -695,6 +695,189 @@ add_action('wp_ajax_get_amsmemberlogindetails','get_amsmemberlogindetails');
 add_action('wp_ajax_nopriv_get_amsmemberlogindetails','get_amsmemberlogindetails');
 // End AMS Member login
 
+// AMS events program data (This function for specific event's program datat get.)
+function get_amsprogramdata($accesstoken, $program_id)
+{
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+
+    $usersdataurl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs/".$program_id."?access_token=".$accesstoken."&method=get&format=json";
+    //In itiate cURL.
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$usersdataurl);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    //curl_setopt($ch, CURLOPT_TIMEOUT,500); // 500 seconds
+    //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    $arrayResultData = json_decode($json, true);
+    $returnarr = isset($arrayResultData) ? $arrayResultData['program'] : [];
+    return $returnarr;
+}
+add_action('wp_ajax_get_amsmemberlogindata','get_amsmemberlogindata');
+add_action('wp_ajax_nopriv_get_amsmemberlogindata','get_amsmemberlogindata');
+// End AMS events program data
+
+// AMS users specific prgram registration
+function programRegistration()
+{
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+    
+    $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
+    $program_id = isset($_POST['program_id']) ? $_POST['program_id'] : 0;
+    $accesstoken = isset($_POST['access_token']) ? $_POST['access_token'] : 0;
+    $floating_first_name = isset($_POST['floating_first_name']) ? $_POST['floating_first_name'] : '';
+    $floating_last_name    = isset($_POST['floating_last_name']) ? $_POST['floating_last_name'] : '';
+   // $file_attachment    = isset($_POST['file_attachment']) ? $_POST['file_attachment'] : [];
+    $token = 'Bearer '.$accesstoken;
+    // User data to send using HTTP PUT method in curl
+    $data = ['program_id'=>$program_id, 'user_id'=>$user_id, 'floating_first_name'=>$floating_first_name, 'floating_last_name'=>$floating_last_name];
+
+    // Data should be passed as json format
+    $data_json = json_encode($data);
+
+    // API URL to update data with employee id
+    $url = "https://wpd.amsnetwork.ca/api/v3/registrations";
+
+    // curl initiate
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+
+    $headers = array(
+       "Content-Type: application/json",
+       "Authorization: ".$token,
+    );
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+   // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: ' . strlen($data_json)));
+
+    // SET Method as a PUT
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+
+    // Pass user data in POST command
+    curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Execute curl and assign returned data
+    $result  = curl_exec($ch);
+
+    // Close curl
+    curl_close($ch);
+
+    $response = json_decode($result, true);
+    if($response['json']['success'] == 1):
+        $msg = ['msg'=>'valid', 'status'=>true];
+    else:
+        $msg = ['msg'=>'invalid', 'status'=>false];
+    endif;
+    echo json_encode($msg);
+    exit;
+}
+add_action('wp_ajax_programRegistration','programRegistration');
+add_action('wp_ajax_nopriv_programRegistration','programRegistration');
+// End AMS users specific prgram registration
+
+// AMS events program verify registration (This function for specific events program datat verification registration status.)
+function verifyRegistrationStatus()
+{
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+    $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
+    $accesstoken = isset($_POST['access_token']) ? $_POST['access_token'] : 0;
+    $token = 'Bearer '.$accesstoken;
+    $url = "https://".$apiurl.".amsnetwork.ca/api/v3/registrations/current_registrations/?id=".$user_id;
+    //In itiate cURL.
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$url);
+    $headers = array(
+       "Content-Type: application/json",
+       "Authorization: ".$token,
+    );
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    $arrayResultData = json_decode($json, true);
+    $registrations = isset($arrayResultData['registrations']) ? $arrayResultData['registrations'] : [];
+    $program = [];
+    $msg = '';
+    if(!empty($registrations)){
+       foreach ($registrations as $value) {
+        $program[] = $value['program_name'];
+        $msg = 'valid';
+       }
+    } else{
+        $program = $registrations;
+        $msg = 'invalid';
+    }
+    echo json_encode(array("currentprogram"=>$program,'msg'=>$msg));
+    exit;
+}
+add_action('wp_ajax_verifyRegistrationStatus','verifyRegistrationStatus');
+add_action('wp_ajax_nopriv_verifyRegistrationStatus','verifyRegistrationStatus');
+// End AMS events program verify registration (This function for specific events program datat verification registration status.)
+
+function invoicesData($account_id=NULL,$accesstoken=NULL,$event_title=NULL)
+{
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+    if(isset($_POST) && !empty($_POST)) :
+        $account_id = isset($_POST['account_id']) ? $_POST['account_id'] : 0;
+        $accesstoken = isset($_POST['access_token']) ? $_POST['access_token'] : 0;
+        $event_title = isset($_POST['event_title']) ? $_POST['event_title'] : '';
+    endif;
+    $filter = 'current';
+    $token = 'Bearer '.$accesstoken;
+    $url = "https://".$apiurl.".amsnetwork.ca/api/v3/invoices?account_id=".$account_id."&filter=current";
+    //In itiate cURL.
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$url);
+    $headers = array(
+       "Content-Type: application/json",
+       "Authorization: ".$token,
+    );
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+   // $word = "Online Course";
+    $arrayResultData = json_decode($json, true);
+    $invoices = isset($arrayResultData) ? $arrayResultData['invoices'] : [];
+    $arrReturn = [];
+    foreach($invoices as $value){
+        if(strpos($value['description_cached'], $event_title) !== false){
+           $arrReturn = $value;
+        }
+    }
+    if(isset($_POST) && !empty($_POST)) :
+        echo json_encode(array("invoicedata"=>$arrReturn));
+    else :
+        return json_encode(array("invoicedata"=>$arrReturn));
+    endif;
+    exit;
+}
+add_action('wp_ajax_invoicesData','invoicesData');
+add_action('wp_ajax_nopriv_invoicesData','invoicesData');
+
 // AMS Project login
 function get_amsprojectlog()
 {
