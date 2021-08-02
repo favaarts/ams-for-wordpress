@@ -7,10 +7,17 @@ function amslogin_function( $slug ) {
     if(isset($usersData) && !empty($usersData)):
         $logindata = $usersData['user'];
         $organization_id = isset($logindata) ? $logindata['organization_id'] : 0;
+        $account_id = isset($logindata) ? $logindata['account_id'] : 0;
+        $filter = 'current';
+        $program_id = '8247';
+        $programData = get_amsprogramdata($_SESSION['accesstoken'], $program_id);
+        $programUsers = isset($programData['users']) ? $programData['users'] : [];
     else:
         $logindata = [];
     endif;
-    ?>
+
+   // echo "<pre/>";print_r($usersData); exit;
+?>
 
 <div id="category" class="category cat-wrap">
 
@@ -32,14 +39,14 @@ main-content main-content-four-col - this class is for four columns.
       <div class="right-col-wrap">
         <div class="amsloginform">
             <div class="post-form-main">
-              <?php 
+              <?php
               if(isset($_SESSION["username"]))  
               {
                 echo '<p>Hii, ' . $_SESSION["username"] . '</p>';
   
                 echo '<h3>Access Token </h3><p>'.$_SESSION["accesstoken"]. '</p>';
               ?>
-               <a class="text-info" href="javascript:void(0);" onclick="redirectAMSWithKey()">AMS Link</a>
+              <a class="text-info" href="javascript:void(0);" onclick="redirectAMSWithKey()">AMS Link</a>
                 <div class="container">
                   <div class="row">
                     <div class="col-8">
@@ -231,15 +238,15 @@ main-content main-content-four-col - this class is for four columns.
                                       </div>
                                       </div>
                                       <div class="row"></div><div class="row">
-                                        <div class="col-md-3"><p>Bio</p><div><div><div><div class=""></div>
+                                        <div class="col-md-12"><p>Bio</p><div><div><div><div class=""></div>
                                           <div class="form-group">
-                                            <input class="form-control undefined" name="bio_link" placeholder="" value="<?php echo $logindata['bio_link']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;">
+                                            <textarea class="form-control undefined" name="bio_link" placeholder="" cols="40" rows="3" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"><?php echo $logindata['bio_link']; ?></textarea>
                                           </div></div></div></div>
                                         </div>
-                                        <div class="col-md-4"><p>Specializations </p><div><div><div><div class=""></div><div class="form-group">
+                                        <div class="col-md-6"><p>Specializations </p><div><div><div><div class=""></div><div class="form-group">
                                           <input class="form-control undefined" name="specializations" placeholder="" value="<?php echo $logindata['specializations']; ?>" style="border-radius: 0px; box-shadow: none; padding-left: 2%;"></div></div></div></div>
                                         </div>
-                                        <div class="col-md-5"><p>Birth Date</p><div class="custom-datepicker"><div class="react-datepicker-wrapper"><div class="react-datepicker__input-container">
+                                        <div class="col-md-6"><p>Birth Date</p><div class="custom-datepicker"><div class="react-datepicker-wrapper"><div class="react-datepicker__input-container">
                                             <input type="date" data-date-inline-picker="true" name="date_of_birth" id="date_of_birth" class="form-control undefined" value="<?php echo $logindata['date_of_birth']; ?>"></div></div></div>
                                           </div>
                                         </div>
@@ -332,6 +339,57 @@ main-content main-content-four-col - this class is for four columns.
                       </div>
                     </div>
                   </div>
+                  <br/><br/>
+                  <?php if(isset($programData) && !empty($programData)): ?>
+                  <div class="eventProgram">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <h3>Event Title</h3>
+                          <div class="eventTitle">
+                            <h4><?php echo $programData['name']; ?></h4>
+                          </div>
+                          <?php foreach($programUsers as $key=>$uservalue){
+                                    if($uservalue['id'] == $_SESSION['user_id']){
+                                      $msg = 'active';
+                                    }
+                                  }
+                          ?>
+                          <div class="invoicedata" id="invoicedata" <?php if($msg =='active'){ echo 'style="display: block;"'; }else{ echo 'style="display: none;"'; } ?>>
+                            <?php $invoices = invoicesData($account_id,$_SESSION['accesstoken'],$programData['name']);
+                                $data = json_decode($invoices);
+                                if(!empty($data)){
+                                  $allData = $data->invoicedata;
+                                }
+                                $incId = isset($allData) ? $allData->id : '';
+                                $registerId = isset($allData) ? $allData->registration_id : '';
+                                $programId = $program_id;
+                                $invoiceId = isset($allData) ? $allData->reference : '';
+                                $invoiceamount = isset($allData) ? $allData->total_due_cached : '';
+                                if(isset($msg) && $msg =='active' && $programId == $program_id){ ?>
+                                  <p><b>Invoice Number - <?php echo $invoiceId; ?></b></p>
+                                  <p><b>Amount - <?php echo $invoiceamount; ?></b></p>
+                            <?php } ?>
+                          </div>
+                          <div class="registerBtn">
+                            <?php if(isset($msg) && $msg =='active' ){ 
+                                  if($invoiceId != '' && $programId == $program_id){ ?>
+                                    <a href="https://<?php echo $subdomain; ?>.amsnetwork.ca/invoices/<?php echo $incId; ?>/online_payment" id="paymentBtn" target="_blank" class="btn ml-1">Payment</a> | 
+                                  <?php } ?>
+                                  <a href="javascript:void(0);" id="registerBtn" class="btn ml-1">Registered</a> <?php }else{ ?><a href="javascript:void(0);" id="registerBtn" class="btn ml-1" onclick="registerProgram()">Register</a><?php } ?> | <a href="javascript:void(0);" id="verifyRegisterBtn" class="btn ml-1" onclick="verifyRegistration()">verify registration</a>
+                          </div>
+                          <br/>
+                          <div class="post-group customloader" id="inifiniteLoaderRegisration" style="text-align: center; display: none;">
+                            <img src="<?php echo esc_url( plugins_url( 'assets/img/buttonloader.gif', dirname(__FILE__) ) ) ?>" >
+                          </div>
+                          <div id="verifystatusMsg" class="verifystatus">
+                          <br/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <?php endif; ?>
                 <?php
                 echo "<input type='hidden' id='getaccesstoken' value='".$_SESSION["accesstoken"]."' />";
                 echo "<div class='col-8'><input type='submit' id='btnAMSLogout' class='btn ml-1' onclick='btnAMSLogout()' value='Log Out' /></div>";
@@ -384,12 +442,141 @@ main-content main-content-four-col - this class is for four columns.
 
 
 <script type="text/javascript">
+
+ //start function for use of redirecting on AMS panel when login with wp 
+ function redirectAMSWithKey() 
+ {
+    var user_id = '<?php echo $_SESSION["user_id"]; ?>';
+    var organization_id = '<?php echo $organization_id; ?>';
+    var user_accesstoken = '<?php echo $_SESSION["accesstoken"]; ?>';
+    var encryptedKey = CryptoJS.AES.encrypt(organization_id, "My Secret Passphrase");
+    var userIdKey = CryptoJS.AES.encrypt(user_id, "My Secret Passphrase");
+    var accessTokenKey = CryptoJS.AES.encrypt(user_accesstoken, "My Secret Passphrase");
+    var url = "https://<?php echo $subdomain; ?>.amsnetwork.ca/projects/podcast-fb8a53a3-7209-496d-930a-bb2fd743176d/media?oid=" + encodeURIComponent(encryptedKey);
+    jQuery.cookie("organizationId", encryptedKey);
+    jQuery.cookie("userId", userIdKey);
+    jQuery.cookie("userAccessToken", accessTokenKey);
+    window.location.href = url;
+    return false;
+ }//end of function
+
+ //start function for use of register user for specific program
+ function registerProgram() 
+ {
+    var user_id = '<?php echo $_SESSION["user_id"]; ?>';
+    var program_id = '<?php echo $program_id; ?>';
+    var first_name = '<?php echo $logindata["first_name"] ?>';
+    var last_name = '<?php echo $logindata["last_name"]; ?>';
+    var access_token = '<?php echo $_SESSION["accesstoken"]; ?>';
+    jQuery.ajax({
+       url: amsjs_ajax_url.ajaxurl,
+       type:'POST',
+       cache: false,
+       data: { 
+              action: 'programRegistration',
+              user_id:user_id,
+              program_id:program_id,
+              access_token:access_token,
+              floating_first_name:first_name,
+              floating_last_name:last_name
+             },
+       dataType: 'JSON',
+       beforeSend: function(){
+       // Show image container
+          jQuery("#inifiniteLoaderRegisration").show();
+          //jQuery("#btnSubmit").attr("disabled", true);
+       },
+       success: function (data) {
+          var mydata = data.msg;
+           if(mydata == 'valid'){
+              jQuery(".registerBtn a#registerBtn").text('Registered');
+              jQuery(".registerBtn a#registerBtn").attr("onclick", "").unbind("click");
+              var account_id = '<?php echo $account_id; ?>';
+              var filter = 'current';
+              var access_token = '<?php echo $_SESSION["accesstoken"]; ?>';
+              var event_title = '<?php echo $programData['name']; ?>';
+                jQuery.ajax({
+                   url: amsjs_ajax_url.ajaxurl,
+                   type:'POST',
+                   cache: false,
+                   data: { 
+                          action: 'invoicesData',
+                          account_id:account_id,
+                          filter:filter,
+                          access_token:access_token,
+                          event_title:event_title
+                         },
+                   dataType: 'JSON',
+                   success: function (response) {
+                    jQuery("#inifiniteLoaderRegisration").hide();
+                    var programId = program_id;
+                    var invoicesData = response.invoicedata;
+                    var registerId = invoicesData.registration_id;
+                    var invoiceId = invoicesData.reference;
+                    var status = invoicesData.status_string;
+                    var invoiceamount = invoicesData.total_due_cached;
+                    jQuery('#invoicedata').html('<p><b>Invocie Number - </b>'+invoiceId+'</p><p><b>Amount :- </b>'+invoiceamount+'</p>');
+                    jQuery('#invoicedata').show();
+                    var html = '<a href="javascript:void(0);" id="paymentBtn" class="btn ml-1">Payment</a> | ';
+                    jQuery('.registerBtn').prepend(html);
+                   }
+                });
+           } else{
+              jQuery("#inifiniteLoaderRegisration").hide();
+              alert('Something went wrong try again!');
+           }
+       }//end of success
+    });
+ }//end of function
+
+ //start function for use of register user for specific program
+ function verifyRegistration() 
+ {
+    jQuery("#verifystatusMsg").hide();
+    var user_id = '<?php echo $_SESSION["user_id"]; ?>';
+    var access_token = '<?php echo $_SESSION["accesstoken"]; ?>';
+    jQuery.ajax({
+       url: amsjs_ajax_url.ajaxurl,
+       type:'POST',
+       cache: false,
+       data: { 
+              action: 'verifyRegistrationStatus',
+              user_id:user_id,
+              access_token:access_token
+             },
+       dataType: 'JSON',
+       beforeSend: function(){
+        // Show image container
+            jQuery("#inifiniteLoaderRegisration").show();
+            //jQuery("#btnSubmit").attr("disabled", true);
+       },
+       success: function (response) {
+         if(response.msg == 'invalid'){
+            jQuery("#inifiniteLoaderRegisration").hide();
+            jQuery("#verifystatusMsg").html("<p style='color:red;'>No current registration.</p>");
+            jQuery("#verifystatusMsg").show();
+            setTimeout(function() {
+                jQuery('#verifystatusMsg').fadeOut('fast');
+            }, 5000);
+         } else{
+            jQuery("#inifiniteLoaderRegisration").hide();
+            var program = response.currentprogram;
+            jQuery("#verifystatusMsg").html("<p style='color:green;'><b>Current Registration </b><br/>"+ program +"</p>");
+            jQuery("#verifystatusMsg").show();
+            setTimeout(function() {
+                jQuery('#verifystatusMsg').fadeOut('fast');
+            }, 10000);
+         }
+       }
+    });
+ }//end of function
+
 jQuery(document).ready(function($) {
     
     jQuery("#updateMsg").hide();
     jQuery("#inifiniteLoader").hide(); 
     jQuery("#inifiniteLoaderUpdate").hide(); 
-    
+   
     $('#btnSubmit').click(function(){
 
         var amsemailoruser = jQuery('#amsemailoruser').val();
@@ -469,65 +656,67 @@ jQuery(document).ready(function($) {
         }
         if(websiteurl == false){
           if(jQuery('#websiteurl').length == 0){
-             $("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+             jQuery("#website").parent().after("<div class='validation' id='websiteurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#website').focus();
+             jQuery('#website').focus();
           }
           focusSet = true;
         }else{
-          $("#website").parent().next(".validation").remove(); // remove it
+          jQuery("#website").parent().next(".validation").remove(); // remove it
         }
         if(facebookurl == false){
           if(jQuery('#facebookurl').length == 0){
-             $("#facebook").parent().after("<div class='validation' id='facebookurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+             jQuery("#facebook").parent().after("<div class='validation' id='facebookurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#facebook').focus();
+             jQuery('#facebook').focus();
           }
           focusSet = true;
         }else{
-          $("#facebook").parent().next(".validation").remove(); // remove it
+          jQuery("#facebook").parent().next(".validation").remove(); // remove it
         }
         if(twitterurl == false){
           if(jQuery('#twitterurl').length == 0){
-            $("#twitter").parent().after("<div class='validation' id='twitterurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            jQuery("#twitter").parent().after("<div class='validation' id='twitterurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#twitter').focus();
+             jQuery('#twitter').focus();
            }
            focusSet = true;
         }else{
-          $("#twitter").parent().next(".validation").remove(); // remove it
+          jQuery("#twitter").parent().next(".validation").remove(); // remove it
         }
         if(instagramurl == false){
           if(jQuery('#instagramurl').length == 0){
-            $("#instagram").parent().after("<div class='validation' id='instagramurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            jQuery("#instagram").parent().after("<div class='validation' id='instagramurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#instagram').focus();
+             jQuery('#instagram').focus();
           }
           focusSet = true;
         }else{
-          $("#instagram").parent().next(".validation").remove(); // remove it
+          jQuery("#instagram").parent().next(".validation").remove(); // remove it
         }
         if(linkedinurl == false){
           if(jQuery('#linkedinurl').length == 0){
-            $("#linkedin").parent().after("<div class='validation' id='linkedinurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            jQuery("#linkedin").parent().after("<div class='validation' id='linkedinurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#linkedin').focus();
+             jQuery('#linkedin').focus();
           }
           focusSet = true;
         }else{
-          $("#linkedin").parent().next(".validation").remove(); // remove it
+          jQuery("#linkedin").parent().next(".validation").remove(); // remove it
         }
         if(youtubeurl == false){
           if(jQuery('#youtubeurl').length == 0){
-            $("#youtube").parent().after("<div class='validation' id='youtubeurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
+            jQuery("#youtube").parent().after("<div class='validation' id='youtubeurl' style='color:red;margin-bottom: 20px;'>Please enter a URL with http:// or https://</div>");
              e.preventDefault(); // prevent form from POST to server
-             $('#youtube').focus();
+             jQuery('#youtube').focus();
           }
           focusSet = true;
         }else{
-          $("#youtube").parent().next(".validation").remove();
+          jQuery("#youtube").parent().next(".validation").remove(); // remove it
         }
-        if(focusSet == true){ return false; }
+        if(focusSet == true){ 
+          return false;
+        }
         e.preventDefault(); // prevent actual form submit
         if(confirm("Are you sure want to update the information?")) {
           this.click;
@@ -573,23 +762,7 @@ jQuery(document).ready(function($) {
           });
         } // condition of confirm box end here
     });
-});
-
-function redirectAMSWithKey() 
-{
-  var user_id = '<?php echo $_SESSION["user_id"]; ?>';
-  var organization_id = '<?php echo $organization_id; ?>';
-  var user_accesstoken = '<?php echo $_SESSION["accesstoken"]; ?>';
-  var encryptedKey = CryptoJS.AES.encrypt(organization_id, "My Secret Passphrase");
-  var userIdKey = CryptoJS.AES.encrypt(user_id, "My Secret Passphrase");
-  var accessTokenKey = CryptoJS.AES.encrypt(user_accesstoken, "My Secret Passphrase");
-  var url = "https://<?php echo $subdomain; ?>.amsnetwork.ca/projects/podcast-fb8a53a3-7209-496d-930a-bb2fd743176d/media?oid=" + encodeURIComponent(encryptedKey);
-  jQuery.cookie("organizationId", encryptedKey);
-  jQuery.cookie("userId", userIdKey);
-  jQuery.cookie("userAccessToken", accessTokenKey);
-  window.location.href = url;
-  return false;
-}
+});    
 </script>
 
   
