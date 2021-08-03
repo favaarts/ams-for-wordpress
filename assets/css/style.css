@@ -1814,7 +1814,7 @@ img.organizationlogo {
     padding-bottom: 15px;
 }
 
-.assetsdetail table
+.assetsdetail table, .eventpage table
 {
     margin: 0px !important;
 }
