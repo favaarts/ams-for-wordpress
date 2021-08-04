@@ -306,8 +306,9 @@ else
           }
           else if($blockdata['radio_attr_event'] == "calendar_view")
           {
-              echo "<div id='calendar_div'>";
-              echo "</div>";
+            echo  "<div class='eventbuttonloader'></div>";
+            echo "<div id='calendar_div'>";
+            echo "</div>";
           } 
           else
           { 
@@ -431,6 +432,7 @@ jQuery(document).ready(function($) {
   if(gridlayoutview == 'calendar_view')
    {
       $('.eventbutton').hide();
+      $("#eventbuttonloader").hide();
 
       jQuery('#calendar_div').fullCalendar({
         editable:false,
@@ -498,9 +500,16 @@ jQuery(document).ready(function($) {
               type: 'post',
               dataType: 'JSON',
               data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid},
+              beforeSend: function() {
+                $("#eventbuttonloader").show();
+                $("#calendar_div").css("opacity", "0.4");
+                $(".eventpage .right-col-wrap").css("position", "relative");
+
+              },
               success: function(data) {
-                //console.log(data)
-                jQuery(".buttonloader").css("display","none");
+                $("#eventbuttonloader").hide();
+                $("#calendar_div").css("opacity", "1");
+                $(".eventpage .right-col-wrap").css("position", "unset");
                 getEventCalendarData(data)
               }
           });
@@ -531,10 +540,14 @@ jQuery(document).ready(function($) {
               dataType: 'JSON',
               data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid},
               beforeSend: function(){
-                  jQuery(".buttonloader").css("display","initial");
+                $("#eventbuttonloader").show();
+                $("#calendar_div").css("opacity", "0.4");
+                $(".eventpage .right-col-wrap").css("position", "relative");
               },
               success: function(data) {
-                jQuery(".buttonloader").css("display","none");
+                $("#eventbuttonloader").hide();
+                $("#calendar_div").css("opacity", "1");
+                $(".eventpage .right-col-wrap").css("position", "unset");
                 getEventCalendarData(data)
               }
           });
@@ -555,11 +568,14 @@ jQuery(document).ready(function($) {
               dataType: 'JSON',
               data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid},
               beforeSend: function(){
-              // Show image container
-                  jQuery(".buttonloader").css("display","initial");
+                $("#eventbuttonloader").show();
+                $("#calendar_div").css("opacity", "0.4");
+                $(".eventpage .right-col-wrap").css("position", "relative");
               },
               success: function(data) {
-                jQuery(".buttonloader").css("display","none");
+                $("#eventbuttonloader").hide();
+                $("#calendar_div").css("opacity", "1");
+                $(".eventpage .right-col-wrap").css("position", "unset");
                 getEventCalendarData(data)
               }
           });
@@ -581,10 +597,14 @@ jQuery(document).ready(function($) {
               dataType: 'JSON',
               data: { action: 'searcheventdata_action', eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid,taglabels: taglabels},
               beforeSend: function(){
-                  jQuery(".buttonloader").css("display","initial");
+                $("#eventbuttonloader").show();
+                $("#calendar_div").css("opacity", "0.4");
+                $(".eventpage .right-col-wrap").css("position", "relative");
               },
               success: function(data) {
-                jQuery(".buttonloader").css("display","none");
+                $("#eventbuttonloader").hide();
+                $("#calendar_div").css("opacity", "1");
+                $(".eventpage .right-col-wrap").css("position", "unset");
                 getEventCalendarData(data)
               }
           });
