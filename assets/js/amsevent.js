@@ -34,6 +34,10 @@
       type: 'boolean',
       default: true
      },
+     instructors: {
+      type: 'boolean',
+      default: true
+     },
      displaypastevents: {
       type: 'boolean',
       default: true
@@ -126,6 +130,14 @@
                  props.setAttributes( { eventshowbutton: value } );
               },
               checked: props.attributes.eventshowbutton,
+            }),
+            el('p', {}, i18n.__('( Show / Hide ) Instructors.', 'amsnetwork-gutenbergevent-block')),
+            el(ToggleControl, {
+              label: 'Instructors',
+              onChange: ( value ) => {
+                 props.setAttributes( { instructors: value } );
+              },
+              checked: props.attributes.instructors,
             }),
             el('p', {}, i18n.__('( On / Off ) Display past events.', 'amsnetwork-gutenbergevent-block')),
             el(ToggleControl, {

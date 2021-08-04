@@ -281,12 +281,15 @@ get_header();  ?>
                                 <?php
                                 if(!empty($arrayResult['program']['instructors']))
                                 {
+                                    if (!isset($blocks[0]['attrs']['instructors']))
+                                    {
                                 ?>
                                 <div class="location-sec">
                                     <h3>Instructors</h3>
                                     <p><?=$arrayResult['program']['instructors']?></p>
                                 </div>
                                 <?php 
+                                    }
                                 } 
                                 ?>
                             </div>
