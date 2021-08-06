@@ -395,7 +395,7 @@ p.price-non-mem {
 .ragister-sec .reg-sec {display: inline-block; margin-right: 10px; }
 .ragister-sec .time {display: inline-block; }
 
-.ragister-sec .reg-sec a {border-radius: 5px; padding: 10px; color: #fff; }
+.ragister-sec .reg-sec a {border-radius: 5px; padding: 10px; color: #fff; margin-right: 8px;}
 .ragister-sec .reg-sec a:hover{text-decoration:none; }
 .ragister-sec .evtdate {display: inline-block; margin-right: 10px; }
 .datetimelable {margin-bottom: 10px;}
