@@ -44,6 +44,7 @@ foreach($blockdata as $amsblock)
         $projectshortattributes = $amsblock['attrs']['projectshortattributes'];
         $amsfile_attachment = $amsblock['attrs']['amsfile_attachment'];
         $passwordprotected = $amsblock['attrs']['passwordprotected'];
+        $remove_submittedby = $amsblock['attrs']['remove_submittedby'];
     }
 }    
 
@@ -261,7 +262,9 @@ echo "</pre>";*/
                                     
                                          
                                         if($arrayResult['project']['creator'])
-                                        {
+                                        {   
+                                            if (!isset($remove_submittedby))
+                                            {
                                             echo "<div class='enrollment enrtop'>
                                                 <h3>Submitted By</h3>";
                                               if ($projecttomember)  
@@ -274,6 +277,7 @@ echo "</pre>";*/
                                               }
                                                 
                                             "</div>";
+                                            }
                                         }
                                         
 

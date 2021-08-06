@@ -89,6 +89,10 @@
       type: 'boolean',
       default: true
     },
+    remove_submittedby: {
+        type: 'boolean',
+        default: true
+    },
     passwordprotected: {
       type: 'boolean',
       default: false
@@ -196,6 +200,13 @@
                  props.setAttributes( { passwordprotected: value } );
               },
               checked: props.attributes.passwordprotected,
+            }),
+            el(ToggleControl, {
+              label: 'Show/Hide Submitted By',
+              onChange: ( value ) => {
+                 props.setAttributes( { remove_submittedby: value } );
+              },
+              checked: props.attributes.remove_submittedby,
             }),
             el( TextControl,
               {

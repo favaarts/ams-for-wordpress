@@ -376,7 +376,7 @@ function wptuts_scripts_important()
 add_action( 'wp_enqueue_scripts', 'wptuts_scripts_important', 20 );
 
 
-function localtimezone($utc = 0)
+function localtimezone($timeformate = 0,$utc = 0)
 {
     if(isset($_COOKIE['timezoneoffset'])){
         $timezone = $_COOKIE['timezoneoffset'];
@@ -391,7 +391,7 @@ function localtimezone($utc = 0)
     $dt = new DateTime($utc);
     $tz = new DateTimeZone($timezone_name); // or whatever zone you're after
     $dt->setTimezone($tz);
-    return $dt->format('Y-m-d H:i:s');
+    return $dt->format($timeformate);
 }
 add_action('wp_ajax_localtimezone','localtimezone');
 add_action('wp_ajax_nopriv_localtimezone','localtimezone'); 
@@ -2601,10 +2601,11 @@ function search_event_action()
 
                 foreach ($eventtime['json']['scheduled_program_dates'] as $daytime) 
                 { 
-                   $starttime = date('Y-m-d h:i:s', strtotime($daytime['start']));
+                    $starttime = localtimezone('Y-m-d h:i:s',$daytime['start']);
+                    $eventtime = localtimezone('H:i a',$daytime['start']);
 
                      $data[] = array(
-                      'title'   => $x_value['name'],
+                      'title'   => $x_value['name'] ." ". $eventtime,
                       'start'   => $starttime,
                       'url' => site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id']),
                       'className' => $eventStatusbg

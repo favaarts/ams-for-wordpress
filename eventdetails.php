@@ -1,6 +1,8 @@
 <?php
 
-get_header();  ?>
+get_header();  
+session_start();
+?>
 <div class="container-wrap">
     <div class="site-content"> <!-- site-content" -->
      <div class="container no-sidebar ams-content">
@@ -14,7 +16,6 @@ get_header();  ?>
                     <div class="eventdetail">
                     <?php
                     global $wp, $wpdb;
-
                     $alleventid = $wp->query_vars['eventslug'];
                     $arrayevid = explode("-",$alleventid);
                     
@@ -24,8 +25,44 @@ get_header();  ?>
                         $bgcolor = "#337AB7";
                     }
 
-
                     $arrayResult = get_eventlisting($arrayevid[1]);
+
+                    // New changes
+                    $usersData = get_amsmemberlogindata($_SESSION['accesstoken'], $_SESSION['user_id']);
+                    $subdomain = get_option('wpams_url_btn_label');
+                    if(isset($usersData) && !empty($usersData)):
+                        $logindata = $usersData['user'];
+                        $organization_id = isset($logindata) ? $logindata['organization_id'] : 0;
+                        $account_id = isset($logindata) ? $logindata['account_id'] : 0;
+                        $filter = 'current';
+                        $program_id = $arrayevid[1];
+                        $programData = get_amsprogramdata($_SESSION['accesstoken'], $program_id);
+                        $programUsers = isset($programData['users']) ? $programData['users'] : [];
+                    else:
+                        $logindata = [];
+                    endif;
+
+                    foreach($programUsers as $key=>$uservalue)
+                    {
+                        if($uservalue['id'] == $_SESSION['user_id'])
+                        {
+                          $msg = 'active';
+                        }
+                    }
+
+
+                    $invoices = invoicesData($account_id,$_SESSION['accesstoken'],$programData['name']);
+                    $data = json_decode($invoices);
+                    if(!empty($data)){
+                      $allData = $data->invoicedata;
+                    }
+                    $incId = isset($allData) ? $allData->id : '';
+                    $registerId = isset($allData) ? $allData->registration_id : '';
+                    $programId = $program_id;
+                    $invoiceId = isset($allData) ? $allData->reference : '';
+                    $invoiceamount = isset($allData) ? $allData->total_due_cached : '';
+                    // End new changes
+
                     
                     //
                     $post = get_post($arrayevid[0]);
@@ -48,6 +85,7 @@ get_header();  ?>
                         $eventwindow = "_self";
                     }
                 ?>    
+                    <input type="hidden" id="getpageid" value="<?php echo $arrayevid[1]; ?>">
                         <div class="event-img-sec">
                             <div class="img-sec">
                                 <?php
@@ -89,6 +127,16 @@ get_header();  ?>
                                 ?>
 
                                 <h1><?=$arrayResult['program']['name']?></h1>
+
+                                <?php if (isset($blocks[0]['attrs']['member']) && isset($blocks[0]['attrs']['nonmember']) && isset($blocks[0]['attrs']['earlybird']) && empty($blocks[0]['attrs']['member']) && empty($blocks[0]['attrs']['nonmember']) && empty($blocks[0]['attrs']['earlybird'])){ ?>
+                                    <div class="event-description-sec">
+                                        <div class="text-sec">
+                                            <p class="text-italic">
+                                                <?php echo $arrayResult['program']['description']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php } ?>
 
                                 <?php if(!empty($arrayResult['program']['member_enrollment_price']))
                                 { 
@@ -178,9 +226,11 @@ get_header();  ?>
                                 <h1></h1>
                                 <h2>About this Event</h2>
                                 <div class="text-sec">
+                                    <?php if (!isset($blocks[0]['attrs']['member']) || !isset($blocks[0]['attrs']['nonmember']) || !isset($blocks[0]['attrs']['earlybird'])){ ?>
                                     <p class="text-italic">
                                         <?php echo $arrayResult['program']['description']; ?>
                                     </p>
+                                    <?php } ?>
                                     <p class="text-italic">
                                         <?php
                                             if($arrayResult['program']['program_details'])
@@ -225,8 +275,11 @@ get_header();  ?>
                                                             echo "<p>".date('D, M d, Y', strtotime($daytime['start']))."</p>";
                                                     echo  "</div>";
                                                     
+                                                $starttime = localtimezone('H:i a',$daytime['start']);
+                                                $endtime = localtimezone('H:i a',$daytime['end']);
+
                                                     echo "<div class='time'>";
-                                                    echo "<p>".date('H:i', strtotime($daytime['start'])). " – ".date('H:i', strtotime($daytime['end'])). "</p>";
+                                                    echo "<p>".$starttime. " – ".$endtime. "</p>";
                                                     echo "</div>";
                                                 echo "</div>";    
                                                 }
@@ -234,9 +287,31 @@ get_header();  ?>
                                             echo   "<br>";
                                             if (!isset($blocks[0]['attrs']['showhideurl']))
                                             {
-                                            echo   "<div class='reg-sec 3'>";
-                                            echo   "<a href=".$registerurl." style='background-color:".$bgcolor."' target=".$eventwindow.">Register</a>";
-                                            echo   "</div>";
+                                                echo   "<div class='reg-sec 3 location-sec'>";
+                                                if(isset($_SESSION['accesstoken']) && $_SESSION["user_id"]):
+                                                    echo "<div class='registerBtn'>";
+                                                        if(isset($msg) && $msg =='active' ){ 
+                                                            if($invoiceId != '' && $programId == $program_id){
+                                                            echo "<a href='https://".$subdomain.".amsnetwork.ca/invoices/".$incId."/online_payment' id='paymentBtn' style='background-color:".$bgcolor."' target='_blank' class='btn ml-1'>Payment</a>";
+                                                            }
+                                                            echo "<a href='javascript:void(0);' style='background-color:".$bgcolor."' id='registerBtn' class='btn ml-1'>Registered</a>";
+                                                        }
+                                                        else
+                                                        {
+                                                                
+                                                        echo "<a href='javascript:void(0);' id='registerBtn' style='background-color:".$bgcolor."' class='btn ml-1' onclick='registerProgram()'>Register</a>";
+                                                        }
+                                                        
+                                                    echo "</div>";
+                                                else:
+                                                    echo   "<a href=".$registerurl." style='background-color:".$bgcolor."' target=".$eventwindow.">Register</a>";
+                                                endif;   
+                                                    echo "<div class='post-group customloader' id='inifiniteLoader' style='text-align: center; display: none;'>
+                                                        <img src=".plugins_url( 'assets/img/buttonloader.gif', __FILE__ )." >
+                                                      </div>"; 
+                                                    echo "<br>";  
+                                                    echo "<div id='verifystatusMsg' class='verifystatus'>";  
+                                                echo   "</div>";    
                                             }
                                             echo "</div>";
                                         }
@@ -263,6 +338,17 @@ get_header();  ?>
                                         }
                                     }
                                 ?>
+                                <?php if(isset($programData) && !empty($programData)): ?>
+                                    
+                                <div class="location-sec invoicedata" id="invoicedata" <?php if($msg =='active'){ echo 'style="display: block;"'; }else{ echo 'style="display: none;"'; } ?>>
+                                    <h3>Invoice Details</h3>
+                                    <?php 
+                                        if(isset($msg) && $msg =='active' && $programId == $program_id){ ?>
+                                          <p>Invoice Number - <?php echo $invoiceId; ?></p>
+                                          <p>Amount - <?php echo $invoiceamount; ?></p>
+                                    <?php } ?>
+                                </div>
+                                <?php endif; ?>
 
                                 <div class="location-sec">
                                     <h3>Location</h3>
@@ -308,5 +394,78 @@ get_header();  ?>
      </div><!-- .container no-sidebar -->
     </div><!-- .site-content -->
 </div>
+
+<script type="text/javascript">
+
+ //start function for use of register user for specific program
+ function registerProgram() 
+ {
+    var user_id = '<?php echo $_SESSION["user_id"]; ?>';
+    var program_id = jQuery("#getpageid").val();
+    var access_token = '<?php echo $_SESSION["accesstoken"]; ?>';
+    jQuery.ajax({
+       url: amsjs_ajax_url.ajaxurl,
+       type:'POST',
+       cache: false,
+       data: { 
+              action: 'programRegistration',
+              user_id:user_id,
+              program_id:program_id,
+              access_token:access_token
+             },
+       dataType: 'JSON',
+       beforeSend: function(){
+       // Show image container
+          jQuery("#inifiniteLoader").show();
+          //jQuery("#btnSubmit").attr("disabled", true);
+       },
+       success: function (data) {
+          var mydata = data.msg;
+           if(mydata == 'valid'){
+              jQuery(".registerBtn a#registerBtn").text('Registered');
+              jQuery(".registerBtn a#registerBtn").attr("onclick", "").unbind("click");
+              var account_id = '<?php echo $account_id; ?>';
+              var filter = 'current';
+              var access_token = '<?php echo $_SESSION["accesstoken"]; ?>';
+              var event_title = '<?php echo $programData['name']; ?>';
+              var bgcolor = '<?php echo $bgcolor; ?>';
+                jQuery.ajax({
+                   url: amsjs_ajax_url.ajaxurl,
+                   type:'POST',
+                   cache: false,
+                   data: { 
+                          action: 'invoicesData',
+                          account_id:account_id,
+                          filter:filter,
+                          access_token:access_token,
+                          event_title:event_title
+                         },
+                   dataType: 'JSON',
+                   success: function (response) {
+                    console.log(response);
+                    jQuery("#inifiniteLoader").hide();
+                    
+                    var programId = program_id;
+                    var invoicesData = response.invoicedata;
+                    var registerId = invoicesData.registration_id;
+                    var invoiceId = invoicesData.reference;
+                    var status = invoicesData.status_string;
+                    var invoiceamount = invoicesData.total_due_cached;
+                    jQuery('#invoicedata').html('<h3>Invoice Details</h3><p>Invocie Number -'+invoiceId+'</p><p>Amount :-'+invoiceamount+'</p>');
+                    jQuery('#invoicedata').show();
+                    var html = '<a href="javascript:void(0);" style="background-color:#337AB7" id="paymentBtn" class="btn ml-1">Payment</a>';
+                    jQuery('.registerBtn').prepend(html);
+                   }
+                });
+           } else{
+              //jQuery("#inifiniteLoaderRegisration").hide();
+              alert('Something went wrong try again!');
+           }
+       }//end of success
+    });
+ }
+ //end of function
+
+</script>    
 <?php
 get_footer();
