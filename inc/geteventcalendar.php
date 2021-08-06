@@ -23,10 +23,11 @@ foreach($assetsResult['programs'] as $x_value)
 
 	foreach ($eventtime['json']['scheduled_program_dates'] as $daytime) 
 	{ 
-	   $starttime = date('Y-m-d h:i:s', strtotime($daytime['start']));
+	    $starttime = localtimezone('Y-m-d h:i:s',$daytime['start']);
+		$eventtime = localtimezone('H:i a',$daytime['start']);
 
 		 $data[] = array(
-	      'title'   => $x_value['name'],
+	      'title'   => $x_value['name'] ." ". $eventtime,
 	      'start'   => $starttime,
 	      'url' => site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id']),
 	      'className' => $eventStatusbg
