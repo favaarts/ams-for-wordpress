@@ -378,20 +378,8 @@ add_action( 'wp_enqueue_scripts', 'wptuts_scripts_important', 20 );
 
 function localtimezone($timeformate = 0,$utc = 0)
 {
-    /*if(isset($_COOKIE['timezoneoffset'])){
-        $timezone = $_COOKIE['timezoneoffset'];
-    }
-    else
-    {
-        $timezone = 0;
-    }
     
-    $timezone_offset_minutes = $timezone; 
-    $timezone_name = timezone_name_from_abbr("", $timezone_offset_minutes*60, false);*/
-
-    $publicIP = file_get_contents("http://ipecho.net/plain");
-     
-    $countryTimezone = "http://ip-api.com/json/".$publicIP."?method=get&format=json";
+    $countryTimezone = "http://www.geoplugin.net/json.gp?method=get&format=json";
 
     $ch = curl_init();
     curl_setopt($ch,CURLOPT_URL,$countryTimezone);
@@ -403,10 +391,10 @@ function localtimezone($timeformate = 0,$utc = 0)
     }
     curl_close($ch);
 
-    $timezonewithip = json_decode($json, true);
+    $timezone = json_decode($json, true);
 
     $dt = new DateTime($utc);
-    $tz = new DateTimeZone($timezonewithip['timezone']);
+    $tz = new DateTimeZone($timezone['geoplugin_timezone']);
     $dt->setTimezone($tz);
     return $dt->format($timeformate);
 }
