@@ -389,14 +389,9 @@ function localtimezone($timeformate = 0,$utc = 0)
     $timezone_offset_minutes = $timezone; 
     $timezone_name = timezone_name_from_abbr("", $timezone_offset_minutes*60, false);*/
 
-    $ipecho = curl_init ();
-
-    curl_setopt ($ipecho, CURLOPT_URL, "http://ipecho.net/plain");
-    curl_setopt ($ipecho, CURLOPT_HEADER, 0);
-    curl_setopt ($ipecho, CURLOPT_RETURNTRANSFER, true);
-    $ip = curl_exec ($ipecho);
+    $publicIP = file_get_contents("http://ipecho.net/plain");
      
-    $countryTimezone = "http://ip-api.com/json/".$ip."?method=get&format=json";
+    $countryTimezone = "http://ip-api.com/json/".$publicIP."?method=get&format=json";
 
     $ch = curl_init();
     curl_setopt($ch,CURLOPT_URL,$countryTimezone);
