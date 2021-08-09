@@ -378,7 +378,7 @@ add_action( 'wp_enqueue_scripts', 'wptuts_scripts_important', 20 );
 
 function localtimezone($timeformate = 0,$utc = 0)
 {
-    if(isset($_COOKIE['timezoneoffset'])){
+    /*if(isset($_COOKIE['timezoneoffset'])){
         $timezone = $_COOKIE['timezoneoffset'];
     }
     else
@@ -387,9 +387,31 @@ function localtimezone($timeformate = 0,$utc = 0)
     }
     
     $timezone_offset_minutes = $timezone; 
-    $timezone_name = timezone_name_from_abbr("", $timezone_offset_minutes*60, false);
+    $timezone_name = timezone_name_from_abbr("", $timezone_offset_minutes*60, false);*/
+
+    $ipecho = curl_init ();
+
+    curl_setopt ($ipecho, CURLOPT_URL, "http://ipecho.net/plain");
+    curl_setopt ($ipecho, CURLOPT_HEADER, 0);
+    curl_setopt ($ipecho, CURLOPT_RETURNTRANSFER, true);
+    $ip = curl_exec ($ipecho);
+     
+    $countryTimezone = "http://ip-api.com/json/".$ip."?method=get&format=json";
+
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$countryTimezone);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    $timezonewithip = json_decode($json, true);
+
     $dt = new DateTime($utc);
-    $tz = new DateTimeZone($timezone_name); // or whatever zone you're after
+    $tz = new DateTimeZone($timezonewithip['timezone']);
     $dt->setTimezone($tz);
     return $dt->format($timeformate);
 }
