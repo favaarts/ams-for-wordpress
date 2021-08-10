@@ -379,8 +379,23 @@ add_action( 'wp_enqueue_scripts', 'wptuts_scripts_important', 20 );
 function localtimezone($timeformate = 0,$utc = 0)
 {
     
-    $countryTimezone = "http://www.geoplugin.net/json.gp?method=get&format=json";
+    if (getenv('HTTP_CLIENT_IP'))
+    $ipaddress = getenv('HTTP_CLIENT_IP');
+    else if(getenv('HTTP_X_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+    else if(getenv('HTTP_X_FORWARDED'))
+        $ipaddress = getenv('HTTP_X_FORWARDED');
+    else if(getenv('HTTP_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_FORWARDED_FOR');
+    else if(getenv('HTTP_FORWARDED'))
+       $ipaddress = getenv('HTTP_FORWARDED');
+    else if(getenv('REMOTE_ADDR'))
+        $ipaddress = getenv('REMOTE_ADDR');
+    else
+        $ipaddress = 'UNKNOWN';
 
+    $countryTimezone = "http://ip-api.com/json/".$ipaddress."?method=get&format=json";
+    
     $ch = curl_init();
     curl_setopt($ch,CURLOPT_URL,$countryTimezone);
     curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
@@ -394,7 +409,7 @@ function localtimezone($timeformate = 0,$utc = 0)
     $timezone = json_decode($json, true);
 
     $dt = new DateTime($utc);
-    $tz = new DateTimeZone($timezone['geoplugin_timezone']);
+    $tz = new DateTimeZone($timezone['timezone']);
     $dt->setTimezone($tz);
     return $dt->format($timeformate);
 }
