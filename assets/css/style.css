@@ -459,6 +459,7 @@ img.member-image {
 }
 .product-img {
     width: 30%;
+    display: inline-block;
 }
 
 .product-content{width: 60%;padding-left: 20px; align-self: center;}

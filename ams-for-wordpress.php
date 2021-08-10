@@ -2507,30 +2507,39 @@ function search_event_action()
                         {
                           if(empty($x_value['organization_logo']))
                           {
+                            echo "<a href='".site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id'])."'>";
                             echo "<div class='product-img-wrap'>";
                                 echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ ) ." alt=".$x_value['name'].">";
-                            echo "</div>";    
+                            echo "</div>";  
+                            echo "</a>";
+
                           }
                           else 
                           {
+                            echo "<a href='".site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id'])."'>";
                             echo "<div class='product-img'>";
                                 echo "<img class='organizationlogo' src=".$x_value['organization_logo'] .">";
-                            echo "</div>";    
+                            echo "</div>"; 
+                            echo "</a>";   
                           }
                         }
                         else
                         {
                           if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
                           {
+                            echo "<a href='".site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id'])."'>";
                             echo "<div class='product-img-wrap'>";
                                 echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ ) ." alt=".$x_value['name'].">";
-                            echo "</div>";    
+                            echo "</div>";  
+                            echo "</a>";  
                           } 
                           else
                           {
+                            echo "<a href='".site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id'])."'>";
                             echo "<div class='product-img'>";
                                 echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
-                            echo "</div>";    
+                            echo "</div>";   
+                            echo "</a>"; 
                           }
                         }   
                       
@@ -3073,30 +3082,38 @@ function geteventonclick_action()
                         {
                           if(empty($x_value['organization_logo']))
                           {
+                            echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'>";
                             echo "<div class='product-img-wrap'>";
                                 echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ ) ." alt=".$x_value['name'].">";
-                            echo "</div>";    
+                            echo "</div>"; 
+                            echo "</a>";   
                           }
                           else 
                           {
+                            echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'>";
                             echo "<div class='product-img'>";
                                 echo "<img class='organizationlogo' src=".$x_value['organization_logo'] .">";
-                            echo "</div>";    
+                            echo "</div>"; 
+                            echo "</a>";   
                           }
                         }
                         else
                         {
                           if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
                           {
+                            echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'>";
                             echo "<div class='product-img-wrap'>";
                                 echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ ) ." alt=".$x_value['name'].">";
-                            echo "</div>";    
+                            echo "</div>"; 
+                            echo "</a>";   
                           } 
                           else
                           {
+                            echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'>";
                             echo "<div class='product-img'>";
                                 echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
-                            echo "</div>";    
+                            echo "</div>";  
+                            echo "</a>";  
                           }
                         }     
                         
@@ -3188,30 +3205,38 @@ function geteventonclick_action()
                                 {
                                   if(empty($x_value['organization_logo']))
                                   {
+                                    echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'>";
                                     echo "<div class='eventlayout-image'>";
                                       echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ ) ." alt=".$x_value['name'].">";
                                     echo "</div>";
+                                    echo "</a>";
                                   }
                                   else 
                                   {
+                                    echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'>";
                                     echo "<div class='product-img-wrap'>";
                                       echo "<img class='organizationlogo' src=".$x_value['organization_logo'] .">";
                                     echo "</div>";  
+                                    echo "</a>";
                                   }
                                 }
                                 else
                                 {
                                   if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
                                   {
+                                    echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'>";
                                     echo "<div class='product-img-wrap'>";
                                       echo "<img src=".plugins_url( 'assets/img/bg-image.png', __FILE__ ) ." alt=".$x_value['name'].">";
                                     echo "</div>";  
+                                    echo "</a>";
                                   } 
                                   else
                                   {
+                                    echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'>";
                                     echo "<div class='eventlayout-image'>";
                                       echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
                                     echo "</div>";  
+                                    echo "</a>";
                                   }
                                 }
                             /*if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
