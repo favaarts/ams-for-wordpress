@@ -1,18 +1,3 @@
-jQuery( document ).ready(function() {
-
-	var timezone_offset_minutes = new Date().getTimezoneOffset();
-	timezone_offset_minutes = timezone_offset_minutes == 0 ? 0 : -timezone_offset_minutes;
-
-	console.log(timezone_offset_minutes);
-	
-	 var date = new Date();
-	 var minutes = 60;
-	 date.setTime(date.getTime() + (minutes * 60 * 1000));
-
-	jQuery.cookie("timezoneoffset", timezone_offset_minutes , { expires: date });
-
-});	
-
 function equipmentdetails(prodictkey)
 {
 	console.log(prodictkey);
