@@ -270,9 +270,10 @@ session_start();
                                             echo "<div class='ragister-sec'>";
                                                 echo "<div class='classevent'>"; 
                                                 foreach ($eventtime['json']['scheduled_program_dates'] as $key => $daytime) { 
+                                                $eventdate = localtimezone('D, M d, Y',$daytime['start']);      
                                                 echo "<div class='daytimediv'>";    
                                                     echo  "<div class='evtdate'>";
-                                                            echo "<p>".date('D, M d, Y', strtotime($daytime['start']))."</p>";
+                                                            echo "<p>".$eventdate."</p>";
                                                     echo  "</div>";
                                                     
                                                 $starttime = localtimezone('H:i a',$daytime['start']);
