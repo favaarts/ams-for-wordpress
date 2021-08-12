@@ -45,6 +45,7 @@ foreach($blockdata as $amsblock)
         $amsfile_attachment = $amsblock['attrs']['amsfile_attachment'];
         $passwordprotected = $amsblock['attrs']['passwordprotected'];
         $remove_submittedby = $amsblock['attrs']['remove_submittedby'];
+        $amscredentials = $amsblock['attrs']['amscredentials'];
     }
 }    
 
@@ -61,12 +62,6 @@ global $wp, $wpdb;
 
 
 $arrayResult = get_projectdetails($amsprojectid);
-
-//echo $arrayResult['project']['user_id'];
-/*echo "<pre>";
-print_r($arrayResult);
-echo "</pre>";
-*///echo $project_protected;
 
 $crewrole = "Crew%20Role";
 $attributeCrewResult = get_projectattributes($amsprojectid,$crewrole);
@@ -105,10 +100,6 @@ if(empty($bgcolor))
 {
     $bgcolor = "#337AB7";
 }
-
-/*echo "<pre>";
-print_r($blocks);
-echo "</pre>";*/
 
 //
 
@@ -153,7 +144,6 @@ echo "</pre>";*/
                                         {
                                             if($x_value['file_attachment_thumbnail'])
                                             {
-                                                //$videoBanner = $x_value['file_attachment_thumbnail'];
                                                 $thumbnailimage = get_the_post_thumbnail_url( $pageid);
                                                  if(empty($thumbnailimage))
                                                  {
@@ -639,7 +629,7 @@ jQuery(document).ready(function($) {
 
    var logintoken = "<?php echo $_SESSION['accesstoken']; ?>";    
    var projectpagepw = "<?php echo $_SESSION['projectpassword']; ?>";    
-    var amscredentials = "<?php echo $blocks[0]['attrs']['amscredentials']; ?>";
+    var amscredentials = "<?php echo $amscredentials; ?>";
     var amssinglevideo = "<?php echo $amssinglevideonew; ?>";
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
@@ -782,6 +772,20 @@ jQuery(document).ready(function($) {
                     });
             }
         }
+    }
+    else
+    {
+        jwplayer("video_player").setup({
+                image: "<?php echo $videoBanner; ?>",
+                width: "100%",
+                aspectratio: "12:7",
+                autostart: "false",
+                sources: [{
+                    file: amssinglevideo
+                }],
+                cast: {},
+                ga: {}
+        });
     }
 
    
