@@ -209,7 +209,7 @@ if(empty($bgcolor))
                                        echo "<div class='videobanner' id='video_player'></div>";     
                                     }
                                 }
-                                else
+                                else if($amssinglevideonew)
                                 {
                                     echo "<a class='video-icon'></a>";
 
@@ -228,10 +228,10 @@ if(empty($bgcolor))
                                      }
 
                                     echo "<img src='".$thumbnailurl."'>";
+                                    echo "<div class='amsaudio' id='amsaudio_player'></div>";
                                 }       
                                 ?>
 
-                                <div class="amsaudio" id="amsaudio_player"></div>
                                 
                                     
                             </div>
@@ -241,7 +241,7 @@ if(empty($bgcolor))
                             if (empty($amsprojectpagesidebar))
                             { 
                             ?>
-                                <div class="ing-title">
+                                <div class="ing-title 12">
                                     <?php
                                     echo  "<h1> ". $arrayResult['project']['name'] ;
                                       if($arrayResult['project']['completed_year'])
@@ -773,7 +773,7 @@ jQuery(document).ready(function($) {
             }
         }
     }
-    else
+    else if(amssinglevideo)
     {
         jwplayer("video_player").setup({
                 image: "<?php echo $videoBanner; ?>",
