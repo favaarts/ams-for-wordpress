@@ -73,7 +73,8 @@
       default: false
     },
     remove_viewmore: {
-        type: 'boolean',
+      type: 'boolean',
+      default: false
     },
     remove_submittedby: {
         type: 'boolean',
