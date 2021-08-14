@@ -46,6 +46,7 @@ foreach($amsblocksetting as $amsblock)
         $projectsidebar = $amsblock['attrs']['projectsidebar'];
         $amsreelid = $amsblock['attrs']['amsreelid'];
         $remove_viewmore = $amsblock['attrs']['remove_viewmore'];
+        if (!in_array($amsblock['attrs']['remove_viewmore'], $amsblock['attrs'])){ unset($remove_viewmore); }
         $project_paymenturl = $amsblock['attrs']['project_paymenturl'];
         $project_paymentmessage = $amsblock['attrs']['project_paymentmessage'];
         $paymentbuttonname = $amsblock['attrs']['paymentbuttonname'];
@@ -390,7 +391,11 @@ if(empty($bgcolor))
             <a id="inifiniteLoader"  data-totalequipment="<?php echo $arrayResult['meta']['total_count']; ?>" ><img src="<?php echo esc_url( plugins_url( 'assets/img/loader.svg', dirname(__FILE__) ) ) ?>" ></a>   
 
             <?php
-            if (isset($remove_viewmore))
+            if (!isset($remove_viewmore))
+            { 
+              echo "<input type='button' id='seemore' style='background-color: $bgcolor' value='View More'>";
+            }
+            if (isset($remove_viewmore) && empty($remove_viewmore))
             { 
               echo "<input type='button' id='seemore' style='background-color: $bgcolor' value='View More'>";
             }
