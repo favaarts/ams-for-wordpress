@@ -1372,6 +1372,12 @@ if(!empty($apiurlcheck) && !empty($apikeycheck))
         plugins_url( 'assets/js/amslogin.js', __FILE__ ),
         array( 'wp-blocks', 'wp-element', 'wp-plugins', 'wp-editor', 'wp-edit-post', 'wp-i18n', 'wp-components', 'wp-data' )
        );
+
+       wp_enqueue_script(
+        'programpage-js',
+        plugins_url( 'assets/js/amsprogrampage.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-element', 'wp-plugins', 'wp-editor', 'wp-edit-post', 'wp-i18n', 'wp-components', 'wp-data' )
+       );
     }
     add_action( 'enqueue_block_editor_assets', 'ams_gutenberg_api_block_admin' );
 }
@@ -1407,7 +1413,7 @@ require plugin_dir_path( __FILE__ ). 'inc/eventlisting.php';
 // CTA for Short code project listing
 require plugin_dir_path( __FILE__ ). 'inc/projects.php';
 require plugin_dir_path( __FILE__ ). 'inc/projectpage.php';
-
+require plugin_dir_path( __FILE__ ). 'inc/programpage.php';
 // CTA for Short code login page
 require plugin_dir_path( __FILE__ ). 'inc/amslogin.php';
 
@@ -2007,6 +2013,33 @@ function get_projectdetails($project_id = '')
 add_action('wp_ajax_get_projectdetails','get_projectdetails');
 add_action('wp_ajax_nopriv_get_projectdetails','get_projectdetails');
 // End Project details
+
+// Program/EVent details
+function get_programdetails($program_id = '')
+{
+
+    $apiurl = get_option('wpams_url_btn_label');
+    $apikey = get_option('wpams_apikey_btn_label');
+
+    /*$projectlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/project_attributes?project_id=".$attribute_id."&access_token=".$apikey."&method=get&format=json";*/
+
+    $projectdetails = "https://".$apiurl.".amsnetwork.ca/api/v3/programs/".$program_id."?access_token=".$apikey."&method=get&format=json";
+
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$projectdetails);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+    $json = curl_exec($ch);
+    if(!$json) {
+        echo curl_error($ch);
+    }
+    curl_close($ch);
+
+    return $arrayProjectResultData = json_decode($json, true);
+}
+add_action('wp_ajax_get_programdetails','get_programdetails');
+add_action('wp_ajax_nopriv_get_programdetails','get_programdetails');
+// End Program/EVent details
 
 // assets Available bookings calendar
 function get_assetscalendar($asets_id = '')

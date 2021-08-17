@@ -3,14 +3,9 @@ session_start();
 function amsprojectpage_function( $slug ) {
     ob_start();  
 
-global $post;
-$pageid = $post->ID;
-$post_slugpage = $post->post_name;
-
-//$blockdata = get_sidebaroption();
-
-$post_id = get_the_ID();
-$post = get_post($post_id);
+global $post, $wp, $wpdb;;
+$pageid = get_the_ID();
+$post = get_post($pageid);
 $blockdata = parse_blocks($post->post_content);
 
 foreach($blockdata as $amsblock) 
@@ -58,9 +53,6 @@ foreach($blockdata as $amsblock)
 
 <?php
 
-global $wp, $wpdb;
-
-
 $arrayResult = get_projectdetails($amsprojectid);
 
 $crewrole = "Crew%20Role";
@@ -72,9 +64,6 @@ $attributePhoto = get_projectattributes($amsprojectid,$photo);
 $longattributes = "Long%20Attributes";
 $longAttribute = get_projectattributes($amsprojectid,$longattributes);
 
-
-$loginPageURL=site_url($post_slugpage);
-/**/
 
 if(isset($firstpartmailtext))
 {
@@ -93,7 +82,7 @@ else
 {
     $secondpartmailtext = "I you have any questions or coments please contact us at programing@fava.ca.";
 }
-/**/
+
 
 $bgcolor = get_option('wpams_button_colour_btn_label');
 if(empty($bgcolor))
@@ -101,7 +90,6 @@ if(empty($bgcolor))
     $bgcolor = "#337AB7";
 }
 
-//
 
 ?>
 
@@ -136,6 +124,7 @@ if(empty($bgcolor))
 
                             <div class="img-sec video-main">
                                 <?php
+                                
                                 if(isset($attributePhoto['project_attributes']))
                                 {    
                                     foreach($attributePhoto['project_attributes'] as $x_value) 
@@ -162,10 +151,20 @@ if(empty($bgcolor))
                                             }
                                             else
                                             {
+                                                $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                                 if(empty($thumbnailimage))
+                                                 {
+                                                    $videoBanner = $x_value['file_attachment_thumbnail'];
+                                                 }
+                                                 else
+                                                 {
+                                                    $videoBanner = $thumbnailimage;
+                                                 }
+
                                                 $videoBanner = plugins_url( 'assets/img/video_poster.jpg', __FILE__ );
                                             }
                                         }
-                                        elseif ($x_value['project_attribute_type_name'] == "Audio") 
+                                        else if ($x_value['project_attribute_type_name'] == "Audio") 
                                         {
                                             $audiofileAttachment = $x_value['file_attachment'];
                                             break;
@@ -173,16 +172,48 @@ if(empty($bgcolor))
                                     }
                                 }    
 
-                                if(empty($amssinglevideonew))
+                                if(empty($amssinglevideonew) && empty($audiofileAttachment))
                                 {
-                                    if(empty($arrayResult['project']['thumbnail']))
+
+                                    $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                    
+                                    if($arrayResult['project']['thumbnail'])
                                     {
-                                        $videoBanner = plugins_url( 'assets/img/bg-image.png', __FILE__ );
-                                        echo  "<img src=".$videoBanner." class='hover-shadow cursor'>";
+                                       $videoBanner = $arrayResult['project']['thumbnail']; 
+                                    }
+                                    else if($thumbnailimage)
+                                    {
+                                        $videoBanner = $thumbnailimage;
+                                    }
+                                    else if($arrayResult['project']['thumbnail'])
+                                    {
+                                        $videoBanner = $arrayResult['project']['thumbnail'];
                                     }
                                     else
                                     {
-                                         $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                        $videoBanner = esc_url( plugins_url( 'assets/img/bg-image.png', dirname(__FILE__) ) );
+                                    }
+                                    
+                                    echo  "<img src=".$videoBanner." class='hover-shadow cursor test1'>";
+                                    
+                                }
+                                
+                                
+                                
+                                if(isset($_SESSION["projectpassword"]))
+                                {
+                                    if($nowtime > $_SESSION['expire'])
+                                    {
+                                      session_unset();
+                                      session_destroy();
+                                    }  
+                                    else if($amssinglevideonew)
+                                    {
+                                       echo "<div class='videobanner' id='video_player'></div>";     
+                                    }
+                                    else if($audiofileAttachment)
+                                    {
+                                        $thumbnailimage = get_the_post_thumbnail_url( $pageid);
                                          if(empty($thumbnailimage))
                                          {
                                             $thumbnailurl = $arrayResult['project']['thumbnail'];
@@ -191,45 +222,94 @@ if(empty($bgcolor))
                                          {
                                             $thumbnailurl = $thumbnailimage;
                                          }
-
-                                        echo  "<img src=".$thumbnailurl." class='hover-shadow cursor'>";
-                                    }
-                                }
-                                
-                                //NEW ams login
-                                if(isset($_SESSION["projectpassword"]) || empty($project_protected) )
-                                {
-                                    if($nowtime > $_SESSION['expire'])
-                                    {
-                                      session_unset();
-                                      session_destroy();
-                                    }  
-                                    else
-                                    {
-                                       echo "<div class='videobanner' id='video_player'></div>";     
+                                        echo "<img class='test' src='".$thumbnailurl."'>";
+                                        echo "<div class='amsaudio' id='amsaudio_player'></div>";
                                     }
                                 }
                                 else if($amssinglevideonew)
                                 {
-                                    echo "<a class='video-icon'></a>";
+                                    if(isset($project_protected) && $project_protected != null && $passwordprotected == 1)
+                                    {
+                                        echo "<a class='video-icon'></a>";
+                                        $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                         if(empty($thumbnailimage))
+                                         {
+                                            $thumbnailurl = $arrayResult['project']['thumbnail'];
+                                         }
+                                         else if(empty($arrayResult['project']['thumbnail']))
+                                         {
+                                            $thumbnailurl = plugins_url( 'assets/img/bg-image.png', __FILE__ );
+                                         }
+                                         else
+                                         {
+                                            $thumbnailurl = $thumbnailimage;
+                                         }
 
-                                    $thumbnailimage = get_the_post_thumbnail_url( $pageid);
-                                     if(empty($thumbnailimage))
-                                     {
-                                        $thumbnailurl = $arrayResult['project']['thumbnail'];
-                                     }
-                                     else if(empty($arrayResult['project']['thumbnail']))
-                                     {
-                                        $thumbnailurl = plugins_url( 'assets/img/bg-image.png', __FILE__ );
-                                     }
-                                     else
-                                     {
-                                        $thumbnailurl = $thumbnailimage;
-                                     }
+                                        echo "<img src='".$thumbnailurl."'>";
+                                    }
+                                    else
+                                    {
+                                        
 
-                                    echo "<img src='".$thumbnailurl."'>";
-                                    echo "<div class='amsaudio' id='amsaudio_player'></div>";
-                                }       
+                                        $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                         if(empty($thumbnailimage))
+                                         {
+                                            $thumbnailurl = $arrayResult['project']['thumbnail'];
+                                         }
+                                         else if(empty($arrayResult['project']['thumbnail']))
+                                         {
+                                            $thumbnailurl = plugins_url( 'assets/img/bg-image.png', __FILE__ );
+                                         }
+                                         else
+                                         {
+                                            $thumbnailurl = $thumbnailimage;
+                                         }
+
+                                        echo "<div class='videobanner two' id='video_player'></div>";
+                                    }
+                                    
+                                } 
+                                else if($audiofileAttachment)
+                                {
+                                    if(isset($project_protected) && $project_protected != null && $passwordprotected == 1)
+                                    {
+                                        echo "<a class='video-icon'></a>";
+                                         $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                         if(empty($thumbnailimage))
+                                         {
+                                            $thumbnailurl = $arrayResult['project']['thumbnail'];
+                                         }
+                                         else if(empty($arrayResult['project']['thumbnail']))
+                                         {
+                                            $thumbnailurl = plugins_url( 'assets/img/bg-image.png', __FILE__ );
+                                         }
+                                         else
+                                         {
+                                            $thumbnailurl = $thumbnailimage;
+                                         }
+                                        echo "<img src='".$thumbnailurl."'>";
+                                    }
+                                    else
+                                    {
+                                        
+                                        $thumbnailimage = get_the_post_thumbnail_url( $pageid);
+                                         if(empty($thumbnailimage))
+                                         {
+                                            $thumbnailurl = $arrayResult['project']['thumbnail'];
+                                         }
+                                         else if(empty($arrayResult['project']['thumbnail']))
+                                         {
+                                            $thumbnailurl = plugins_url( 'assets/img/bg-image.png', __FILE__ );
+                                         }
+                                         else
+                                         {
+                                            $thumbnailurl = $thumbnailimage;
+                                         }
+
+                                        echo "<img class='audio_test' src='".$thumbnailurl."'>";
+                                        echo "<div class='amsaudio' id='amsaudio_player'></div>";
+                                    }    
+                                }      
                                 ?>
 
                                 
@@ -241,7 +321,7 @@ if(empty($bgcolor))
                             if (empty($amsprojectpagesidebar))
                             { 
                             ?>
-                                <div class="ing-title 12">
+                                <div class="ing-title 12345">
                                     <?php
                                     echo  "<h1> ". $arrayResult['project']['name'] ;
                                       if($arrayResult['project']['completed_year'])
@@ -353,7 +433,7 @@ if(empty($bgcolor))
                                  
 
                                 <?php
-                               
+                                
                                 if (!isset($projectmedia)) 
                                 {    
                                     if(isset($attributePhoto['project_attributes']))   
@@ -367,9 +447,16 @@ if(empty($bgcolor))
                                             <h3>Media:</h3>
                                             <?php
                                             $i = 1;
-                                            
-                                            array_shift($attributePhoto['project_attributes']);
 
+                                            $totalattribute = count($attributePhoto['project_attributes']);
+
+
+                                            if($totalattribute > 1 )
+                                            {
+                                                
+                                                array_shift($attributePhoto['project_attributes']);
+                                            }
+                                            
                                             foreach($attributePhoto['project_attributes'] as $x_value) 
                                             {
                                                 if($x_value['project_attribute_type_name'] == "Video")
@@ -397,7 +484,7 @@ if(empty($bgcolor))
                                             } 
 
 
-                                            // Audio div
+                                            
                                             foreach($attributePhoto['project_attributes'] as $ams_audio) 
                                             {
                                                 if($ams_audio['project_attribute_type_name'] == "Audio")
@@ -420,9 +507,7 @@ if(empty($bgcolor))
                                                 }
                                               $i++;      
                                             }
-                                            // End audio div 
-
-                                            // Image div
+                                            
                                             foreach($attributePhoto['project_attributes'] as $xphoto_value) 
                                             {
                                                 
@@ -444,9 +529,10 @@ if(empty($bgcolor))
                                                     </div>
                                                     </div>";
                                                 }
-                                                $i++; 
+                                                
                                             }
-                                            // Image div   
+                                            $i++; 
+                                              
                                             ?>
 
                                         </div>
@@ -487,7 +573,6 @@ if(empty($bgcolor))
                                     { 
                                 ?>
                                 <div class="crewroles prospace">
-                                    <!-- <h3>Crew Roles:</h3> -->
                                         <?php
                                         foreach($attributeCrewResult['project_attributes'] as $x_value) 
                                         {
@@ -535,9 +620,6 @@ if(empty($bgcolor))
                             ?>
                             <div class="right-sec">
                                
-                                <!-- <div class="location-sec">
-                                    <h3>Short Attributes</h3>
-                                </div> -->
                                 <?php
                                 
 
@@ -561,14 +643,14 @@ if(empty($bgcolor))
                 </div> 
             </div>
         </div>
-        <!-- .entry-content -->
+        
 
 
-            </main><!-- #main -->
-        </div><!-- #primary -->
+            </main>
+        </div>
       </div>  
-     </div><!-- .container no-sidebar -->
-    </div><!-- .site-content -->
+     </div>
+    </div>
 
 <?php
 
@@ -632,12 +714,14 @@ jQuery(document).ready(function($) {
     var amscredentials = "<?php echo $amscredentials; ?>";
     var amssinglevideo = "<?php echo $amssinglevideonew; ?>";
     var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
-    var audiofileAttachment = "<?php echo $audiofileAttachment; ?>";
     var amsprojectpagesidebar = "<?php echo $amsprojectpagesidebar; ?>";
     var passwordprotected = "<?php echo $passwordprotected; ?>";
 
     var projectpassword = "<?php echo $_GET['password']; ?>";
-    var url = $(this).val();   
+    var url = $(this).val();  
+
+
+    console.log(audiofileAttachment);
 
     jQuery(".video-icon").click(function(){
       jQuery(".custom-model-main").addClass("model-open");
@@ -757,7 +841,7 @@ jQuery(document).ready(function($) {
                         file: amssinglevideo
                     }],
                     cast: {},
-					ga: {}
+                    ga: {}
             });
         }
         else if(audiofileAttachment)
@@ -773,7 +857,7 @@ jQuery(document).ready(function($) {
             }
         }
     }
-    else if(amssinglevideo)
+    else if(amssinglevideo && passwordprotected != 1)
     {
         jwplayer("video_player").setup({
                 image: "<?php echo $videoBanner; ?>",
@@ -786,6 +870,18 @@ jQuery(document).ready(function($) {
                 cast: {},
                 ga: {}
         });
+    }
+    else if(audiofileAttachment && passwordprotected != 1)
+    {
+        audioSetUp("amsaudio_player",audiofileAttachment);
+
+        function audioSetUp(id, url){
+         jwplayer(id).setup({
+                    file: url,
+                    height: 30,
+             primary:"flash"
+                });
+        }
     }
 
    
