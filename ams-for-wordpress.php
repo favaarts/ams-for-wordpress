@@ -13,6 +13,39 @@ if (!defined( 'WPINC' )) {
     die;
 }
 
+// Set Timezone
+if (getenv('HTTP_CLIENT_IP'))
+$ipaddress = getenv('HTTP_CLIENT_IP');
+else if(getenv('HTTP_X_FORWARDED_FOR'))
+    $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+else if(getenv('HTTP_X_FORWARDED'))
+    $ipaddress = getenv('HTTP_X_FORWARDED');
+else if(getenv('HTTP_FORWARDED_FOR'))
+    $ipaddress = getenv('HTTP_FORWARDED_FOR');
+else if(getenv('HTTP_FORWARDED'))
+   $ipaddress = getenv('HTTP_FORWARDED');
+else if(getenv('REMOTE_ADDR'))
+    $ipaddress = getenv('REMOTE_ADDR');
+else
+    $ipaddress = 'UNKNOWN';
+
+$countryTimezone = "http://ip-api.com/json/".$ipaddress."?method=get&format=json";
+
+$ch = curl_init();
+curl_setopt($ch,CURLOPT_URL,$countryTimezone);
+curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
+$json = curl_exec($ch);
+if(!$json) {
+    echo curl_error($ch);
+}
+curl_close($ch);
+
+$timezone = json_decode($json, true);
+$timezone_cookie = $timezone['timezone'];
+setcookie("timezonecookie",$timezone_cookie, time() + (86400 * 30), "/");
+/*End Timezone*/
+
 //register_deactivation_hook( __FILE__, 'amsnetwork_deactivate' );
 //register_uninstall_hook( __FILE__, 'amsnetwork_deactivate' );
 register_deactivation_hook( __FILE__, 'amsnetwork_deactivate' );
@@ -378,38 +411,15 @@ add_action( 'wp_enqueue_scripts', 'wptuts_scripts_important', 20 );
 
 function localtimezone($timeformate = 0,$utc = 0)
 {
-    
-    if (getenv('HTTP_CLIENT_IP'))
-    $ipaddress = getenv('HTTP_CLIENT_IP');
-    else if(getenv('HTTP_X_FORWARDED_FOR'))
-        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-    else if(getenv('HTTP_X_FORWARDED'))
-        $ipaddress = getenv('HTTP_X_FORWARDED');
-    else if(getenv('HTTP_FORWARDED_FOR'))
-        $ipaddress = getenv('HTTP_FORWARDED_FOR');
-    else if(getenv('HTTP_FORWARDED'))
-       $ipaddress = getenv('HTTP_FORWARDED');
-    else if(getenv('REMOTE_ADDR'))
-        $ipaddress = getenv('REMOTE_ADDR');
-    else
-        $ipaddress = 'UNKNOWN';
-
-    $countryTimezone = "http://ip-api.com/json/".$ipaddress."?method=get&format=json";
-    
-    $ch = curl_init();
-    curl_setopt($ch,CURLOPT_URL,$countryTimezone);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT, 4);
-    $json = curl_exec($ch);
-    if(!$json) {
-        echo curl_error($ch);
+    session_start();
+    if(isset($_COOKIE['timezonecookie'])){ 
+    $timezonevalue = $_COOKIE['timezonecookie'];
+    }else{
+        $timezonevalue = 'UTC';
     }
-    curl_close($ch);
-
-    $timezone = json_decode($json, true);
 
     $dt = new DateTime($utc);
-    $tz = new DateTimeZone($timezone['timezone']);
+    $tz = new DateTimeZone($timezonevalue);
     $dt->setTimezone($tz);
     return $dt->format($timeformate);
 }
