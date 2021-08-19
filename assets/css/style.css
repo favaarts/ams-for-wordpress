@@ -1795,6 +1795,12 @@ img.organizationlogo {
     font-size: 11px;
     padding: 2px 0px;
 }
+.ams-content .notavailable .fc-bg
+{
+    background: #337AB7;
+    background-color: #fb6e6e;
+    opacity: 1;
+}
 .ams-content .eventdetail .fc-event, .ams-content .eventdetail .fc-event-dot {
     background-color: #fb6e6e00;
 }
