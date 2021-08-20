@@ -136,10 +136,6 @@ if(empty($bgcolor))
           echo "<div class='userlogin'><p>Hii, ".$_SESSION['billingEmailAddress']."</p></div>";
       
          get_sentmailproject($pageid,$_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);     
-         /* echo "<div class='amslogoutbutton'>
-                  <input type='submit' id='btnAMSLogout' onclick='btnAMSLogout()' value='Log Out'>
-                </div>";*/
-                
       echo "</div>";  
 
       /* Popup */
@@ -184,12 +180,12 @@ if(empty($bgcolor))
               if(empty($amsreelid))
               {
                 echo "<ul class='ul-cat-wrap getcategoryid'>";
-                echo "<li><a href='".site_url('/project')."'>All Projects</a></li>";
+                echo "<li><a href='".site_url($post_slugpage)."'>All Projects</a></li>";
                 $reelsArrayResult = get_getallReels();
 
                 foreach($reelsArrayResult['reels'] as $c => $c_value) 
                 {
-                  echo "<li><a href='".site_url('/project/?reels_id='. $c_value['id'])."'>".$c_value['name']."</a></li>"; 
+                  echo "<li><a href='".site_url('/'.$post_slugpage.'/?reels_id='. $c_value['id'])."'>".$c_value['name']."</a></li>"; 
                 }
                 echo "</ul>";
               }
@@ -304,7 +300,6 @@ if(empty($bgcolor))
               echo "</div>";
               echo "</div>";
               echo "</div>";  
-            //
             }
           }  
       }
