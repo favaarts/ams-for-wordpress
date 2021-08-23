@@ -200,7 +200,7 @@
               checked: props.attributes.remove_viewmore,
             }),
             el(ToggleControl, {
-              label: 'Show/Hide Submitted By',
+              label: 'Hide Submitted By',
               onChange: ( value ) => {
                  props.setAttributes( { remove_submittedby: value } );
               },

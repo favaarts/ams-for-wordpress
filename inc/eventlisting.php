@@ -3,13 +3,32 @@
 function amseventlisting_function( $slug ) {
     ob_start();  
 
-$blockdata = get_sidebaroption();
-if($blockdata['radio_attr_event'] == "calendar_view")
-{ 
+$post_id = get_the_ID();
+$post = get_post($post_id);
+$eventblocksetting = parse_blocks($post->post_content);
 
+foreach($eventblocksetting as $blockdata) 
+{
+    if($blockdata['blockName'] == "wpdams-amsnetwork-event/amsnetwork-block-event")
+    { 
+        $gridlayout = $blockdata['attrs']['radio_attr_event'];
+        $event_pagination = $blockdata['attrs']['event_pagination'];
+        $eventsidebar = $blockdata['attrs']['eventsidebar'];
+        $tagsevents = $blockdata['attrs']['tagsevents'];
+        $organizationevents = $blockdata['attrs']['organizationevents'];
+        $displaypastevents = $blockdata['attrs']['displaypastevents'];
+        $earlybird = $blockdata['attrs']['earlybird'];
+        $eventshowbutton = $blockdata['attrs']['eventshowbutton'];
+        
+    }
+}
+
+
+
+
+if($gridlayout == "calendar_view")
+{ 
 echo "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css' />
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js'></script>";
 }   
@@ -34,15 +53,12 @@ main-content main-content-four-col - this class is for four columns.
 $bgcolor = get_option('wpams_button_colour_btn_label');
 if(empty($bgcolor))
 {
-    $bgcolor = "#337AB7";
+  $bgcolor = "#337AB7";
 }
 
-
-$gridlayout = $blockdata['radio_attr_event'];
-
-if($blockdata['event_pagination'] != NULL)
+if($event_pagination != NULL)
 {
-  $pagination = $blockdata['event_pagination'];
+  $pagination = $event_pagination;
 }
 else
 {
@@ -75,10 +91,10 @@ else
 <div class="wp-block-columns main-content <?= $blockclass; ?>" >
    
   <input type="hidden" name="slugurl" id="slugurl" value="<?=$post_slug?>">  
-  <input type="hidden" id="gridlayoutview" value="<?=$blockdata['radio_attr_event'] ?>">
+  <input type="hidden" id="gridlayoutview" value="<?=$gridlayout?>">
 
     <?php
-    if (!isset($blockdata['eventsidebar']))
+    if (!isset($eventsidebar))
       {
     ?>
     <!-- Sidebar -->
@@ -86,10 +102,7 @@ else
         <?php
 
         $locationArrayResult = get_eventlocation();
-        /*echo $locationArrayResult['json']['locations'][0];
-        echo "<pre>";
-        print_r($locationArrayResult);
-        echo "</pre>";*/
+        
         if(!isset($locationArrayResult['error']))
         {
             
@@ -102,8 +115,6 @@ else
             </div>
 
           <div class="othersearch">
-
-           <!--<h4 class="othertitle" style="color: <?=$bgcolor?>">Filter By</h4></br>-->
 
             <div class="alltypeevent">
               <h4>Type</h4>
@@ -137,7 +148,7 @@ else
             </div>
 
             <?php
-            if (!isset($blockdata['tagsevents']))
+            if (!isset($tagsevents))
             {
             ?>
             <div class="taglabels">
@@ -156,7 +167,7 @@ else
             <?php 
             } 
 
-            if (isset($blockdata['organizationevents']))
+            if (isset($organizationevents))
             {
             ?>
             <div class="taglabels">
@@ -199,7 +210,7 @@ else
           $pageid = $post->ID;
           $pageslug = $post->post_name;
 
-          if($blockdata['radio_attr_event'] == "list_view")
+          if($gridlayout == "list_view")
           {
                 foreach($arrayResult['programs'] as $x_value) 
                 { 
@@ -212,7 +223,7 @@ else
                   echo "<div class='productstyle-list-items'>";
                      
                       
-                        if (isset($blockdata['organizationevents']))
+                        if (isset($organizationevents))
                         {
                           if(empty($x_value['organization_logo']))
                           {
@@ -255,7 +266,7 @@ else
                       echo "<div class='product-content'>";
                         echo "<a href='".site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id'])."'> <p class='product-title'>". $x_value['name'] ."</p> </a>";
                           
-                          if (!isset($blockdata['displaypastevents']))
+                          if (!isset($displaypastevents))
                           {
                             $date=$x_value['earliest_scheduled_program_date'];
                           }
@@ -278,7 +289,7 @@ else
                             echo "<p class='locationname'><strong>Location: </strong>".$x_value['location']."</p>";
                           }
                           
-                          if (!isset($blockdata['earlybird']))
+                          if (!isset($earlybird))
                           {
                             $earlybirddate=$x_value['earlybird_cutoff'];
                             if(empty($earlybirddate))
@@ -312,7 +323,7 @@ else
 
         
           }
-          else if($blockdata['radio_attr_event'] == "calendar_view")
+          else if($gridlayout == "calendar_view")
           {
             echo  "<div class='eventbuttonloader'></div>";
             echo "<div id='calendar_div'>";
@@ -333,7 +344,7 @@ else
                             $assetstitle = (strlen($x_value['name']) > 43) ? substr($x_value['name'],0,40).'...' : $x_value['name'];
 
                             // Check if organization toogle is ON
-                            if (isset($blockdata['organizationevents']))
+                            if (isset($organizationevents))
                             {
                               if(empty($x_value['organization_logo']))
                               {
@@ -372,20 +383,11 @@ else
                               }
                             }
 
-                            /*if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
-                            {                                    
-                                
-                            }
-                            else
-                            {
-                                 echo "<div class='eventlayout-image'>";
-                                    echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
-                                 echo "</div>";
-                            }*/
+                            
 
                             echo "<div class='eventtitle'>";
                               
-                              if (!isset($blockdata['displaypastevents']))
+                              if (!isset($displaypastevents))
                               {
                                 $date=$x_value['earliest_scheduled_program_date'];
                               }
@@ -422,7 +424,7 @@ else
                 <p class="para"></p>
                 <a id="inifiniteLoader"  data-totalequipment="<?php echo $arrayResult['meta']['total_count']; ?>" ><img src="<?php echo esc_url( plugins_url( 'assets/img/loader.svg', dirname(__FILE__) ) ) ?>" ></a>
                 <?php
-                if (!isset($blockdata['eventshowbutton']))
+                if (!isset($eventshowbutton))
                 {
                 echo "<input type='button' id='seemore' style='background-color: $bgcolor' value='View More'>";
                 }
@@ -879,7 +881,8 @@ jQuery(document).ready(function($) {
           data: { action: 'searcheventdata_action', getevent: getevent, organizations: organizations, eventtype: eventtype, eventstatus: eventstatus, evtlocation: evtlocation, pageslug: pageslug, pageid: pageid, eventperpg: eventperpg},
           success: function(data) {
             jQuery('.right-col-wrap').html(data);
-            jQuery('#seemore').hide();
+            //jQuery('#seemore').hide();
+            AjaxInitProgram();
           }
       });
 
@@ -918,11 +921,11 @@ jQuery(document).ready(function($) {
 
    
 
-    function AjaxInitProgram() {
+    function AjaxInitProgram() {     
       var totalprogram = jQuery("#totalprogram").val();
       total = totalprogram;
       console.log(total);
-      if(total >= 10)
+      if(total > 0)
       {
         jQuery('#seemore').show();
         jQuery(".para").hide();

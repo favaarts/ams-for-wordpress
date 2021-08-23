@@ -27,7 +27,7 @@ else if(getenv('HTTP_FORWARDED'))
 else if(getenv('REMOTE_ADDR'))
     $ipaddress = getenv('REMOTE_ADDR');
 else
-    $ipaddress = 'UNKNOWN';
+    $ipaddress = 'UNKNOWN';   
 
 $countryTimezone = "http://ip-api.com/json/".$ipaddress."?method=get&format=json";
 
@@ -2441,10 +2441,34 @@ function search_event_action()
     $organizationid = $_POST['organizations'];
 
     $post = get_post($pageid);
-    $blocks = parse_blocks($post->post_content);
+    $eventblocksetting = parse_blocks($post->post_content);
+
+    foreach($eventblocksetting as $blockdata) 
+    {
+        if($blockdata['blockName'] == "wpdams-amsnetwork-event/amsnetwork-block-event")
+        { 
+            $gridlayout = $blockdata['attrs']['radio_attr_event'];
+            $event_pagination = $blockdata['attrs']['event_pagination'];
+            $eventsidebar = $blockdata['attrs']['eventsidebar'];
+            $tagsevents = $blockdata['attrs']['tagsevents'];
+            $organizationevents = $blockdata['attrs']['organizationevents'];
+            $displaypastevents = $blockdata['attrs']['displaypastevents'];
+            $earlybird = $blockdata['attrs']['earlybird'];
+            $eventshowbutton = $blockdata['attrs']['eventshowbutton'];
+
+            $register_url = $blockdata['attrs']['register_url'];
+            $register_urltab = $blockdata['attrs']['register_urltab'];
+            $member = $blockdata['attrs']['member'];
+            $nonmember = $blockdata['attrs']['nonmember'];
+            $showhideurl = $blockdata['attrs']['showhideurl'];
+            $instructors = $blockdata['attrs']['instructors'];
+            
+            
+        }
+    }
 
     // If the toggle to display Organization filter is ON
-    if(isset($blocks[0]['attrs']['organizationevents']))
+    if(isset($organizationevents))
     {
         $isenable = "true";
     }
@@ -2456,11 +2480,9 @@ function search_event_action()
     if(!empty($_POST['getevent']))
     {
         
-        if (!isset($blocks[0]['attrs']['displaypastevents']))
+        if (!isset($displaypastevents))
         {
             $producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&organization_id=".$organizationid."&type=".$eventtype."&location=".$eventlocaton."&status=".$eventstatus."&tag_name=".$taglabels."&query=".$productname."&page=".$page."&per_page=".$eventperpg."&access_token=".$apikey."&method=get&format=json";
-
-            /*$producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&type=All&query=".$productname."&access_token=".$apikey."&method=get&format=json";*/
         }
         else
         {
@@ -2468,8 +2490,6 @@ function search_event_action()
             $month = date("m");
             $year = date("Y");
             $eventdate = $day."%2F".$month."%2F".$year;
-            
-            //$producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&type=All&query=".$productname."&after=".$eventdate."&access_token=".$apikey."&method=get&format=json";
 
             $producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&organization_id=".$organizationid."&type=".$eventtype."&location=".$eventlocaton."&status=".$eventstatus."&after=".$eventdate."&query=".$productname."&page=".$page."&per_page=".$eventperpg."&tag_name=".$taglabels."&access_token=".$apikey."&method=get&format=json";
         }
@@ -2477,7 +2497,7 @@ function search_event_action()
     else if(isset($eventtype))
     {
        
-        if (!isset($blocks[0]['attrs']['displaypastevents']))
+        if (!isset($displaypastevents))
         {
             $producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&organization_id=".$organizationid."&type=".$eventtype."&location=".$eventlocaton."&status=".$eventstatus."&tag_name=".$taglabels."&page=".$page."&per_page=".$eventperpg."&access_token=".$apikey."&method=get&format=json";
         }
@@ -2495,7 +2515,7 @@ function search_event_action()
     else
     {
 
-        if (!isset($blocks[0]['attrs']['displaypastevents']))
+        if (!isset($displaypastevents))
         {
 
             $producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&type=All&access_token=".$apikey."&method=get&format=json";
@@ -2527,11 +2547,7 @@ function search_event_action()
     
     if(!empty($arrayResult['programs']))
     {
-        $post = get_post($pageid);
-        $blocks = parse_blocks($post->post_content);
-        $gridlayout = $blocks[0]['attrs']['radio_attr_event'];
         
-
         if($gridlayout == "list_view")
         {
             echo "<input type='hidden' id='totalprogram' value='".$arrayResult['meta']['total_count']."'>";
@@ -2545,8 +2561,7 @@ function search_event_action()
                 echo "<div class='listview-events'>";
                   echo "<div class='productstyle-list-items'>";
                        
-                        // Check if organization toogle is ON
-                        if (isset($blocks[0]['attrs']['organizationevents']))
+                        if (isset($organizationevents))
                         {
                           if(empty($x_value['organization_logo']))
                           {
@@ -2590,7 +2605,7 @@ function search_event_action()
                       echo "<div class='product-content'>";
                         echo "<a href='".site_url('/'.$pageslug.'/'.$pageid.'-'.$x_value['id'])."'> <p class='product-title'>". $x_value['name'] ."</p> </a>";
 
-                        if (!isset($blocks[0]['attrs']['displaypastevents']))
+                        if (!isset($displaypastevents))
                         {
                             $date=$x_value['earliest_scheduled_program_date'];
                         }
@@ -2705,7 +2720,7 @@ function search_event_action()
 
                                 
                                 // Check if organization toogle is ON
-                                if (isset($blocks[0]['attrs']['organizationevents']))
+                                if (isset($organizationevents))
                                 {
                                   if(empty($x_value['organization_logo']))
                                   {
@@ -2734,23 +2749,11 @@ function search_event_action()
                                       echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
                                     echo "</div>";  
                                   }
-                                }
-
-                                /*if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
-                                {                                    
-                                    
-
-                                }
-                                else
-                                {
-                                     echo "<div class='eventlayout-image'>";
-                                        echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
-                                     echo "</div>";
-                                }*/
+                                }                                
 
                                 echo "<div class='eventtitle'>";
 
-                                if (!isset($blocks[0]['attrs']['displaypastevents']))
+                                if (!isset($displaypastevents))
                                 {
                                     $date=$x_value['earliest_scheduled_program_date'];
                                 }
@@ -3078,10 +3081,33 @@ function geteventonclick_action()
     $organizationid = $_POST['organizations'];
 
     $post = get_post($pageslugid);
-    $blocks = parse_blocks($post->post_content);
-    $gridlayout = $blocks[0]['attrs']['radio_attr_event'];
+    $eventblocksetting = parse_blocks($post->post_content);
 
-    if(isset($blocks[0]['attrs']['organizationevents']))
+    foreach($eventblocksetting as $blockdata) 
+    {
+        if($blockdata['blockName'] == "wpdams-amsnetwork-event/amsnetwork-block-event")
+        { 
+            $gridlayout = $blockdata['attrs']['radio_attr_event'];
+            $event_pagination = $blockdata['attrs']['event_pagination'];
+            $eventsidebar = $blockdata['attrs']['eventsidebar'];
+            $tagsevents = $blockdata['attrs']['tagsevents'];
+            $organizationevents = $blockdata['attrs']['organizationevents'];
+            $displaypastevents = $blockdata['attrs']['displaypastevents'];
+            $earlybird = $blockdata['attrs']['earlybird'];
+            $eventshowbutton = $blockdata['attrs']['eventshowbutton'];
+
+            $register_url = $blockdata['attrs']['register_url'];
+            $register_urltab = $blockdata['attrs']['register_urltab'];
+            $member = $blockdata['attrs']['member'];
+            $nonmember = $blockdata['attrs']['nonmember'];
+            $showhideurl = $blockdata['attrs']['showhideurl'];
+            $instructors = $blockdata['attrs']['instructors'];
+            
+            
+        }
+    }
+    
+    if(isset($organizationevents))
     {
         $isenable = "true";
     }
@@ -3090,7 +3116,24 @@ function geteventonclick_action()
         $isenable = "false";
     }
 
-    $producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&organization_id=".$organizationid."&type=".$eventtype."&location=".$eventlocaton."&status=".$eventstatus."&tag_name=".$taglabels."&page=".$page."&per_page=".$eventperpg."&access_token=".$apikey."&method=get&format=json";
+    if($displaypastevents == 'futureevents')
+    {
+        
+        $day = date("d");
+        $month = date("m");
+        $year = date("Y");
+        $eventdate = $day."%2F".$month."%2F".$year;
+
+        //$eventlistingurl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&type=All&per_page=".$totalevents."&after=".$eventdate."&access_token=".$apikey."&method=get&format=json";
+
+        $producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&organization_id=".$organizationid."&type=".$eventtype."&location=".$eventlocaton."&status=".$eventstatus."&tag_name=".$taglabels."&page=".$page."&per_page=".$eventperpg."&after=".$eventdate."&access_token=".$apikey."&method=get&format=json";
+    }
+    else
+    {
+        $producturl = "https://".$apiurl.".amsnetwork.ca/api/v3/programs?is_enabled_for_artsevents=".$isenable."&organization_id=".$organizationid."&type=".$eventtype."&location=".$eventlocaton."&status=".$eventstatus."&tag_name=".$taglabels."&page=".$page."&per_page=".$eventperpg."&access_token=".$apikey."&method=get&format=json";
+    }
+
+    
 
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL,$producturl);
@@ -3121,7 +3164,7 @@ function geteventonclick_action()
                         
                         
                         // Check if organization toogle is ON
-                        if (isset($blocks[0]['attrs']['organizationevents']))
+                        if (isset($organizationevents))
                         {
                           if(empty($x_value['organization_logo']))
                           {
@@ -3159,17 +3202,6 @@ function geteventonclick_action()
                             echo "</a>";  
                           }
                         }     
-                        
-                      /*if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
-                      {                                    
-                          
-                      }
-                      else
-                      {
-                           echo "<div class='product-img'>";
-                              echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
-                           echo "</div>";
-                      }*/
 
                       echo "<div class='product-content'>";
 
@@ -3197,7 +3229,6 @@ function geteventonclick_action()
                             echo "<p class='locationname'><strong>Location: </strong>".$x_value['location']."</p>";
                           }
                           
-                          //earlybird_cutoff
                           $earlybirddate=$x_value['earlybird_cutoff'];
                           if(empty($earlybirddate))
                           {
@@ -3244,7 +3275,7 @@ function geteventonclick_action()
 
 
                                 // Check if organization toogle is ON
-                                if (isset($blocks[0]['attrs']['organizationevents']))
+                                if (isset($organizationevents))
                                 {
                                   if(empty($x_value['organization_logo']))
                                   {
@@ -3282,20 +3313,26 @@ function geteventonclick_action()
                                     echo "</a>";
                                   }
                                 }
-                            /*if($x_value['photo']['photo']['medium']['url'] == NULL || $x_value['photo']['photo']['medium']['url'] == "")
-                            {                                    
-                                
+                            
+
+                            echo "<div class='eventtitle'>";
+                            
+                            if (!isset($displaypastevents))
+                            {
+                                $date=$x_value['earliest_scheduled_program_date'];
                             }
                             else
                             {
-                                 echo "<div class='eventlayout-image'>";
-                                    echo "<img src=".$x_value['photo']['photo']['medium']['url'].">";
-                                 echo "</div>";
-                            }*/
-
-                            echo "<div class='eventtitle'>";
-                            $date=date_create($arrayResult['program']['created_at']);
-                                echo "<p><span class='datetitle'>Earliest Date: </span>".date_format($date, 'D, M d')."</P>"; 
+                                $date=$x_value['upcoming_scheduled_program_date'];
+                            }  
+                            if(empty($date))
+                            {
+                              echo "<p>No Date Scheduled</P>";
+                            }
+                            else
+                            {
+                              echo "<p><span class='datetitle'><strong>Earliest Date: </strong> </span>".date('D, M d', strtotime($date))."</P>"; 
+                            }  
                                 echo "<a href='".site_url('/'.$pageslug.'/'.$pageslugid.'-'.$x_value['id'])."'> <p class='product-title'>". $assetstitle ."</p> </a>";
                             echo "</div>";
                               
@@ -3306,8 +3343,7 @@ function geteventonclick_action()
             }
         
         }
-        //echo "<img src=". esc_url( plugins_url( 'assets/img/loader.svg', dirname(__FILE__) ) ) . ">";
-
+        
     die();
 }
 add_action('wp_ajax_geteventonclick_action','geteventonclick_action');
