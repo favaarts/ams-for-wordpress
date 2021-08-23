@@ -39,8 +39,8 @@
       default: true
      },
      displaypastevents: {
-      type: 'boolean',
-      default: true
+      type: 'string',
+      default: 'allevents',
      },
      tagsevents: {
       type: 'boolean',
@@ -139,14 +139,19 @@
               },
               checked: props.attributes.instructors,
             }),
-            el('p', {}, i18n.__('( On / Off ) Display past events.', 'amsnetwork-gutenbergevent-block')),
-            el(ToggleControl, {
-              label: 'Display Past Events',
-              onChange: ( value ) => {
-                 props.setAttributes( { displaypastevents: value } );
-              },
-              checked: props.attributes.displaypastevents,
-            }),
+            el( SelectControl,
+              {
+                label: 'Display Past, Future or All Programs',
+                options : [
+                  { label: 'All', value: 'allevents' },
+                  { label: 'Future Only', value: 'futureevents' },
+                ],
+                onChange: ( value ) => {
+                  props.setAttributes( { displaypastevents: value } );
+                },
+                value: props.attributes.displaypastevents
+              }
+            ),
             el('p', {}, i18n.__('( On / Off ) Display Labels.', 'amsnetwork-gutenbergevent-block')),
             el(ToggleControl, {
               label: 'Labels',

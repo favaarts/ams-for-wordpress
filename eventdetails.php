@@ -66,12 +66,37 @@ session_start();
                     
                     //
                     $post = get_post($arrayevid[0]);
-                    $blocks = parse_blocks($post->post_content);
+                    $eventblocksetting = parse_blocks($post->post_content);
+
+                    foreach($eventblocksetting as $blockdata) 
+                    {
+                        if($blockdata['blockName'] == "wpdams-amsnetwork-event/amsnetwork-block-event")
+                        { 
+                            $gridlayout = $blockdata['attrs']['radio_attr_event'];
+                            $event_pagination = $blockdata['attrs']['event_pagination'];
+                            $eventsidebar = $blockdata['attrs']['eventsidebar'];
+                            $tagsevents = $blockdata['attrs']['tagsevents'];
+                            $organizationevents = $blockdata['attrs']['organizationevents'];
+                            $displaypastevents = $blockdata['attrs']['displaypastevents'];
+                            $earlybird = $blockdata['attrs']['earlybird'];
+                            $eventshowbutton = $blockdata['attrs']['eventshowbutton'];
+
+                            $register_url = $blockdata['attrs']['register_url'];
+                            $register_urltab = $blockdata['attrs']['register_urltab'];
+                            $member = $blockdata['attrs']['member'];
+                            $nonmember = $blockdata['attrs']['nonmember'];
+                            $showhideurl = $blockdata['attrs']['showhideurl'];
+                            $instructors = $blockdata['attrs']['instructors'];
+                            
+                            
+                        }
+                    }
+                    
 
                     // Register URL
-                    if($blocks[0]['attrs']['register_url'])
+                    if($register_url)
                     {
-                        $registerurl = $blocks[0]['attrs']['register_url'];
+                        $registerurl = $register_url;
                     }
                     else
                     {
@@ -79,7 +104,7 @@ session_start();
                         $registerurl = "https://".$apiurl.".amsnetwork.ca/login";
                     }
 
-                    $eventwindow = $blocks[0]['attrs']['register_urltab'];
+                    $eventwindow = $register_urltab;
                     if(empty($eventwindow))
                     {
                         $eventwindow = "_self";
@@ -92,7 +117,7 @@ session_start();
                                 if($arrayResult['program']['photo']['photo']['medium']['url'] == NULL || $arrayResult['program']['photo']['photo']['medium']['url'] == "")
                                 {  
                                     // Check if organization toogle is ON
-                                  if (isset($blocks[0]['attrs']['organizationevents']))
+                                  if (isset($organizationevents))
                                   { 
                                     if(empty($arrayResult['program']['organization_logo']))
                                     {
@@ -128,7 +153,7 @@ session_start();
 
                                 <h1><?=$arrayResult['program']['name']?></h1>
 
-                                <?php if (isset($blocks[0]['attrs']['member']) && isset($blocks[0]['attrs']['nonmember']) && isset($blocks[0]['attrs']['earlybird']) && empty($blocks[0]['attrs']['member']) && empty($blocks[0]['attrs']['nonmember']) && empty($blocks[0]['attrs']['earlybird'])){ ?>
+                                <?php if (isset($member) && isset($nonmember) && isset($earlybird) && empty($member) && empty($nonmember) && empty($earlybird)){ ?>
                                     <div class="event-description-sec">
                                         <div class="text-sec">
                                             <p class="text-italic">
@@ -140,7 +165,7 @@ session_start();
 
                                 <?php if(!empty($arrayResult['program']['member_enrollment_price']))
                                 { 
-                                    if (!isset($blocks[0]['attrs']['member']))
+                                    if (!isset($member))
                                     {
                                 ?>
                                 <div class="enrollment enrtop">
@@ -165,7 +190,7 @@ session_start();
                                 }
                                 if(!empty($arrayResult['program']['enrollment_price']))
                                 {
-                                    if (!isset($blocks[0]['attrs']['nonmember']))
+                                    if (!isset($nonmember))
                                     { 
 
                                         if($arrayResult['program']['enrollment_price'] > 0)
@@ -195,7 +220,7 @@ session_start();
                                 }
                                 if(!empty($arrayResult['program']['earlybird_discount']))
                                 {
-                                    if (!isset($blocks[0]['attrs']['earlybird']))
+                                    if (!isset($earlybird))
                                     {
                                  ?>
                                 <div class="enrollment">
@@ -226,7 +251,7 @@ session_start();
                                 <h1></h1>
                                 <h2>About this Event</h2>
                                 <div class="text-sec">
-                                    <?php if (!isset($blocks[0]['attrs']['member']) || !isset($blocks[0]['attrs']['nonmember']) || !isset($blocks[0]['attrs']['earlybird'])){ ?>
+                                    <?php if (!isset($member) || !isset($nonmember) || !isset($earlybird)){ ?>
                                     <p class="text-italic">
                                         <?php echo $arrayResult['program']['description']; ?>
                                     </p>
@@ -286,7 +311,7 @@ session_start();
                                                 }
                                                 echo "</div>";
                                             echo   "<br>";
-                                            if (!isset($blocks[0]['attrs']['showhideurl']))
+                                            if (!isset($showhideurl))
                                             {
                                                 echo   "<div class='reg-sec 3 location-sec'>";
                                                 if(isset($_SESSION['accesstoken']) && $_SESSION["user_id"]):
@@ -321,7 +346,7 @@ session_start();
                                            
 
                                             echo "<div class='ragister-sec'>";
-                                            if (!isset($blocks[0]['attrs']['showhideurl']))
+                                            if (!isset($showhideurl))
                                             {
                                             echo   "<div class='reg-sec 1'>";
                                             echo   "<a href=".$registerurl." target=".$eventwindow." style='background-color:".$bgcolor."'>Register</a>";
@@ -368,7 +393,7 @@ session_start();
                                 <?php
                                 if(!empty($arrayResult['program']['instructors']))
                                 {
-                                    if (!isset($blocks[0]['attrs']['instructors']))
+                                    if (!isset($instructors))
                                     {
                                 ?>
                                 <div class="location-sec">
