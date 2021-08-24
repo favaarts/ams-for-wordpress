@@ -6,6 +6,7 @@ function amsprojectpage_function( $slug ) {
 global $post, $wp, $wpdb;;
 $pageid = get_the_ID();
 $post = get_post($pageid);
+$loginPageURL=site_url($post->post_name);
 $blockdata = parse_blocks($post->post_content);
 
 foreach($blockdata as $amsblock) 
@@ -760,7 +761,7 @@ jQuery(document).ready(function($) {
 
           if(custbillingEmail == null)
           {
-            location.reload();
+            window.location.replace("<?php echo $loginPageURL; ?>");
           }
     }  
 

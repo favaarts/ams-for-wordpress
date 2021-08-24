@@ -50,6 +50,7 @@ foreach($amsblocksetting as $amsblock)
         $project_paymenturl = $amsblock['attrs']['project_paymenturl'];
         $project_paymentmessage = $amsblock['attrs']['project_paymentmessage'];
         $paymentbuttonname = $amsblock['attrs']['paymentbuttonname'];
+        $remove_submittedby = $amsblock['attrs']['remove_submittedby'];
         
     }
 }  
@@ -279,8 +280,11 @@ if(empty($bgcolor))
                 echo  "</a>";
               }  
 
-              echo "<div class='assetsprice'>";
-              echo    "<p class='memberprice'><strong>Created By</strong> - ". $x_value['creator']. "</p>";
+              if (!isset($remove_submittedby))
+              {
+                echo "<div class='assetsprice'>";
+                echo    "<p class='memberprice'><strong>Created By</strong> - ". $x_value['creator']. "</p>";
+              }
 
               if($synopsis != NULL)
               {
@@ -368,7 +372,11 @@ if(empty($bgcolor))
                           echo "<img src=".$x_value['thumbnail'].">";
                        echo "</div>";
                   }
+
+                  if (!isset($remove_submittedby))
+                  {
                   echo "<p class='memberprice'><strong>Created By</strong> - ". $x_value['creator']. "</p>";
+                  }
             echo"</div>";
 
             }
