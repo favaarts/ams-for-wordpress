@@ -1075,8 +1075,6 @@ function sentmailprojectpage()
         echo 'Unable to send email. Please try again.';
     }
 }
-add_action('wp_ajax_sentmailprojectpage','sentmailprojectpage');
-add_action('wp_ajax_nopriv_sentmailprojectpage','sentmailprojectpage');
 
 // AMS Member login
 function get_amsmemberlogout()
