@@ -1043,11 +1043,30 @@ add_action('wp_ajax_nopriv_get_sentmailproject','get_sentmailproject');
 // End AMS Project mail
 
 // Project page mail
-function sentmailprojectpage()
+function sentmailprojectpage($produtid,$billingEmailAddress,$projectPassword,$billingContactName,$loginPageURL)
 {
-    $to = 'jay.bagwansingh@ifuturz.com';
-    $subject = 'FAVA FEST 2021';
-    $from = 'info@fava.ca';
+
+    global $post;
+    $post_id = $produtid;
+    $post = get_post($post_id);
+    $amsblocksetting = parse_blocks($post->post_content);
+
+    foreach($amsblocksetting as $amsblock) 
+    {
+        if($amsblock['blockName'] == "wpdams-amsnetwork-projectpage/amsnetwork-block-projectpage")
+        { 
+
+            $mailsubject = isset($amsblock['attrs']['mailsubject']) ? $amsblock['attrs']['mailsubject'] : "FAVA FEST";
+            $senderemailaddress = isset($amsblock['attrs']['senderemailaddress']) ? $amsblock['attrs']['senderemailaddress'] : "info@fava.ca";
+
+            $firstpartmailtext = isset($amsblock['attrs']['firstpartmailtext']) ? $amsblock['attrs']['firstpartmailtext'] : "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
+            $secondpartmailtext = isset($amsblock['attrs']['secondpartmailtext']) ? $amsblock['attrs']['secondpartmailtext'] : "I you have any questions or coments please contact us at programing@fava.ca.";
+        }
+    }
+
+    $to = $billingEmailAddress;
+    $subject = $mailsubject;
+    $from = $senderemailaddress;
      
     // To send HTML mail, the Content-type header must be set
     $headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -1060,20 +1079,14 @@ function sentmailprojectpage()
      
     // Compose a simple HTML email message
     $message = '<html><body>';
-    $message .= '<h1 style="color:#000;">Hi -NAME-!</h1>';
-    $message .= '<p style="color:#3e3939;font-size:16px;">Thank you for supporting our festival. Please use this acces credentilas to watch the content.</p>';
-    $message .= '<p style="color:#3e3939;font-size:16px;">It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>';
-    $message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> https://fava.ca/fava-fest-2021-watch/</p>';
-    $message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> 123</p>';
-    $message .= '<p style="color:#3e3939;font-size:16px;">I you have any questions or coments please contact us at programing@fava.ca.</p>';
+    $message .= '<h1 style="color:#000;">Hi '.$billingContactName.'</h1>';
+    $message .= '<p style="color:#3e3939;font-size:16px;">'.$firstpartmailtext.'</p>';
+    $message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> '.$loginPageURL.'</p>';
+    $message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> '.$projectPassword.'</p>';
+    $message .= '<p style="color:#3e3939;font-size:16px;">'.$secondpartmailtext.'</p>';
     $message .= '</body></html>';
-     
-    // Sending email
-    if(mail($to, $subject, $message, $headers)){
-        echo 'Your mail has been sent successfully.';
-    } else{
-        echo 'Unable to send email. Please try again.';
-    }
+
+    mail($to, $subject, $message, $headers);
 }
 add_action('wp_ajax_sentmailprojectpage','sentmailprojectpage');
 add_action('wp_ajax_nopriv_sentmailprojectpage','sentmailprojectpage');
