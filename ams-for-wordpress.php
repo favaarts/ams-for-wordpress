@@ -989,6 +989,7 @@ add_action('wp_ajax_nopriv_get_amssingleprojectpagelog','get_amssingleprojectpag
 function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$billingContactName,$loginPageURL)
 {
 
+global $post;
 $post_id = $produtid;
 $post = get_post($post_id);
 $amsblocksetting = parse_blocks($post->post_content);
@@ -1029,7 +1030,13 @@ $message .= '<p style="color:#3e3939;font-size:16px;">'.$secondpartmailtext.'</p
 $message .= '</body></html>';
 
 // send email
-mail($to, $subject, $message, $headers);
+//mail($to, $subject, $message, $headers);
+    if(mail($to, $subject, $message, $headers)){
+        echo 'Your mail has been sent successfully.';
+    } else{
+        echo 'Unable to send email. Please try again.';
+    }
+
 }
 add_action('wp_ajax_get_sentmailproject','get_sentmailproject');
 add_action('wp_ajax_nopriv_get_sentmailproject','get_sentmailproject');
