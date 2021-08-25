@@ -991,52 +991,20 @@ function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$bi
 
 $post_id = $produtid;
 $post = get_post($post_id);
-$blocks = parse_blocks($post->post_content);
-$blockdata = $blocks[0]['attrs'];
+$amsblocksetting = parse_blocks($post->post_content);
 
-$blockdata['mailsubject'];
-$blockdata['senderemailaddress'];
-$blockdata['firstpartmailtext'];
-$blockdata['secondpartmailtext'];    
+foreach($amsblocksetting as $amsblock) 
+{
+    if($amsblock['blockName'] == "wpdams-amsnetwork-project/amsnetwork-block-project")
+    { 
 
+        $mailsubject = isset($amsblock['attrs']['mailsubject']) ? $amsblock['attrs']['mailsubject'] : "FAVA FEST";
+        $senderemailaddress = isset($amsblock['attrs']['senderemailaddress']) ? $amsblock['attrs']['senderemailaddress'] : "info@fava.ca";
 
-if(isset($blockdata['mailsubject']))
-{
-    $mailsubject = $blockdata['mailsubject'];
-}
-else
-{
-    $mailsubject = "FAVA FEST";
-}
-
-
-if(isset($blockdata['senderemailaddress']))
-{
-    $senderemailaddress = $blockdata['senderemailaddress'];
-}
-else
-{
-    $senderemailaddress = "info@fava.ca";
-}
-
-if(isset($blockdata['firstpartmailtext']))
-{
-    $firstpartmailtext = $blockdata['firstpartmailtext'];
-}
-else
-{
-    $firstpartmailtext = "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
-}
-
-if(isset($blockdata['secondpartmailtext']))
-{
-    $secondpartmailtext = $blockdata['secondpartmailtext'];
-}
-else
-{
-    $secondpartmailtext = "I you have any questions or coments please contact us at programing@fava.ca.";
-}
-/*==*/
+        $firstpartmailtext = isset($amsblock['attrs']['firstpartmailtext']) ? $amsblock['attrs']['firstpartmailtext'] : "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
+        $secondpartmailtext = isset($amsblock['attrs']['secondpartmailtext']) ? $amsblock['attrs']['secondpartmailtext'] : "I you have any questions or coments please contact us at programing@fava.ca.";
+    }
+}   
 
 $to = $billingEmailAddress;
 $subject = $mailsubject;
