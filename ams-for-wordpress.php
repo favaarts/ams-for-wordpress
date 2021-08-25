@@ -989,6 +989,62 @@ add_action('wp_ajax_nopriv_get_amssingleprojectpagelog','get_amssingleprojectpag
 function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$billingContactName,$loginPageURL)
 {
 
+global $post;
+$post_id = $produtid;
+$post = get_post($post_id);
+$amsblocksetting = parse_blocks($post->post_content);
+
+foreach($amsblocksetting as $amsblock) 
+{
+    if($amsblock['blockName'] == "wpdams-amsnetwork-project/amsnetwork-block-project")
+    { 
+
+        $mailsubject = isset($amsblock['attrs']['mailsubject']) ? $amsblock['attrs']['mailsubject'] : "FAVA FEST";
+        $senderemailaddress = isset($amsblock['attrs']['senderemailaddress']) ? $amsblock['attrs']['senderemailaddress'] : "info@fava.ca";
+
+        $firstpartmailtext = isset($amsblock['attrs']['firstpartmailtext']) ? $amsblock['attrs']['firstpartmailtext'] : "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
+        $secondpartmailtext = isset($amsblock['attrs']['secondpartmailtext']) ? $amsblock['attrs']['secondpartmailtext'] : "I you have any questions or coments please contact us at programing@fava.ca.";
+    }
+}   
+
+$to = $billingEmailAddress;
+$subject = $mailsubject;
+$from = $senderemailaddress;
+ 
+// To send HTML mail, the Content-type header must be set
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+ 
+// Create email headers
+$headers .= 'From: '.$from."\r\n".
+    'Reply-To: '.$from."\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+ 
+// Compose a simple HTML email message
+$message = '<html><body>';
+$message .= '<h1 style="color:#000;">Hi '.$billingContactName.'</h1>';
+$message .= '<p style="color:#3e3939;font-size:16px;">'.$firstpartmailtext.'</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> '.$loginPageURL.'</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> '.$projectPassword.'</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;">'.$secondpartmailtext.'</p>';
+$message .= '</body></html>';
+
+// send email
+//mail($to, $subject, $message, $headers);
+    if(mail($to, $subject, $message, $headers)){
+        echo 'Your mail has been sent successfully.';
+    } else{
+        echo 'Unable to send email. Please try again.';
+    }
+
+}
+add_action('wp_ajax_get_sentmailproject','get_sentmailproject');
+add_action('wp_ajax_nopriv_get_sentmailproject','get_sentmailproject');
+// End AMS Project mail
+
+// Project page mail
+function sentmailprojectpage()
+{
     $to = 'jay.bagwansingh@ifuturz.com';
     $subject = 'FAVA FEST 2021';
     $from = 'info@fava.ca';
@@ -1018,11 +1074,9 @@ function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$bi
     } else{
         echo 'Unable to send email. Please try again.';
     }
-
 }
-add_action('wp_ajax_get_sentmailproject','get_sentmailproject');
-add_action('wp_ajax_nopriv_get_sentmailproject','get_sentmailproject');
-// End AMS Project mail
+add_action('wp_ajax_sentmailprojectpage','sentmailprojectpage');
+add_action('wp_ajax_nopriv_sentmailprojectpage','sentmailprojectpage');
 
 // AMS Member login
 function get_amsmemberlogout()

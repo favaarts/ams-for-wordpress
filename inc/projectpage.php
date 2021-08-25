@@ -9,6 +9,8 @@ $post = get_post($pageid);
 $loginPageURL=site_url($post->post_name);
 $blockdata = parse_blocks($post->post_content);
 
+sentmailprojectpage();
+
 foreach($blockdata as $amsblock) 
 {
     if($amsblock['blockName'] == "wpdams-amsnetwork-projectpage/amsnetwork-block-projectpage")
