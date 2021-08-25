@@ -9,8 +9,6 @@ $post = get_post($pageid);
 $loginPageURL=site_url($post->post_name);
 $blockdata = parse_blocks($post->post_content);
 
-sentmailprojectpage();
-
 foreach($blockdata as $amsblock) 
 {
     if($amsblock['blockName'] == "wpdams-amsnetwork-projectpage/amsnetwork-block-projectpage")
@@ -108,8 +106,9 @@ if(empty($bgcolor))
                 <div class="categorysearchdata right-col">
 
                     <?php
+                    $billingEmailAddress = $_POST['billingEmailAddress'];
                     if(isset($_SESSION["username"]))  
-                      {
+                    {
                         echo "<div class='amsuserlayout'>";
                             echo "<div class='userlogin'><p>Hii, ".$_SESSION["username"]."</p></div>";
             
@@ -119,7 +118,13 @@ if(empty($bgcolor))
                                   
                         echo "</div>";                              
                         
-                      }
+                    }
+                    else if($_SESSION['billingEmailAddress'] = $billingEmailAddress)
+                    {
+                        $_SESSION['billingContactName'] = $_POST['billingContactName'];
+                      
+                        sentmailprojectpage($pageid,$_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);
+                    }
                     ?>
                     <div class="projectdetail projectpagebanner">
                         
