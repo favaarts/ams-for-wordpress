@@ -9,7 +9,37 @@ $post = get_post($pageid);
 $loginPageURL=site_url($post->post_name);
 $blockdata = parse_blocks($post->post_content);
 
-sentmailprojectpage();
+// Mail changes
+$to = 'jay.bagwansingh@ifuturz.com';
+$subject = 'FAVA FEST 2021';
+$from = 'info@fava.ca';
+ 
+// To send HTML mail, the Content-type header must be set
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+ 
+// Create email headers
+$headers .= 'From: '.$from."\r\n".
+    'Reply-To: '.$from."\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+ 
+// Compose a simple HTML email message
+$message = '<html><body>';
+$message .= '<h1 style="color:#000;">Hi -NAME-!</h1>';
+$message .= '<p style="color:#3e3939;font-size:16px;">Thank you for supporting our festival. Please use this acces credentilas to watch the content.</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;">It will be available from 9:00 AM on the 24th of may 2021 for 24 hours</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> https://fava.ca/fava-fest-2021-watch/</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> 123</p>';
+$message .= '<p style="color:#3e3939;font-size:16px;">I you have any questions or coments please contact us at programing@fava.ca.</p>';
+$message .= '</body></html>';
+ 
+// Sending email
+if(mail($to, $subject, $message, $headers)){
+    echo 'Your mail has been sent successfully.';
+} else{
+    echo 'Unable to send email. Please try again.';
+}
+// Mail changes
 
 foreach($blockdata as $amsblock) 
 {
@@ -446,7 +476,7 @@ if(empty($bgcolor))
                                     ?> 
                                     <div class="videos prospace amsvideos">
                                        
-                                        <div class="video-row">
+                                        <div class="video-row 21">
                                             <h3>Media:</h3>
                                             <?php
                                             $i = 1;
