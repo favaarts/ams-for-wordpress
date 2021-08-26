@@ -988,49 +988,47 @@ add_action('wp_ajax_nopriv_get_amssingleprojectpagelog','get_amssingleprojectpag
 // AMS Project mail
 function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$billingContactName,$loginPageURL)
 {
+    global $post;
+    $post_id = $produtid;
+    $post = get_post($post_id);
+    $amsblocksetting = parse_blocks($post->post_content);
 
-global $post;
-$post_id = $produtid;
-$post = get_post($post_id);
-$amsblocksetting = parse_blocks($post->post_content);
+    foreach($amsblocksetting as $amsblock) 
+    {
+        if($amsblock['blockName'] == "wpdams-amsnetwork-project/amsnetwork-block-project")
+        { 
 
-foreach($amsblocksetting as $amsblock) 
-{
-    if($amsblock['blockName'] == "wpdams-amsnetwork-project/amsnetwork-block-project")
-    { 
+            $mailsubject = isset($amsblock['attrs']['mailsubject']) ? $amsblock['attrs']['mailsubject'] : 'FAVA FEST';
+            $senderemailaddress = isset($amsblock['attrs']['senderemailaddress']) ? $amsblock['attrs']['senderemailaddress'] : 'info@fava.ca';
 
-        $mailsubject = isset($amsblock['attrs']['mailsubject']) ? $amsblock['attrs']['mailsubject'] : "FAVA FEST";
-        $senderemailaddress = isset($amsblock['attrs']['senderemailaddress']) ? $amsblock['attrs']['senderemailaddress'] : "info@fava.ca";
+            $firstpartmailtext = isset($amsblock['attrs']['firstpartmailtext']) ? $amsblock['attrs']['firstpartmailtext'] : 'Thank you for supporting our festival. Please use this acces credentilas to watch the content.';
+            $secondpartmailtext = isset($amsblock['attrs']['secondpartmailtext']) ? $amsblock['attrs']['secondpartmailtext'] : 'I you have any questions or coments please contact us at programing@fava.ca.';
+        }
+    }   
 
-        $firstpartmailtext = isset($amsblock['attrs']['firstpartmailtext']) ? $amsblock['attrs']['firstpartmailtext'] : "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
-        $secondpartmailtext = isset($amsblock['attrs']['secondpartmailtext']) ? $amsblock['attrs']['secondpartmailtext'] : "I you have any questions or coments please contact us at programing@fava.ca.";
-    }
-}   
+    $to = $billingEmailAddress;
+    $subject = $mailsubject;
+    $from = $senderemailaddress;
+     
+    // To send HTML mail, the Content-type header must be set
+    $headers  = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+     
+    // Create email headers
+    $headers .= 'From: '.$from."\r\n".
+        'Reply-To: '.$from."\r\n" .
+        'X-Mailer: PHP/' . phpversion();
+     
+    // Compose a simple HTML email message
+    $message = '<html><body>';
+    $message .= '<h1 style="color:#000;">Hi '.$billingContactName.'</h1>';
+    $message .= '<p style="color:#3e3939;font-size:16px;">'.$firstpartmailtext.'</p>';
+    $message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> '.$loginPageURL.'</p>';
+    $message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> '.$projectPassword.'</p>';
+    $message .= '<p style="color:#3e3939;font-size:16px;">'.$secondpartmailtext.'</p>';
+    $message .= '</body></html>';
 
-$to = $billingEmailAddress;
-$subject = $mailsubject;
-$from = $senderemailaddress;
- 
-// To send HTML mail, the Content-type header must be set
-$headers  = 'MIME-Version: 1.0' . "\r\n";
-$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
- 
-// Create email headers
-$headers .= 'From: '.$from."\r\n".
-    'Reply-To: '.$from."\r\n" .
-    'X-Mailer: PHP/' . phpversion();
- 
-// Compose a simple HTML email message
-$message = '<html><body>';
-$message .= '<h1 style="color:#000;">Hi '.$billingContactName.'</h1>';
-$message .= '<p style="color:#3e3939;font-size:16px;">'.$firstpartmailtext.'</p>';
-$message .= '<p style="color:#3e3939;font-size:16px;"><strong>URL: </strong> '.$loginPageURL.'</p>';
-$message .= '<p style="color:#3e3939;font-size:16px;"><strong>Password: </strong> '.$projectPassword.'</p>';
-$message .= '<p style="color:#3e3939;font-size:16px;">'.$secondpartmailtext.'</p>';
-$message .= '</body></html>';
-
-// send email
-//mail($to, $subject, $message, $headers);
+    //mail($to, $subject, $message, $headers);
     if(mail($to, $subject, $message, $headers)){
         echo 'Your mail has been sent successfully.';
     } else{
@@ -1045,7 +1043,6 @@ add_action('wp_ajax_nopriv_get_sentmailproject','get_sentmailproject');
 // Project page mail
 function sentmailprojectpage($produtid,$billingEmailAddress,$projectPassword,$billingContactName,$loginPageURL)
 {
-
     global $post;
     $post_id = $produtid;
     $post = get_post($post_id);
@@ -1056,11 +1053,11 @@ function sentmailprojectpage($produtid,$billingEmailAddress,$projectPassword,$bi
         if($amsblock['blockName'] == "wpdams-amsnetwork-projectpage/amsnetwork-block-projectpage")
         { 
 
-            $mailsubject = isset($amsblock['attrs']['mailsubject']) ? $amsblock['attrs']['mailsubject'] : "FAVA FEST";
-            $senderemailaddress = isset($amsblock['attrs']['senderemailaddress']) ? $amsblock['attrs']['senderemailaddress'] : "info@fava.ca";
+            $mailsubject = isset($amsblock['attrs']['mailsubject']) ? $amsblock['attrs']['mailsubject'] : 'FAVA FEST';
+            $senderemailaddress = isset($amsblock['attrs']['senderemailaddress']) ? $amsblock['attrs']['senderemailaddress'] : 'info@fava.ca';
 
-            $firstpartmailtext = isset($amsblock['attrs']['firstpartmailtext']) ? $amsblock['attrs']['firstpartmailtext'] : "Thank you for supporting our festival. Please use this acces credentilas to watch the content.";
-            $secondpartmailtext = isset($amsblock['attrs']['secondpartmailtext']) ? $amsblock['attrs']['secondpartmailtext'] : "I you have any questions or coments please contact us at programing@fava.ca.";
+            $firstpartmailtext = isset($amsblock['attrs']['firstpartmailtext']) ? $amsblock['attrs']['firstpartmailtext'] : 'Thank you for supporting our festival. Please use this acces credentilas to watch the content.';
+            $secondpartmailtext = isset($amsblock['attrs']['secondpartmailtext']) ? $amsblock['attrs']['secondpartmailtext'] : 'I you have any questions or coments please contact us at programing@fava.ca.';
         }
     }
 
