@@ -1965,3 +1965,5 @@ a.ex1:hover, a.ex1:active {
     z-index:10000000;
     filter: alpha(opacity=40);
 }
+
+.amsloginpopup .close-btn a {color: #fff;}
