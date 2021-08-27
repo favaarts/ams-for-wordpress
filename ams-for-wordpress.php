@@ -1026,13 +1026,8 @@ function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$bi
     $message .= '<p style="color:#3e3939;font-size:16px;">'.$secondpartmailtext.'</p>';
     $message .= '</body></html>';
 
-    //mail($to, $subject, $message, $headers);
-    if(mail($to, $subject, $message, $headers)){
-        echo "<p>Your mail has been sent successfully.</p>";
-    } else{
-        echo "<p>Unable to send email. Please try again.</p>";
-    }
-
+    mail($to, $subject, $message, $headers);
+    
 }
 add_action('wp_ajax_get_sentmailproject','get_sentmailproject');
 add_action('wp_ajax_nopriv_get_sentmailproject','get_sentmailproject');
