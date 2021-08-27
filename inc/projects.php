@@ -469,12 +469,9 @@ jQuery(document).ready(function($) {
              type:'POST',
              data: { action: 'get_amsprojectlog', projectpassword:projectpassword,getpageid:getpageid},
              success: function (data) {
-               /* console.log(data);*/
                 jQuery('.customprojectloader').hide('1000');
                 jQuery("#projectsubmit").prop('disabled', false);
-
                 var mydata = data.substring(0,data.length - 1);
-
                 console.log(mydata);
              }
           });
@@ -490,12 +487,7 @@ jQuery(document).ready(function($) {
    jQuery(".customprojectloader").hide();
    amsblocklogin();
 
-    $('#seemore').click(function(){
-
-     /* var position = $(window).scrollTop();
-      var bottom = $(document).height() - $(window).height();*/
-        //$('#seemore').hide();
-        
+    $('#seemore').click(function(){        
         var numItems = jQuery('.productstyle').length;
         var listnumItems = jQuery('.listview-project').length;   
         
@@ -556,10 +548,7 @@ jQuery(document).ready(function($) {
       var project_protected = "<?php echo $protectedpassword; ?>";
       if(projectpasswordsession == '' && project_protected != '')
       {
-        /*jQuery(".projectdiv").on('click', function() {
-          jQuery(".custom-model-main").addClass('model-open');
-        }); */
-
+        
         $(document).on("click", ".projectdiv a", function() {
            var projectpageid = jQuery(this).data("pageid");
            var projectuserid = jQuery(this).data("userid");
@@ -605,7 +594,6 @@ jQuery(document).ready(function($) {
                  {
                     var siteurl = mailsiteurl+projectidams+'-'+projectuserams+'-'+getpageid;
                     window.location.href = siteurl;
-                    //location.reload();
                  }
                  else
                  {
