@@ -127,6 +127,7 @@ if($_SESSION['billingEmailAddress'] = $billingEmailAddress)
   $_SESSION['billingContactName'] = $_POST['billingContactName'];
   echo "<input type='hidden' id='custbillingEmail' name='custbillingEmail' value='".$_SESSION['billingEmailAddress']."'>";
   echo "<div class='amsuserlayout'>";
+  
      get_sentmailproject($pageid,$_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);     
   echo "</div>";  
 
