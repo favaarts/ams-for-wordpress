@@ -127,7 +127,7 @@ if($_SESSION['billingEmailAddress'] = $billingEmailAddress)
   $_SESSION['billingContactName'] = $_POST['billingContactName'];
   echo "<input type='hidden' id='custbillingEmail' name='custbillingEmail' value='".$_SESSION['billingEmailAddress']."'>";
   echo "<div class='amsuserlayout'>";
-  
+
      get_sentmailproject($pageid,$_SESSION['billingEmailAddress'],$_GET['password'],$_SESSION['billingContactName'],$loginPageURL);     
   echo "</div>";  
 
@@ -158,7 +158,6 @@ if($_SESSION['billingEmailAddress'] = $billingEmailAddress)
 <div class="wp-block-columns main-content <?= $blockclass; ?>" >
 
   <?php
-    
   // Remove Project sidebar
   if (!isset($projectsidebar))
   {        
@@ -166,9 +165,6 @@ if($_SESSION['billingEmailAddress'] = $billingEmailAddress)
     <div class="wp-block-column left-col col-fit" >
         
         <div class="assetssidebar">
-
-            
-
             <div class="searchbox">
                 <h4>Search</h4>
                 <input type="text" class="searrch-input" name="keyword" id="getproject" data-protectedid="<?php echo $protectedpassword; ?>" onkeyup="fetchproject()"></input>
