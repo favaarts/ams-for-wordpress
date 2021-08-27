@@ -1028,9 +1028,9 @@ function get_sentmailproject($produtid,$billingEmailAddress,$projectPassword,$bi
 
     //mail($to, $subject, $message, $headers);
     if(mail($to, $subject, $message, $headers)){
-        echo 'Your mail has been sent successfully.';
+        echo "<p>Your mail has been sent successfully.</p>";
     } else{
-        echo 'Unable to send email. Please try again.';
+        echo "<p>Unable to send email. Please try again.</p>";
     }
 
 }
